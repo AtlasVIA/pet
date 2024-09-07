@@ -14,6 +14,10 @@ import "./tasks/treat-pet";
 import "./tasks/update-pet";
 import "./tasks/walk-pet";
 import "./tasks/get-shelters";
+import "./tasks/add-shelter-manager";
+import "./tasks/remove-shelter-manager";
+import "./tasks/get-available-pets";
+import "./tasks/get-nft-meta";
 
 dotenv.config({ path: __dirname + "/.env" });
 

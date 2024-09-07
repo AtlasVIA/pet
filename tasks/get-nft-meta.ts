@@ -1,8 +1,7 @@
 import { task } from "hardhat/config";
 
-task("remove-shelter-owner", "Remove Shelter Owner")
-	.addParam("shelterId", "Shelter ID")
-	.addParam("owner", "Owner address")
+task("get-nft-meta", "Metadata")
+    .addParam("nftId", "")
 	.addOptionalParam("signer", "Custom signer (private key)")
 	.addOptionalParam("provider", "Custom provider RPC url")
 	.setAction(async (args, hre:any) => {
@@ -12,12 +11,9 @@ task("remove-shelter-owner", "Remove Shelter Owner")
 		let signer = deployer;
 		if (args.signer) signer = new ethers.Wallet(args.signer, new ethers.providers.JsonRpcProvider(args.provider));
 		
+
 		const petNFT = await ethers.getContract("PetNFT");
+		const metadata = await petNFT.tokenURI(args.nftId);
 
-		await (await petNFT.removeShelterOwner(
-			args.shelterId,
-			args.owner
-		)).wait();
-
-		console.log("Shelter owner removed successfully");
+		console.log(metadata);
 	});
