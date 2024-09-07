@@ -4,9 +4,10 @@ pragma solidity =0.8.17;
 
 import "@vialabs-io/contracts/message/MessageClient.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "base64-sol/base64.sol";
 
-contract PetNFT is ERC721, MessageClient {
+contract PetNFT is ERC721, Ownable, MessageClient {
     struct ShelterData {
         string name;
         string location;
@@ -18,19 +19,13 @@ contract PetNFT is ERC721, MessageClient {
     struct PetData {
         uint lastWalk;
         uint lastFeed;
-        uint lastPlay;
         uint lastTreat;
 
         uint totalWalks;
         uint totalFeeds;
-        uint totalPlays;
         uint totalTreats;
 
         string name;
-        uint age;
-        uint weight;
-        string breed;
-        string color;
         string personality;
         uint shelterId;
     }
@@ -38,6 +33,7 @@ contract PetNFT is ERC721, MessageClient {
     uint public nextNftId;
     mapping(uint => PetData) public pets;
     mapping(uint => ShelterData) public shelters;
+    mapping(address => uint) public shelterManagers;
 
     constructor() ERC721("PetNFT", "PetNFT") {
         nextNftId = block.chainid * 10**4;
@@ -59,14 +55,6 @@ contract PetNFT is ERC721, MessageClient {
         pet.totalFeeds++;
     }
 
-    function play(uint _nftId) external {
-        require(ownerOf(_nftId) == msg.sender, "PetNFT: caller is not the owner of the nft");
-
-        PetData storage pet = pets[_nftId];
-        pet.lastPlay = block.timestamp;
-        pet.totalPlays++;
-    }
-
     function treat(uint _nftId) external {
         require(ownerOf(_nftId) == msg.sender, "PetNFT: caller is not the owner of the nft");
 
@@ -85,16 +73,19 @@ contract PetNFT is ERC721, MessageClient {
         shelter.phone = _phone;
     }
 
-    function addPet(string memory _name, uint _age, uint _weight, string memory _breed, string memory _color, string memory _personality, uint _shelterId) external onlyOwner {
+    function addShelterManager(address _manager, uint _shelterId) external onlyOwner {
+        shelterManagers[_manager] = _shelterId;
+    }
+
+    // Shelter Functions
+    function addPet(string memory _name, string memory _personality, uint _shelterId) external onlyOwner {
+        
+        
         _mint(msg.sender, nextNftId);
         nextNftId++;
 
         PetData storage pet = pets[nextNftId];
         pet.name = _name;
-        pet.age = _age;
-        pet.weight = _weight;
-        pet.breed = _breed;
-        pet.color = _color;
         pet.personality = _personality;
         pet.shelterId = _shelterId;
     }
@@ -102,21 +93,15 @@ contract PetNFT is ERC721, MessageClient {
     function bridge(uint _destChainId, address _recipient, uint _nftId) external onlyActiveChain(_destChainId) {
         require(ownerOf(_nftId) == msg.sender, "PetNFT: caller is not the owner of the nft");
 
-        string memory _nftMetadata = abi.encode(
+        bytes memory _nftMetadata = abi.encode(
             pets[_nftId].name,
-            pets[_nftId].age,
-            pets[_nftId].weight,
-            pets[_nftId].breed,
-            pets[_nftId].color,
             pets[_nftId].personality,
             pets[_nftId].shelterId,
             pets[_nftId].lastWalk,
             pets[_nftId].lastFeed,
-            pets[_nftId].lastPlay,
             pets[_nftId].lastTreat,
             pets[_nftId].totalWalks,
             pets[_nftId].totalFeeds,
-            pets[_nftId].totalPlays,
             pets[_nftId].totalTreats
         );
 
@@ -127,26 +112,33 @@ contract PetNFT is ERC721, MessageClient {
 
     function messageProcess(uint, uint _sourceChainId, address _sender, address, uint, bytes calldata _data) external override  onlySelf(_sender, _sourceChainId)  {
         // decode message
-        (address _recipient, uint _nftId, string memory _nftMetadata) = abi.decode(_data, (address, uint, string));
+        (address _recipient, uint _nftId, bytes memory _nftMetadata) = abi.decode(_data, (address, uint, bytes));
 
         // parse metadata
         (
             string memory _name, 
-            uint _age, 
-            uint _weight, 
-            string memory _breed, 
-            string memory _color, 
             string memory _personality, 
             uint _shelterId, 
             uint _lastWalk, 
             uint _lastFeed, 
-            uint _lastPlay, 
             uint _lastTreat, 
             uint _totalWalks, 
             uint _totalFeeds, 
-            uint _totalPlays, 
             uint _totalTreats
-        ) = abi.decode(_nftMetadata, (string, uint, uint, string, string, string, uint, uint, uint, uint, uint, uint, uint, uint, uint));
+        ) = abi.decode(_nftMetadata, (string, string, uint, uint, uint, uint, uint, uint, uint));
+
+        // store metadata
+        pets[_nftId] = PetData({
+            name: _name,
+            personality: _personality,
+            shelterId: _shelterId,
+            lastWalk: _lastWalk,
+            lastFeed: _lastFeed,
+            lastTreat: _lastTreat,
+            totalWalks: _totalWalks,
+            totalFeeds: _totalFeeds,
+            totalTreats: _totalTreats
+        });
 
         // mint tokens
         _mint(_recipient, _nftId);
@@ -162,10 +154,6 @@ contract PetNFT is ERC721, MessageClient {
                 "\"image\":\"\",",
                 "\"attributes\":[",
                     "{\"trait_type\":\"Name\",\"value\":\"", pets[tokenId].name, "\"},",
-                    "{\"trait_type\":\"Age\",\"value\":\"", pets[tokenId].age, "\"},",
-                    "{\"trait_type\":\"Weight\",\"value\":\"", pets[tokenId].weight, "\"},",
-                    "{\"trait_type\":\"Breed\",\"value\":\"", pets[tokenId].breed, "\"},",
-                    "{\"trait_type\":\"Color\",\"value\":\"", pets[tokenId].color, "\"},",
                     "{\"trait_type\":\"Personality\",\"value\":\"", pets[tokenId].personality, "\"}",
                     "{\"trait_type\":\"Shelter\",\"value\":\"", shelters[pets[tokenId].shelterId].name, "\"}",
                     "{\"trait_type\":\"Location\",\"value\":\"", shelters[pets[tokenId].shelterId].location, "\"}",

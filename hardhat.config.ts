@@ -3,12 +3,6 @@ import "hardhat-deploy";
 import "hardhat-deploy-ethers";
 import "@typechain/hardhat";
 
-import "./tasks/bridge-nft";
-import "./tasks/get-nft";
-import "./tasks/mint-nft";
-import "./tasks/transfer-nft";
-import "./tasks/configure";
-
 dotenv.config({ path: __dirname + "/.env" });
 
 const accounts = [process.env.PRIVATE_KEY];
@@ -56,6 +50,7 @@ const config: any = {
 						enabled: true,
 						runs: 200,
 					},
+					viaIR: true
 				},
 			},
 		],
