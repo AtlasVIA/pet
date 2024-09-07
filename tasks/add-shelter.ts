@@ -1,6 +1,10 @@
 import { task } from "hardhat/config";
 
-task("", "")
+task("add-shelter", "Add Shelter")
+    .addParam("name", "Shelter name")
+	.addParam("location", "Shelter location")
+	.addParam("website", "Shelter website")
+	.addParam("email", "Shelter email")
 	.addOptionalParam("signer", "Custom signer (private key)")
 	.addOptionalParam("provider", "Custom provider RPC url")
 	.setAction(async (args, hre:any) => {
@@ -12,7 +16,12 @@ task("", "")
 		
 		const petNFT = ethers.getContract("PetNFT");
 
-		await petNFT.addShelter(
+		await (await petNFT.addShelter(
+			args.name,
+			args.location,
+			args.website,
+			args.email
+		)).wait();
 
-		);
+		console.log("Shelter added successfully");
 	});
