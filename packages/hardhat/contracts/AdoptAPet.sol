@@ -14,6 +14,7 @@ contract AdoptAPet is ERC721, ERC721Enumerable, Ownable, MessageClient {
         string location;
         string website;
         string email;
+        address accountant;
     }
 
     struct PetData {
@@ -37,47 +38,74 @@ contract AdoptAPet is ERC721, ERC721Enumerable, Ownable, MessageClient {
     mapping(uint => PetData) public pets;
     mapping(uint => ShelterData) public shelters;
     mapping(uint => mapping(address => bool)) public shelterManagers;
+    mapping(uint => address) public shelterAccountant;
 
     uint[] public allShelters;
     uint[] public availablePets;
 
+    uint public actionCost = 0.0001 ether;
+
     event MetadataUpdate(uint256 _nftId);
+    event ShelterAdded(uint256 _shelterId);
+    event ShelterManagerAdded(uint256 _shelterId, address _manager);
+    event ShelterManagerRemoved(uint256 _shelterId, address _manager);
+    event PetAdded(uint256 _nftId);
+    event PetAdopted(uint256 _nftId);
+    event PetRescued(uint256 _nftId);
+    event PetWalked(uint256 _nftId);
+    event PetFed(uint256 _nftId);
+    event PetTreated(uint256 _nftId);
+    event PetBridged(uint256 _nftId, uint256 _destChainId, address _recipient);
+    event ActionCostSet(uint256 _actionCost);
 
     constructor() ERC721("Adopt A Pet", "AAP") {
         nextNftId = block.chainid * 10**4;
         nextShelterId = block.chainid * 10**4;
     }
 
-    function walk(uint _nftId) external {
+    function walk(uint _nftId) external payable {
+        require(msg.value >= actionCost, "AdoptAPet: Insufficient funds");
         require(ownerOf(_nftId) == msg.sender, "AdoptAPet: caller is not the owner of the nft");
+
+        payable(shelterAccountant[pets[_nftId].shelterId]).transfer(msg.value);
 
         pets[_nftId].lastWalk = block.timestamp;
         pets[_nftId].totalWalks++;
 
         emit MetadataUpdate(_nftId);
+        emit PetWalked(_nftId);
     }
 
-    function feed(uint _nftId) external {
+    function feed(uint _nftId) external payable {
+        require(msg.value >= actionCost, "AdoptAPet: Insufficient funds");
         require(ownerOf(_nftId) == msg.sender, "AdoptAPet: caller is not the owner of the nft");
+
+        payable(shelterAccountant[pets[_nftId].shelterId]).transfer(msg.value);
 
         PetData storage pet = pets[_nftId];
         pet.lastFeed = block.timestamp;
         pet.totalFeeds++;
 
         emit MetadataUpdate(_nftId);
+        emit PetFed(_nftId);
     }
 
-    function treat(uint _nftId) external {
+    function treat(uint _nftId) external payable {
+        require(msg.value >= actionCost, "AdoptAPet: Insufficient funds");
         require(ownerOf(_nftId) == msg.sender, "AdoptAPet: caller is not the owner of the nft");
+
+        payable(shelterAccountant[pets[_nftId].shelterId]).transfer(msg.value);
 
         PetData storage pet = pets[_nftId];
         pet.lastTreat = block.timestamp;
         pet.totalTreats++;
 
         emit MetadataUpdate(_nftId);
+        emit PetTreated(_nftId);
     }
 
-    function rescue(uint _nftId) external {
+    function rescue(uint _nftId) external payable {
+        require(msg.value >= actionCost, "AdoptAPet: Insufficient funds");
         require(_exists(_nftId), "AdoptAPet: Pet does not exist");
 
         PetData storage pet = pets[_nftId];
@@ -89,6 +117,7 @@ contract AdoptAPet is ERC721, ERC721Enumerable, Ownable, MessageClient {
             pet.lastTreat < block.timestamp - 7 days
          ) {
             _transfer(ownerOf(_nftId), msg.sender, _nftId);
+            emit PetRescued(_nftId);
         } else {
             revert("AdoptAPet: Pet is being taken care of. Cannot return to shelter.");
         }
@@ -118,27 +147,43 @@ contract AdoptAPet is ERC721, ERC721Enumerable, Ownable, MessageClient {
         require(_exists(_nftId), "AdoptAPet: Pet does not exist");
         require(ownerOf(_nftId) == address(this), "AdoptAPet: Already adopted by someone");
 
+        pets[_nftId].lastWalk = block.timestamp;
+        pets[_nftId].lastFeed = block.timestamp;
+        pets[_nftId].lastTreat = block.timestamp;
+
         _transfer(address(this), msg.sender, _nftId);
+        
+        emit PetAdopted(_nftId);
     }
 
     // Admin Functions
-    function addShelter(string memory _name, string memory _location, string memory _website, string memory _email) external onlyOwner {
+    function addShelter(address _accountant, string memory _name, string memory _location, string memory _website, string memory _email) external onlyOwner {
         ShelterData storage shelter = shelters[nextShelterId];
         shelters[nextShelterId].name = _name;
         shelter.location = _location;
         shelter.website = _website;
         shelter.email = _email;
+        shelter.accountant = _accountant;
 
         allShelters.push(nextShelterId);
+        emit ShelterAdded(nextShelterId);
+        
         nextShelterId++;
+    }
+
+    function setActionCost(uint _actionCost) external onlyOwner {
+        actionCost = _actionCost;
+        emit ActionCostSet(actionCost);
     }
 
     function addShelterManager(uint _shelterId, address _manager) external onlyOwner {
         shelterManagers[_shelterId][_manager] = true;
+        emit ShelterManagerAdded(_shelterId, _manager);
     }
 
     function removeShelterManager(uint _shelterId, address _manager) external onlyOwner {
         delete shelterManagers[_shelterId][_manager];
+        emit ShelterManagerRemoved(_shelterId, _manager);
     }
 
     // Shelter Functions
@@ -153,6 +198,7 @@ contract AdoptAPet is ERC721, ERC721Enumerable, Ownable, MessageClient {
         pet.shelterId = _shelterId;
 
         availablePets.push(nextNftId);
+        emit PetAdded(nextNftId);
 
         nextNftId++;
     }
@@ -176,6 +222,8 @@ contract AdoptAPet is ERC721, ERC721Enumerable, Ownable, MessageClient {
         _burn(_nftId);
 
         _sendMessage(_destChainId, abi.encode(_recipient, _nftId, _nftMetadata));
+
+        emit PetBridged(_nftId, _destChainId, _recipient);
     }
 
     function messageProcess(uint, uint _sourceChainId, address _sender, address, uint, bytes calldata _data) external override  onlySelf(_sender, _sourceChainId)  {
