@@ -4,10 +4,11 @@ pragma solidity =0.8.17;
 
 import "@vialabs-io/contracts/message/MessageClient.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "base64-sol/base64.sol";
 
-contract AdoptAPet is ERC721, Ownable, MessageClient {
+contract AdoptAPet is ERC721, ERC721Enumerable, Ownable, MessageClient {
     struct ShelterData {
         string name;
         string location;
@@ -50,9 +51,8 @@ contract AdoptAPet is ERC721, Ownable, MessageClient {
     function walk(uint _nftId) external {
         require(ownerOf(_nftId) == msg.sender, "AdoptAPet: caller is not the owner of the nft");
 
-        PetData storage pet = pets[_nftId];
-        pet.lastWalk = block.timestamp;
-        pet.totalWalks++;
+        pets[_nftId].lastWalk = block.timestamp;
+        pets[_nftId].totalWalks++;
 
         emit MetadataUpdate(_nftId);
     }
@@ -239,6 +239,23 @@ contract AdoptAPet is ERC721, Ownable, MessageClient {
             )))
         ));
 
+    }
+
+    function walletOfOwner(address owner) public view returns (uint256[] memory) {
+        uint256 ownerTokenCount = balanceOf(owner);
+        uint256[] memory tokenIds = new uint256[](ownerTokenCount);
+        for (uint256 i = 0; i < ownerTokenCount; i++) {
+            tokenIds[i] = tokenOfOwnerByIndex(owner, i);
+        }
+        return tokenIds;
+    }
+
+    function _beforeTokenTransfer(address from, address to, uint256 tokenId, uint256 batchSize) internal override(ERC721, ERC721Enumerable) {
+        super._beforeTokenTransfer(from, to, tokenId, batchSize);
+    }
+
+    function supportsInterface(bytes4 interfaceId) public view override(ERC721, ERC721Enumerable) returns (bool) {
+        return super.supportsInterface(interfaceId);
     }
 
     function uint2str(uint _i) internal pure returns (string memory) {
