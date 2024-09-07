@@ -27,6 +27,7 @@ contract PetNFT is ERC721, Ownable, MessageClient {
         string name;
         string personality;
         uint shelterId;
+        bool adopted;
     }
 
     uint public nextNftId;
@@ -35,6 +36,8 @@ contract PetNFT is ERC721, Ownable, MessageClient {
     mapping(uint => PetData) public pets;
     mapping(uint => ShelterData) public shelters;
     mapping(uint => mapping(address => bool)) public shelterManagers;
+
+    uint[] public allShelters;
 
     constructor() ERC721("PetNFT", "PetNFT") {
         nextNftId = block.chainid * 10**4;
@@ -69,14 +72,23 @@ contract PetNFT is ERC721, Ownable, MessageClient {
         return messages[_nftId];
     }
 
+    function getAllShelters() external view returns (uint[] memory) {
+        return allShelters;
+    }
+
+    function getShelter(uint _shelterId) external view returns (ShelterData memory) {
+        return shelters[_shelterId];
+    }
+
     // Admin Functions
     function addShelter(string memory _name, string memory _location, string memory _website, string memory _email) external onlyOwner {
         ShelterData storage shelter = shelters[nextShelterId];
-        shelter.name = _name;
+        shelters[nextShelterId].name = _name;
         shelter.location = _location;
         shelter.website = _website;
         shelter.email = _email;
 
+        allShelters.push(nextShelterId);
         nextShelterId++;
     }
 
@@ -113,7 +125,8 @@ contract PetNFT is ERC721, Ownable, MessageClient {
             pets[_nftId].lastTreat,
             pets[_nftId].totalWalks,
             pets[_nftId].totalFeeds,
-            pets[_nftId].totalTreats
+            pets[_nftId].totalTreats,
+            pets[_nftId].adopted
         );
 
         _burn(_nftId);
@@ -135,8 +148,9 @@ contract PetNFT is ERC721, Ownable, MessageClient {
             uint _lastTreat, 
             uint _totalWalks, 
             uint _totalFeeds, 
-            uint _totalTreats
-        ) = abi.decode(_nftMetadata, (string, string, uint, uint, uint, uint, uint, uint, uint));
+            uint _totalTreats,
+            bool _adopted
+        ) = abi.decode(_nftMetadata, (string, string, uint, uint, uint, uint, uint, uint, uint, bool));
 
         // store metadata
         pets[_nftId] = PetData({
@@ -148,7 +162,8 @@ contract PetNFT is ERC721, Ownable, MessageClient {
             lastTreat: _lastTreat,
             totalWalks: _totalWalks,
             totalFeeds: _totalFeeds,
-            totalTreats: _totalTreats
+            totalTreats: _totalTreats,
+            adopted: _adopted
         });
 
         // mint tokens
@@ -171,6 +186,7 @@ contract PetNFT is ERC721, Ownable, MessageClient {
                     "{\"trait_type\":\"Total Walks\",\"value\":\"", pets[tokenId].totalWalks, "\"}",
                     "{\"trait_type\":\"Total Feeds\",\"value\":\"", pets[tokenId].totalFeeds, "\"}",
                     "{\"trait_type\":\"Total Treats\",\"value\":\"", pets[tokenId].totalTreats, "\"}",
+                    "{\"trait_type\":\"Adopted\",\"value\":\"", pets[tokenId].adopted, "\"}",
                     "{\"trait_type\":\"Shelter\",\"value\":\"", shelters[pets[tokenId].shelterId].name, "\"}",
                     "{\"trait_type\":\"Location\",\"value\":\"", shelters[pets[tokenId].shelterId].location, "\"}",
                     "{\"trait_type\":\"Website\",\"value\":\"", shelters[pets[tokenId].shelterId].website, "\"}",
