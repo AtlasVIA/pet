@@ -13,7 +13,6 @@ contract PetNFT is ERC721, Ownable, MessageClient {
         string location;
         string website;
         string email;
-        string phone;
     }
 
     struct PetData {
@@ -66,13 +65,12 @@ contract PetNFT is ERC721, Ownable, MessageClient {
     }
 
     // Admin Functions
-    function addShelter(string memory _name, string memory _location, string memory _website, string memory _email, string memory _phone) external onlyOwner {
+    function addShelter(string memory _name, string memory _location, string memory _website, string memory _email) external onlyOwner {
         ShelterData storage shelter = shelters[nextShelterId];
         shelter.name = _name;
         shelter.location = _location;
         shelter.website = _website;
         shelter.email = _email;
-        shelter.phone = _phone;
 
         nextShelterId++;
     }
@@ -162,7 +160,12 @@ contract PetNFT is ERC721, Ownable, MessageClient {
                 "\"image\":\"\",",
                 "\"attributes\":[",
                     "{\"trait_type\":\"Name\",\"value\":\"", pets[tokenId].name, "\"},",
-                    "{\"trait_type\":\"Personality\",\"value\":\"", pets[tokenId].personality, "\"}",
+                    "{\"trait_type\":\"Last Walk\",\"value\":\"", pets[tokenId].lastWalk, "\"}",
+                    "{\"trait_type\":\"Last Feed\",\"value\":\"", pets[tokenId].lastFeed, "\"}",
+                    "{\"trait_type\":\"Last Treat\",\"value\":\"", pets[tokenId].lastTreat, "\"}",
+                    "{\"trait_type\":\"Total Walks\",\"value\":\"", pets[tokenId].totalWalks, "\"}",
+                    "{\"trait_type\":\"Total Feeds\",\"value\":\"", pets[tokenId].totalFeeds, "\"}",
+                    "{\"trait_type\":\"Total Treats\",\"value\":\"", pets[tokenId].totalTreats, "\"}",
                     "{\"trait_type\":\"Shelter\",\"value\":\"", shelters[pets[tokenId].shelterId].name, "\"}",
                     "{\"trait_type\":\"Location\",\"value\":\"", shelters[pets[tokenId].shelterId].location, "\"}",
                     "{\"trait_type\":\"Website\",\"value\":\"", shelters[pets[tokenId].shelterId].website, "\"}",
