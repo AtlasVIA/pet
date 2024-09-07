@@ -3,6 +3,18 @@ import "hardhat-deploy";
 import "hardhat-deploy-ethers";
 import "@typechain/hardhat";
 
+import "./tasks/configure";
+import "./tasks/add-pet";
+import "./tasks/add-shelter";
+import "./tasks/bridge-pet";
+import "./tasks/feed-pet";
+import "./tasks/listen-pet";
+import "./tasks/talk-pet";
+import "./tasks/treat-pet";
+import "./tasks/update-pet";
+import "./tasks/walk-pet";
+import "./tasks/get-shelters";
+
 dotenv.config({ path: __dirname + "/.env" });
 
 const accounts = [process.env.PRIVATE_KEY];
