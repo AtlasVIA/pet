@@ -39,13 +39,15 @@ contract PetNFT is ERC721, Ownable, MessageClient {
 
     uint[] public allShelters;
 
-    constructor() ERC721("PetNFT", "PetNFT") {
+    uint[] public availablePets;
+
+    constructor() ERC721("Adopt A Pet", "AAP") {
         nextNftId = block.chainid * 10**4;
         nextShelterId = block.chainid * 10**4;
     }
 
     function walk(uint _nftId) external {
-        require(ownerOf(_nftId) == msg.sender, "PetNFT: caller is not the owner of the nft");
+        require(ownerOf(_nftId) == msg.sender, "AdoptAPet: caller is not the owner of the nft");
 
         PetData storage pet = pets[_nftId];
         pet.lastWalk = block.timestamp;
@@ -53,7 +55,7 @@ contract PetNFT is ERC721, Ownable, MessageClient {
     }
 
     function feed(uint _nftId) external {
-        require(ownerOf(_nftId) == msg.sender, "PetNFT: caller is not the owner of the nft");
+        require(ownerOf(_nftId) == msg.sender, "AdoptAPet: caller is not the owner of the nft");
 
         PetData storage pet = pets[_nftId];
         pet.lastFeed = block.timestamp;
@@ -61,7 +63,7 @@ contract PetNFT is ERC721, Ownable, MessageClient {
     }
 
     function treat(uint _nftId) external {
-        require(ownerOf(_nftId) == msg.sender, "PetNFT: caller is not the owner of the nft");
+        require(ownerOf(_nftId) == msg.sender, "AdoptAPet: caller is not the owner of the nft");
 
         PetData storage pet = pets[_nftId];
         pet.lastTreat = block.timestamp;
@@ -78,6 +80,21 @@ contract PetNFT is ERC721, Ownable, MessageClient {
 
     function getShelter(uint _shelterId) external view returns (ShelterData memory) {
         return shelters[_shelterId];
+    }
+
+    function getAvailablePets() external view returns (uint[] memory) {
+        return availablePets;
+    }
+
+    function getPet(uint _nftId) external view returns (PetData memory) {
+        return pets[_nftId];
+    }
+
+    function adoptPet(uint _nftId) external {
+        require(_exists(_nftId), "AdoptAPet: Pet does not exist");
+        require(ownerOf(_nftId) == address(this), "AdoptAPet: Already adopted by someone");
+
+        _transfer(address(this), msg.sender, _nftId);
     }
 
     // Admin Functions
@@ -102,19 +119,22 @@ contract PetNFT is ERC721, Ownable, MessageClient {
 
     // Shelter Functions
     function addPet(uint _shelterId, string memory _name, string memory _personality) external {
-        require(shelterManagers[_shelterId][msg.sender], "PetNFT: caller is not a manager of the shelter");
+        require(shelterManagers[_shelterId][msg.sender], "AdoptAPet: caller is not a manager of the shelter");
 
-        _mint(msg.sender, nextNftId);
-        nextNftId++;
+        _mint(address(this), nextNftId);
 
         PetData storage pet = pets[nextNftId];
         pet.name = _name;
         pet.personality = _personality;
         pet.shelterId = _shelterId;
+
+        availablePets.push(nextNftId);
+
+        nextNftId++;
     }
 
     function bridge(uint _destChainId, address _recipient, uint _nftId) external onlyActiveChain(_destChainId) {
-        require(ownerOf(_nftId) == msg.sender, "PetNFT: caller is not the owner of the nft");
+        require(ownerOf(_nftId) == msg.sender, "AdoptAPet: caller is not the owner of the nft");
 
         bytes memory _nftMetadata = abi.encode(
             pets[_nftId].name,
@@ -175,24 +195,44 @@ contract PetNFT is ERC721, Ownable, MessageClient {
 
         return string(abi.encodePacked('data:application/json;base64,', 
             Base64.encode(bytes(abi.encodePacked(
-                "{\"name\":\"Pet #", tokenId, "\",",
-                "\"description\":\"Pet NFT\",",
-                "\"image\":\"\",",
+                "{\"name\":\"Adopt A Pet #", uint2str(tokenId), "\",",
+                "\"description\":\"Adopt A Pet NFT\",",
+                "\"image\":\"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNnGyXJiQkmaE3EZDljvdNCEa7f232VxTpHg&s\",",
                 "\"attributes\":[",
-                    "{\"trait_type\":\"Name\",\"value\":\"", pets[tokenId].name, "\"},",
-                    "{\"trait_type\":\"Last Walk\",\"value\":\"", pets[tokenId].lastWalk, "\"}",
-                    "{\"trait_type\":\"Last Feed\",\"value\":\"", pets[tokenId].lastFeed, "\"}",
-                    "{\"trait_type\":\"Last Treat\",\"value\":\"", pets[tokenId].lastTreat, "\"}",
-                    "{\"trait_type\":\"Total Walks\",\"value\":\"", pets[tokenId].totalWalks, "\"}",
-                    "{\"trait_type\":\"Total Feeds\",\"value\":\"", pets[tokenId].totalFeeds, "\"}",
-                    "{\"trait_type\":\"Total Treats\",\"value\":\"", pets[tokenId].totalTreats, "\"}",
-                    "{\"trait_type\":\"Adopted\",\"value\":\"", pets[tokenId].adopted, "\"}",
-                    "{\"trait_type\":\"Shelter\",\"value\":\"", shelters[pets[tokenId].shelterId].name, "\"}",
-                    "{\"trait_type\":\"Location\",\"value\":\"", shelters[pets[tokenId].shelterId].location, "\"}",
-                    "{\"trait_type\":\"Website\",\"value\":\"", shelters[pets[tokenId].shelterId].website, "\"}",
-                    "{\"trait_type\":\"Email\",\"value\":\"", shelters[pets[tokenId].shelterId].email, "\"}",
+                    "{\"trait_type\":\"Name\",\"value\":\"", string(pets[tokenId].name), "\"},",
+                    "{\"trait_type\":\"Last Walk\",\"value\":\"", uint2str(pets[tokenId].lastWalk), "\"},", // Added commas
+                    "{\"trait_type\":\"Last Feed\",\"value\":\"", uint2str(pets[tokenId].lastFeed), "\"},",
+                    "{\"trait_type\":\"Last Treat\",\"value\":\"", uint2str(pets[tokenId].lastTreat), "\"},",
+                    "{\"trait_type\":\"Total Walks\",\"value\":\"", uint2str(pets[tokenId].totalWalks), "\"},",
+                    "{\"trait_type\":\"Total Feeds\",\"value\":\"", uint2str(pets[tokenId].totalFeeds), "\"},",
+                    "{\"trait_type\":\"Total Treats\",\"value\":\"", uint2str(pets[tokenId].totalTreats), "\"},",
+                    "{\"trait_type\":\"Adopted\",\"value\":\"", pets[tokenId].adopted ? "true" : "false", "\"},",
+                    "{\"trait_type\":\"Shelter\",\"value\":\"", string(shelters[pets[tokenId].shelterId].name), "\"},",
+                    "{\"trait_type\":\"Location\",\"value\":\"", string(shelters[pets[tokenId].shelterId].location), "\"},",
+                    "{\"trait_type\":\"Website\",\"value\":\"", string(shelters[pets[tokenId].shelterId].website), "\"},",
+                    "{\"trait_type\":\"Email\",\"value\":\"", string(shelters[pets[tokenId].shelterId].email), "\"}",
                 "]}"
             )))
         ));
+
+    }
+
+    function uint2str(uint _i) internal pure returns (string memory) {
+        if (_i == 0) return "0";
+    
+        uint j = _i;
+        uint len;
+        while (j != 0) {
+            len++;
+            j /= 10;
+        }
+        
+        bytes memory bstr = new bytes(len);
+        while (_i != 0) {
+            len -= 1;
+            bstr[len] = bytes1(uint8(48 + _i % 10));
+            _i /= 10;
+        }
+        return string(bstr);
     }
 }
