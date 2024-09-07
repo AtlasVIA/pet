@@ -36,7 +36,7 @@ const InteractPage = () => {
     }
   }, [fetchedNftData]);
 
-  const getStatus = (lastInteraction) => {
+  const getStatus = (lastInteraction: string) => {
     if (!lastInteraction) return 'dead';
   
     const daysAgo = Math.floor((Date.now() - Number(lastInteraction) * 1000) / (1000 * 60 * 60 * 24));
@@ -69,7 +69,7 @@ const InteractPage = () => {
     return null;
   }
 
-  const getStatusIcon = (status) => {
+  const getStatusIcon = (status: string) => {
     switch (status) {
       case 'happy':
         return <FaSmile className="text-green-500" size={32} />;
