@@ -6,6 +6,7 @@ typechain
 typechain-types
 .vscode
 deployments/
+package-lock.json
 
 #Hardhat files
 cache
