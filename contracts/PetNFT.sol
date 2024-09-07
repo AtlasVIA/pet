@@ -73,7 +73,7 @@ contract PetNFT is ERC721, Ownable, MessageClient {
         PetData storage pet = pets[_nftId];
         pet.lastTreat = block.timestamp;
         pet.totalTreats++;
-        
+
         emit MetadataUpdate(_nftId);
     }
 
@@ -207,7 +207,7 @@ contract PetNFT is ERC721, Ownable, MessageClient {
                 "\"image\":\"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNnGyXJiQkmaE3EZDljvdNCEa7f232VxTpHg&s\",",
                 "\"attributes\":[",
                     "{\"trait_type\":\"Name\",\"value\":\"", string(pets[tokenId].name), "\"},",
-                    "{\"trait_type\":\"Last Walk\",\"value\":\"", uint2str(pets[tokenId].lastWalk), "\"},", // Added commas
+                    "{\"trait_type\":\"Last Walk\",\"value\":\"", uint2str(pets[tokenId].lastWalk), "\"},",
                     "{\"trait_type\":\"Last Feed\",\"value\":\"", uint2str(pets[tokenId].lastFeed), "\"},",
                     "{\"trait_type\":\"Last Treat\",\"value\":\"", uint2str(pets[tokenId].lastTreat), "\"},",
                     "{\"trait_type\":\"Total Walks\",\"value\":\"", uint2str(pets[tokenId].totalWalks), "\"},",
