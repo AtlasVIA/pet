@@ -31,12 +31,14 @@ contract PetNFT is ERC721, Ownable, MessageClient {
     }
 
     uint public nextNftId;
+    uint public nextShelterId;
     mapping(uint => PetData) public pets;
     mapping(uint => ShelterData) public shelters;
-    mapping(address => uint) public shelterManagers;
+    mapping(uint => mapping(address => bool)) public shelterManagers;
 
     constructor() ERC721("PetNFT", "PetNFT") {
         nextNftId = block.chainid * 10**4;
+        nextShelterId = block.chainid * 10**4;
     }
 
     function walk(uint _nftId) external {
@@ -64,23 +66,29 @@ contract PetNFT is ERC721, Ownable, MessageClient {
     }
 
     // Admin Functions
-    function addShelter(uint _nftId, string memory _name, string memory _location, string memory _website, string memory _email, string memory _phone) external onlyOwner {
-        ShelterData storage shelter = shelters[_nftId];
+    function addShelter(string memory _name, string memory _location, string memory _website, string memory _email, string memory _phone) external onlyOwner {
+        ShelterData storage shelter = shelters[nextShelterId];
         shelter.name = _name;
         shelter.location = _location;
         shelter.website = _website;
         shelter.email = _email;
         shelter.phone = _phone;
+
+        nextShelterId++;
     }
 
-    function addShelterManager(address _manager, uint _shelterId) external onlyOwner {
-        shelterManagers[_manager] = _shelterId;
+    function addShelterManager(uint _shelterId, address _manager) external onlyOwner {
+        shelterManagers[_shelterId][_manager] = true;
+    }
+
+    function removeShelterManager(uint _shelterId, address _manager) external onlyOwner {
+        delete shelterManagers[_shelterId][_manager];
     }
 
     // Shelter Functions
-    function addPet(string memory _name, string memory _personality, uint _shelterId) external onlyOwner {
-        
-        
+    function addPet(string memory _name, string memory _personality, uint _shelterId) external {
+        require(shelterManagers[_shelterId][msg.sender], "PetNFT: caller is not a manager of the shelter");
+
         _mint(msg.sender, nextNftId);
         nextNftId++;
 
