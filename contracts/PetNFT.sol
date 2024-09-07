@@ -38,8 +38,9 @@ contract PetNFT is ERC721, Ownable, MessageClient {
     mapping(uint => mapping(address => bool)) public shelterManagers;
 
     uint[] public allShelters;
-
     uint[] public availablePets;
+
+    event MetadataUpdate(uint256 _nftId);
 
     constructor() ERC721("Adopt A Pet", "AAP") {
         nextNftId = block.chainid * 10**4;
@@ -52,6 +53,8 @@ contract PetNFT is ERC721, Ownable, MessageClient {
         PetData storage pet = pets[_nftId];
         pet.lastWalk = block.timestamp;
         pet.totalWalks++;
+
+        emit MetadataUpdate(_nftId);
     }
 
     function feed(uint _nftId) external {
@@ -60,6 +63,8 @@ contract PetNFT is ERC721, Ownable, MessageClient {
         PetData storage pet = pets[_nftId];
         pet.lastFeed = block.timestamp;
         pet.totalFeeds++;
+
+        emit MetadataUpdate(_nftId);
     }
 
     function treat(uint _nftId) external {
@@ -68,6 +73,8 @@ contract PetNFT is ERC721, Ownable, MessageClient {
         PetData storage pet = pets[_nftId];
         pet.lastTreat = block.timestamp;
         pet.totalTreats++;
+        
+        emit MetadataUpdate(_nftId);
     }
 
     function getLastMessage(uint _nftId) external view returns (string memory) {
