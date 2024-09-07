@@ -28,6 +28,7 @@ contract AdoptAPet is ERC721, ERC721Enumerable, Ownable, MessageClient {
 
         string name;
         string personality;
+        string image;
         uint shelterId;
         bool adopted;
     }
@@ -147,9 +148,9 @@ contract AdoptAPet is ERC721, ERC721Enumerable, Ownable, MessageClient {
         require(_exists(_nftId), "AdoptAPet: Pet does not exist");
         require(ownerOf(_nftId) == address(this), "AdoptAPet: Already adopted by someone");
 
-        pets[_nftId].lastWalk = block.timestamp;
-        pets[_nftId].lastFeed = block.timestamp;
-        pets[_nftId].lastTreat = block.timestamp;
+        pets[_nftId].lastWalk = block.timestamp - 1 days;
+        pets[_nftId].lastFeed = block.timestamp - 3 days;
+        pets[_nftId].lastTreat = block.timestamp - 5 days;
 
         _transfer(address(this), msg.sender, _nftId);
         
@@ -187,7 +188,7 @@ contract AdoptAPet is ERC721, ERC721Enumerable, Ownable, MessageClient {
     }
 
     // Shelter Functions
-    function addPet(uint _shelterId, string memory _name, string memory _personality) external {
+    function addPet(uint _shelterId, string memory _name, string memory _image, string memory _personality) external {
         require(shelterManagers[_shelterId][msg.sender], "AdoptAPet: caller is not a manager of the shelter");
 
         _mint(address(this), nextNftId);
@@ -196,6 +197,7 @@ contract AdoptAPet is ERC721, ERC721Enumerable, Ownable, MessageClient {
         pet.name = _name;
         pet.personality = _personality;
         pet.shelterId = _shelterId;
+        pet.image = _image;
 
         availablePets.push(nextNftId);
         emit PetAdded(nextNftId);
@@ -208,6 +210,7 @@ contract AdoptAPet is ERC721, ERC721Enumerable, Ownable, MessageClient {
 
         bytes memory _nftMetadata = abi.encode(
             pets[_nftId].name,
+            pets[_nftId].image,
             pets[_nftId].personality,
             pets[_nftId].shelterId,
             pets[_nftId].lastWalk,
@@ -234,6 +237,7 @@ contract AdoptAPet is ERC721, ERC721Enumerable, Ownable, MessageClient {
         (
             string memory _name, 
             string memory _personality, 
+            string memory _image,
             uint _shelterId, 
             uint _lastWalk, 
             uint _lastFeed, 
@@ -242,11 +246,12 @@ contract AdoptAPet is ERC721, ERC721Enumerable, Ownable, MessageClient {
             uint _totalFeeds, 
             uint _totalTreats,
             bool _adopted
-        ) = abi.decode(_nftMetadata, (string, string, uint, uint, uint, uint, uint, uint, uint, bool));
+        ) = abi.decode(_nftMetadata, (string, string, string, uint, uint, uint, uint, uint, uint, uint, bool));
 
         // store metadata
         pets[_nftId] = PetData({
             name: _name,
+            image: _image,
             personality: _personality,
             shelterId: _shelterId,
             lastWalk: _lastWalk,
@@ -269,7 +274,7 @@ contract AdoptAPet is ERC721, ERC721Enumerable, Ownable, MessageClient {
             Base64.encode(bytes(abi.encodePacked(
                 "{\"name\":\"Adopt A Pet #", uint2str(tokenId), "\",",
                 "\"description\":\"Adopt A Pet NFT\",",
-                "\"image\":\"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNnGyXJiQkmaE3EZDljvdNCEa7f232VxTpHg&s\",",
+                "\"image\":\"", string(pets[tokenId].image), "\",",
                 "\"attributes\":[",
                     "{\"trait_type\":\"Name\",\"value\":\"", string(pets[tokenId].name), "\"},",
                     "{\"trait_type\":\"Last Walk\",\"value\":\"", uint2str(pets[tokenId].lastWalk), "\"},",
