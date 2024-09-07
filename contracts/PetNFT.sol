@@ -31,6 +31,7 @@ contract PetNFT is ERC721, Ownable, MessageClient {
 
     uint public nextNftId;
     uint public nextShelterId;
+    mapping(uint => string) public messages;
     mapping(uint => PetData) public pets;
     mapping(uint => ShelterData) public shelters;
     mapping(uint => mapping(address => bool)) public shelterManagers;
@@ -64,6 +65,10 @@ contract PetNFT is ERC721, Ownable, MessageClient {
         pet.totalTreats++;
     }
 
+    function getLastMessage(uint _nftId) external view returns (string memory) {
+        return messages[_nftId];
+    }
+
     // Admin Functions
     function addShelter(string memory _name, string memory _location, string memory _website, string memory _email) external onlyOwner {
         ShelterData storage shelter = shelters[nextShelterId];
@@ -84,7 +89,7 @@ contract PetNFT is ERC721, Ownable, MessageClient {
     }
 
     // Shelter Functions
-    function addPet(string memory _name, string memory _personality, uint _shelterId) external {
+    function addPet(uint _shelterId, string memory _name, string memory _personality) external {
         require(shelterManagers[_shelterId][msg.sender], "PetNFT: caller is not a manager of the shelter");
 
         _mint(msg.sender, nextNftId);
