@@ -1,6 +1,8 @@
 yarn hardhat --network mantle-testnet deploy
-#yarn hardhat --network optimism-testnet deploy
+yarn hardhat --network optimism-testnet deploy
 yarn hardhat --network celo-testnet deploy
+yarn hardhat --network aleph-zero-testnet deploy
+
 
 yarn hardhat --network mantle-testnet configure
 #yarn hardhat --network optimism-testnet configure

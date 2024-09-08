@@ -56,6 +56,12 @@ const config: any = {
       live: false,
       accounts: accounts,
     },
+    "aleph-zero-testnet": {
+      chainId: 2039,
+      url: "https://rpc.alephzero-testnet.gelato.digital",
+      live: false,
+      accounts: accounts,
+    },
     hardhat: {
       live: false,
       deploy: ["deploy/hardhat/"],

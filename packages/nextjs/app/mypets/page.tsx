@@ -224,30 +224,38 @@ const PetCard = ({ nftId }: { nftId: number }) => {
       </div>
 
       {/* Bridge Section */}
-      <div className="w-full mt-4">
-        <label htmlFor={`chainSelect-${nftId}`} className="block text-sm font-medium text-gray-700">
-          Select Destination Chain
+      <div className="w-full mt-6 bg-gray-100 p-4 rounded-lg shadow-md border border-gray-300">
+        <label htmlFor={`chainSelect-${nftId}`} className="block text-base font-semibold text-gray-800 mb-2">
+          🌍 Select Destination Chain
         </label>
-        <select
-          id={`chainSelect-${nftId}`}
-          className="form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-          defaultValue=""
-        >
-          <option value="" disabled>Select chain</option>
-          {chainOptions.map((chain) => (
-            <option key={chain.id} value={chain.id}>
-              {chain.name}
-            </option>
-          ))}
-        </select>
+        <div className="relative">
+          <select
+            id={`chainSelect-${nftId}`}
+            className="form-select block w-full px-4 py-3 rounded-lg bg-white border-2 border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 ease-in-out"
+            defaultValue=""
+          >
+            <option value="" disabled>Select a chain</option>
+            {chainOptions.map((chain) => (
+              <option key={chain.id} value={chain.id}>
+                {chain.name}
+              </option>
+            ))}
+          </select>
+          <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+            <svg className="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M10 3a1 1 0 01.894.553l3 6a1 1 0 01-.051.9l-3 5a1 1 0 01-1.686 0l-3-5a1 1 0 01-.051-.9l3-6A1 1 0 0110 3z" clipRule="evenodd" />
+            </svg>
+          </div>
+        </div>
 
         <button
           onClick={handleBridge}
-          className="btn bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-2 px-4 mt-4 rounded-full hover:from-pink-600 hover:to-purple-600 transition-all duration-300 w-full"
+          className="w-full mt-4 px-4 py-3 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold rounded-lg shadow-md hover:from-indigo-600 hover:to-purple-600 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-opacity-75 transition-all duration-300 ease-in-out"
         >
-          Bridge
+          🚀 Bridge Pet
         </button>
       </div>
+
 
     </div>
   );

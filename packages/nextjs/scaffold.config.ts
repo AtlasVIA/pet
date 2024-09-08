@@ -1,4 +1,20 @@
+import { defineChain } from "viem";
 import * as chains from "viem/chains";
+ 
+export const alephZeroTestnet = defineChain({
+  ...chains.celoAlfajores,
+  name: 'Aleph Zero',
+  rpcUrl: 'https://rpc.alephzero-testnet.gelato.digital',
+  explorerUrl: 'https://test.azero.dev/#/explorer',
+  nativeCurrency: {
+    name: 'Aleph Zero',
+    symbol: 'AZERO',
+    decimals: 18,
+  },
+  chainId: 2039,
+  
+  // ...
+})
 
 export type ScaffoldConfig = {
   targetNetworks: readonly chains.Chain[];
@@ -10,7 +26,7 @@ export type ScaffoldConfig = {
 
 const scaffoldConfig = {
   // The networks on which your DApp is live
-  targetNetworks: [chains.celoAlfajores, chains.optimismSepolia, chains.mantleSepoliaTestnet],
+  targetNetworks: [chains.celoAlfajores, chains.optimismSepolia, chains.mantleSepoliaTestnet, alephZeroTestnet],
 
   // The interval at which your front-end polls the RPC servers for new data
   // it has no effect if you only target the local network (default is 4000)
