@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   5003: {
     AdoptAPet: {
-      address: "0x793457b45A982aad21d7fDd3d2909e44d3A6Cf8B",
+      address: "0xcfdB0CcA026D582f6b514603694ca638f1b28ACa",
       abi: [
         {
           inputs: [],
@@ -1822,7 +1822,7 @@ const deployedContracts = {
   },
   44787: {
     AdoptAPet: {
-      address: "0xC3D4CD3A9FceaEA47eea32c09D2e7071f24617D9",
+      address: "0x739b3e3b35E265ab672C1453CaB8dCa64cA47480",
       abi: [
         {
           inputs: [],
@@ -3637,7 +3637,7 @@ const deployedContracts = {
   },
   48899: {
     AdoptAPet: {
-      address: "0x289992562cba9EB7447C0579d626ABb7960802cb",
+      address: "0x0135c25Bd3e88b1aac5FDC6f16FEe2C63d967f9d",
       abi: [
         {
           inputs: [],
@@ -5452,7 +5452,7 @@ const deployedContracts = {
   },
   11155420: {
     AdoptAPet: {
-      address: "0xeeF39DaF0F4F1d85203e049Baf7F6318BC748dFc",
+      address: "0xF519A4Cb02d0265cc36d27dcb71b2f06eD2a239c",
       abi: [
         {
           inputs: [],

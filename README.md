@@ -6,6 +6,16 @@ Welcome to our **Tomagachi-style Pet NFT** project, built for the **Warsaw ETH H
 
 Our MVP showcases the potential to create a **meaningful social impact** rather than yet another meme token or trading app. By caring for your pet through the blockchain, every interaction benefits real-world shelters, each action being a micro-donation that goes to directly to care for the shelter animals.
 
+## Targeted Bounties
+
+- **Celo**
+- **Mantle**
+- **Optimism**
+- **Aleph Zero**
+- **Zircuit**
+- **Buidl Guidl**
+- **ETH Warsaw**
+
 ## Project Vision 🌟
 
 The aim of this project is to give shelters a way to earn microdonations by allowing people to "adopt" pets in a gamified, on-chain environment. With the ever-growing popularity of NFTs, this platform turns the focus away from profit-driven motives to **social good** and tangible impact.
@@ -19,7 +29,7 @@ If pets are neglected (i.e., not fed, treated, or walked within 7 days), they wi
 - **On-Chain Pet Adoption:** Adopt NFTs that represent real pets submitted by shelters.
 - **Microdonations for Actions:** Every action you take (feeding, treating, walking) sends a small donation to the shelter.
 - **Real-World Impact:** Unlike other meme-based projects, this NFT project is connected to real-world causes.
-- **Multi-Chain Support:** You can adopt pets on multiple chains, including **Celo**, **Mantle**, **Aleph Zero**, **Optimism**, and **Starknet**.
+- **Multi-Chain Support:** You can adopt pets on multiple chains, including **Celo**, **Mantle**, **Aleph Zero**, **Optimism**, and **Zircuit**.
 - **On-Chain Metadata Preservation:** Pets and their metadata are stored on-chain, ensuring that pets and their history can be bridged across chains without losing any data.
 - **Cross-Chain Bridging:** Move your pets between supported chains with seamless on-chain bridging, keeping all metadata intact.
 
@@ -36,7 +46,7 @@ Our platform is **multi-chain**, currently deployed on:
 - **Mantle**
 - **Aleph Zero**
 - **Optimism**
-- **Starknet**
+- **Zircuit**
 
 Users can easily **bridge** their pets between these chains, maintaining the same on-chain metadata and keeping track of their pet’s interactions and status.
 
@@ -47,6 +57,9 @@ This project was built using **[Scaffold-ETH 2](https://github.com/scaffold-eth/
 ## Future Development Plans 🚀
 
 Bounties won during this hackathon will be directly reinvested into **enhancing the platform**:
+- **Stable Coins**: Utilize USDC for donations
+- **Account Abstraction**: Implement account abstraction for easier onboarding.
+- **Chain Abstraction**: No need to settle on one chain, accessable for all chains.
 - **Expanding gamification**: We plan to add more game-like elements to increase user engagement while also boosting donations.
 - **Advanced NFT features**: We will further develop the NFT aspects of the platform, possibly adding customization options, leveling systems, and more.
 - **More chain integrations**: Expand to other EVM-compatible chains and L2 solutions to bring even more users and shelters onboard.

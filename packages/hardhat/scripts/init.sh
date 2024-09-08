@@ -1,12 +1,14 @@
 yarn hardhat --network mantle-testnet deploy
 yarn hardhat --network optimism-testnet deploy
 yarn hardhat --network celo-testnet deploy
+yarn hardhat --network zircuit-testnet deploy
 #yarn hardhat --network aleph-zero-testnet deploy
 
 
 yarn hardhat --network mantle-testnet configure
 yarn hardhat --network optimism-testnet configure
 yarn hardhat --network celo-testnet configure
+yarn hardhat --network zircuit-testnet configure
 #yarn hardhat --network aleph-zero-testnet configure
 
 yarn hardhat --network celo-testnet add-shelter --accountant 0x02C4870d0af82440c1c768e078112FB377a1Fc93 --name "Test Shelter" --location "Somewhereville" --website "https://foobar.com" --email "foo@bar.com"
