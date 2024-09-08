@@ -53,6 +53,9 @@ const PetCard = ({ nftId }: { nftId: number }) => {
   const allChainOptions = [
     { id: 44787, name: 'Celo Testnet' },
     { id: 5003, name: 'Mantle Testnet' },
+    { id: 11155420, name: "OP Sepolia" },
+    { id: 48899, name: "Zircuit Testnet"},
+    { id: 2039, name: "Aleph Zero Testnet"}
   ];
   const chainOptions = allChainOptions.filter(option => option.id !== selectedChain);
 
@@ -127,7 +130,7 @@ const PetCard = ({ nftId }: { nftId: number }) => {
   };
 
   const interactWithPet = async (action: "walk" | "feed" | "treat") => {
-    await writeYourContractAsync({ functionName: action, args: [BigInt(nftId)], value: parseEther("0.0001") });
+    await writeYourContractAsync({ functionName: action, args: [BigInt(nftId)], value: parseEther("0.001") });
     refetch();
   };
 

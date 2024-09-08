@@ -12,9 +12,24 @@ export const alephZeroTestnet = defineChain({
     decimals: 18,
   },
   chainId: 2039,
-  
+
   // ...
-})
+});
+
+export const zircuitTestnet = defineChain({
+  ...chains.celoAlfajores,
+  name: 'Zircuit',
+  rpcUrl: 'https://zircuit1.p2pify.com',
+  explorerUrl: 'https://zircuit1.p2pify.com',
+  nativeCurrency: {
+    name: 'Zircuit',
+    symbol: 'ZIRC',
+    decimals: 18,
+  },
+  chainId: 48899,
+
+  // ...
+});
 
 export type ScaffoldConfig = {
   targetNetworks: readonly chains.Chain[];
@@ -26,7 +41,7 @@ export type ScaffoldConfig = {
 
 const scaffoldConfig = {
   // The networks on which your DApp is live
-  targetNetworks: [chains.celoAlfajores, chains.optimismSepolia, chains.mantleSepoliaTestnet, alephZeroTestnet],
+  targetNetworks: [chains.celoAlfajores, chains.optimismSepolia, chains.mantleSepoliaTestnet, alephZeroTestnet, zircuitTestnet],
 
   // The interval at which your front-end polls the RPC servers for new data
   // it has no effect if you only target the local network (default is 4000)

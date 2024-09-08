@@ -62,6 +62,12 @@ const config: any = {
       live: false,
       accounts: accounts,
     },
+    "zircuit-testnet": {
+      chainId: 48899,
+      url: "https://zircuit1.p2pify.com",
+      live: false,
+      accounts: accounts,
+    },
     hardhat: {
       live: false,
       deploy: ["deploy/hardhat/"],

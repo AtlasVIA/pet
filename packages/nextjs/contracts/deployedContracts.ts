@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   5003: {
     AdoptAPet: {
-      address: "0x9aDc3191F7695C6c8e5Db81D87978022c596156b",
+      address: "0x793457b45A982aad21d7fDd3d2909e44d3A6Cf8B",
       abi: [
         {
           inputs: [],
@@ -1822,7 +1822,1822 @@ const deployedContracts = {
   },
   44787: {
     AdoptAPet: {
-      address: "0x409a08Fe68dD6cAbF8254a3d94C353138D12b9e1",
+      address: "0xC3D4CD3A9FceaEA47eea32c09D2e7071f24617D9",
+      abi: [
+        {
+          inputs: [],
+          stateMutability: "nonpayable",
+          type: "constructor",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "_actionCost",
+              type: "uint256",
+            },
+          ],
+          name: "ActionCostSet",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "approved",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "tokenId",
+              type: "uint256",
+            },
+          ],
+          name: "Approval",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "operator",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "bool",
+              name: "approved",
+              type: "bool",
+            },
+          ],
+          name: "ApprovalForAll",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "address",
+              name: "previousOwner",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "address",
+              name: "newOwner",
+              type: "address",
+            },
+          ],
+          name: "MessageOwnershipTransferred",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "_nftId",
+              type: "uint256",
+            },
+          ],
+          name: "MetadataUpdate",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "previousOwner",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "newOwner",
+              type: "address",
+            },
+          ],
+          name: "OwnershipTransferred",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "_nftId",
+              type: "uint256",
+            },
+          ],
+          name: "PetAdded",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "_nftId",
+              type: "uint256",
+            },
+          ],
+          name: "PetAdopted",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "_nftId",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "_destChainId",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "address",
+              name: "_recipient",
+              type: "address",
+            },
+          ],
+          name: "PetBridged",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "_nftId",
+              type: "uint256",
+            },
+          ],
+          name: "PetFed",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "_nftId",
+              type: "uint256",
+            },
+          ],
+          name: "PetRescued",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "_nftId",
+              type: "uint256",
+            },
+          ],
+          name: "PetTreated",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "_nftId",
+              type: "uint256",
+            },
+          ],
+          name: "PetWalked",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "address",
+              name: "token",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "amount",
+              type: "uint256",
+            },
+          ],
+          name: "RecoverToken",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "txId",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "destinationChainId",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "uint32",
+              name: "featureId",
+              type: "uint32",
+            },
+            {
+              indexed: false,
+              internalType: "bytes",
+              name: "featureData",
+              type: "bytes",
+            },
+          ],
+          name: "SendMessageWithFeature",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "address",
+              name: "exsig",
+              type: "address",
+            },
+          ],
+          name: "SetExsig",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "maxfee",
+              type: "uint256",
+            },
+          ],
+          name: "SetMaxfee",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "maxGas",
+              type: "uint256",
+            },
+          ],
+          name: "SetMaxgas",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "_shelterId",
+              type: "uint256",
+            },
+          ],
+          name: "ShelterAdded",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "_shelterId",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "address",
+              name: "_manager",
+              type: "address",
+            },
+          ],
+          name: "ShelterManagerAdded",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "_shelterId",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "address",
+              name: "_manager",
+              type: "address",
+            },
+          ],
+          name: "ShelterManagerRemoved",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "from",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "to",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "tokenId",
+              type: "uint256",
+            },
+          ],
+          name: "Transfer",
+          type: "event",
+        },
+        {
+          stateMutability: "payable",
+          type: "fallback",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          name: "CHAINS",
+          outputs: [
+            {
+              internalType: "address",
+              name: "endpoint",
+              type: "address",
+            },
+            {
+              internalType: "bytes",
+              name: "endpointExtended",
+              type: "bytes",
+            },
+            {
+              internalType: "uint16",
+              name: "confirmations",
+              type: "uint16",
+            },
+            {
+              internalType: "bool",
+              name: "extended",
+              type: "bool",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+            {
+              internalType: "uint32",
+              name: "",
+              type: "uint32",
+            },
+          ],
+          name: "FEATURES",
+          outputs: [
+            {
+              internalType: "address",
+              name: "endpoint",
+              type: "address",
+            },
+            {
+              internalType: "bytes",
+              name: "endpointExtended",
+              type: "bytes",
+            },
+            {
+              internalType: "uint16",
+              name: "confirmations",
+              type: "uint16",
+            },
+            {
+              internalType: "bool",
+              name: "extended",
+              type: "bool",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "FEATURE_GATEWAY",
+          outputs: [
+            {
+              internalType: "contract IFeatureGateway",
+              name: "",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "FEE_TOKEN",
+          outputs: [
+            {
+              internalType: "contract IERC20cl",
+              name: "",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "MESSAGE_OWNER",
+          outputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "MESSAGEv3",
+          outputs: [
+            {
+              internalType: "contract IMessageV3",
+              name: "",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "actionCost",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_shelterId",
+              type: "uint256",
+            },
+            {
+              internalType: "string",
+              name: "_name",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "_image",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "_personality",
+              type: "string",
+            },
+          ],
+          name: "addPet",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "_accountant",
+              type: "address",
+            },
+            {
+              internalType: "string",
+              name: "_name",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "_location",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "_website",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "_email",
+              type: "string",
+            },
+          ],
+          name: "addShelter",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_shelterId",
+              type: "uint256",
+            },
+            {
+              internalType: "address",
+              name: "_manager",
+              type: "address",
+            },
+          ],
+          name: "addShelterManager",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_nftId",
+              type: "uint256",
+            },
+          ],
+          name: "adoptPet",
+          outputs: [],
+          stateMutability: "payable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          name: "allShelters",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "to",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "tokenId",
+              type: "uint256",
+            },
+          ],
+          name: "approve",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          name: "availablePets",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+          ],
+          name: "balanceOf",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_destChainId",
+              type: "uint256",
+            },
+            {
+              internalType: "address",
+              name: "_recipient",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "_nftId",
+              type: "uint256",
+            },
+          ],
+          name: "bridge",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "_messageV3",
+              type: "address",
+            },
+            {
+              internalType: "uint256[]",
+              name: "_chains",
+              type: "uint256[]",
+            },
+            {
+              internalType: "address[]",
+              name: "_endpoints",
+              type: "address[]",
+            },
+            {
+              internalType: "uint16[]",
+              name: "_confirmations",
+              type: "uint16[]",
+            },
+          ],
+          name: "configureClient",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "_messageV3",
+              type: "address",
+            },
+            {
+              internalType: "uint256[]",
+              name: "_chains",
+              type: "uint256[]",
+            },
+            {
+              internalType: "bytes[]",
+              name: "_endpoints",
+              type: "bytes[]",
+            },
+            {
+              internalType: "uint16[]",
+              name: "_confirmations",
+              type: "uint16[]",
+            },
+          ],
+          name: "configureClientExtended",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "_featureGateway",
+              type: "address",
+            },
+          ],
+          name: "configureFeatureGateway",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_nftId",
+              type: "uint256",
+            },
+          ],
+          name: "feed",
+          outputs: [],
+          stateMutability: "payable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "getAllShelters",
+          outputs: [
+            {
+              internalType: "uint256[]",
+              name: "",
+              type: "uint256[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "tokenId",
+              type: "uint256",
+            },
+          ],
+          name: "getApproved",
+          outputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "getAvailablePets",
+          outputs: [
+            {
+              internalType: "uint256[]",
+              name: "",
+              type: "uint256[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_nftId",
+              type: "uint256",
+            },
+          ],
+          name: "getLastMessage",
+          outputs: [
+            {
+              internalType: "string",
+              name: "",
+              type: "string",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_nftId",
+              type: "uint256",
+            },
+          ],
+          name: "getPet",
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: "uint256",
+                  name: "lastWalk",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "lastFeed",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "lastTreat",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "totalWalks",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "totalFeeds",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "totalTreats",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "totalDonations",
+                  type: "uint256",
+                },
+                {
+                  internalType: "string",
+                  name: "name",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "personality",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "image",
+                  type: "string",
+                },
+                {
+                  internalType: "uint256",
+                  name: "shelterId",
+                  type: "uint256",
+                },
+                {
+                  internalType: "bool",
+                  name: "adopted",
+                  type: "bool",
+                },
+              ],
+              internalType: "struct AdoptAPet.PetData",
+              name: "",
+              type: "tuple",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_shelterId",
+              type: "uint256",
+            },
+          ],
+          name: "getShelter",
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: "string",
+                  name: "name",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "location",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "website",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "email",
+                  type: "string",
+                },
+                {
+                  internalType: "address",
+                  name: "accountant",
+                  type: "address",
+                },
+              ],
+              internalType: "struct AdoptAPet.ShelterData",
+              name: "",
+              type: "tuple",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "operator",
+              type: "address",
+            },
+          ],
+          name: "isApprovedForAll",
+          outputs: [
+            {
+              internalType: "bool",
+              name: "",
+              type: "bool",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "_sender",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "_sourceChainId",
+              type: "uint256",
+            },
+          ],
+          name: "isAuthorized",
+          outputs: [
+            {
+              internalType: "bool",
+              name: "",
+              type: "bool",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "_sender",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "_sourceChainId",
+              type: "uint256",
+            },
+          ],
+          name: "isSelf",
+          outputs: [
+            {
+              internalType: "bool",
+              name: "",
+              type: "bool",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "_sourceChainId",
+              type: "uint256",
+            },
+            {
+              internalType: "address",
+              name: "_sender",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+            {
+              internalType: "bytes",
+              name: "_data",
+              type: "bytes",
+            },
+          ],
+          name: "messageProcess",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          name: "messages",
+          outputs: [
+            {
+              internalType: "string",
+              name: "",
+              type: "string",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "name",
+          outputs: [
+            {
+              internalType: "string",
+              name: "",
+              type: "string",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "nextNftId",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "nextShelterId",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "owner",
+          outputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "tokenId",
+              type: "uint256",
+            },
+          ],
+          name: "ownerOf",
+          outputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          name: "pets",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "lastWalk",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "lastFeed",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "lastTreat",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "totalWalks",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "totalFeeds",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "totalTreats",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "totalDonations",
+              type: "uint256",
+            },
+            {
+              internalType: "string",
+              name: "name",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "personality",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "image",
+              type: "string",
+            },
+            {
+              internalType: "uint256",
+              name: "shelterId",
+              type: "uint256",
+            },
+            {
+              internalType: "bool",
+              name: "adopted",
+              type: "bool",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "_token",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "_amount",
+              type: "uint256",
+            },
+          ],
+          name: "recoverToken",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_shelterId",
+              type: "uint256",
+            },
+            {
+              internalType: "address",
+              name: "_manager",
+              type: "address",
+            },
+          ],
+          name: "removeShelterManager",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "renounceOwnership",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_nftId",
+              type: "uint256",
+            },
+          ],
+          name: "rescue",
+          outputs: [],
+          stateMutability: "payable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "from",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "to",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "tokenId",
+              type: "uint256",
+            },
+          ],
+          name: "safeTransferFrom",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "from",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "to",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "tokenId",
+              type: "uint256",
+            },
+            {
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "safeTransferFrom",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_actionCost",
+              type: "uint256",
+            },
+          ],
+          name: "setActionCost",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "operator",
+              type: "address",
+            },
+            {
+              internalType: "bool",
+              name: "approved",
+              type: "bool",
+            },
+          ],
+          name: "setApprovalForAll",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "_signer",
+              type: "address",
+            },
+          ],
+          name: "setExsig",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_maxFee",
+              type: "uint256",
+            },
+          ],
+          name: "setMaxfee",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_maxGas",
+              type: "uint256",
+            },
+          ],
+          name: "setMaxgas",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          name: "shelterAccountant",
+          outputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          name: "shelterManagers",
+          outputs: [
+            {
+              internalType: "bool",
+              name: "",
+              type: "bool",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          name: "shelters",
+          outputs: [
+            {
+              internalType: "string",
+              name: "name",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "location",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "website",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "email",
+              type: "string",
+            },
+            {
+              internalType: "address",
+              name: "accountant",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes4",
+              name: "interfaceId",
+              type: "bytes4",
+            },
+          ],
+          name: "supportsInterface",
+          outputs: [
+            {
+              internalType: "bool",
+              name: "",
+              type: "bool",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "symbol",
+          outputs: [
+            {
+              internalType: "string",
+              name: "",
+              type: "string",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "index",
+              type: "uint256",
+            },
+          ],
+          name: "tokenByIndex",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "index",
+              type: "uint256",
+            },
+          ],
+          name: "tokenOfOwnerByIndex",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "tokenId",
+              type: "uint256",
+            },
+          ],
+          name: "tokenURI",
+          outputs: [
+            {
+              internalType: "string",
+              name: "",
+              type: "string",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "totalSupply",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "from",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "to",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "tokenId",
+              type: "uint256",
+            },
+          ],
+          name: "transferFrom",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "_newMessageOwner",
+              type: "address",
+            },
+          ],
+          name: "transferMessageOwnership",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "newOwner",
+              type: "address",
+            },
+          ],
+          name: "transferOwnership",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_nftId",
+              type: "uint256",
+            },
+          ],
+          name: "treat",
+          outputs: [],
+          stateMutability: "payable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_nftId",
+              type: "uint256",
+            },
+          ],
+          name: "walk",
+          outputs: [],
+          stateMutability: "payable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+          ],
+          name: "walletOfOwner",
+          outputs: [
+            {
+              internalType: "uint256[]",
+              name: "",
+              type: "uint256[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          stateMutability: "payable",
+          type: "receive",
+        },
+      ],
+      inheritedFunctions: {
+        approve:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        balanceOf:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        getApproved:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        isApprovedForAll:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        name: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        ownerOf:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        safeTransferFrom:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        setApprovalForAll:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        supportsInterface:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        symbol:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenURI:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        transferFrom:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenByIndex:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenOfOwnerByIndex:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        totalSupply:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        owner: "@openzeppelin/contracts/access/Ownable.sol",
+        renounceOwnership: "@openzeppelin/contracts/access/Ownable.sol",
+        transferOwnership: "@openzeppelin/contracts/access/Ownable.sol",
+        CHAINS: "@vialabs-io/contracts/message/MessageClient.sol",
+        FEATURES: "@vialabs-io/contracts/message/MessageClient.sol",
+        FEATURE_GATEWAY: "@vialabs-io/contracts/message/MessageClient.sol",
+        FEE_TOKEN: "@vialabs-io/contracts/message/MessageClient.sol",
+        MESSAGE_OWNER: "@vialabs-io/contracts/message/MessageClient.sol",
+        MESSAGEv3: "@vialabs-io/contracts/message/MessageClient.sol",
+        configureClient: "@vialabs-io/contracts/message/MessageClient.sol",
+        configureClientExtended:
+          "@vialabs-io/contracts/message/MessageClient.sol",
+        configureFeatureGateway:
+          "@vialabs-io/contracts/message/MessageClient.sol",
+        isAuthorized: "@vialabs-io/contracts/message/MessageClient.sol",
+        isSelf: "@vialabs-io/contracts/message/MessageClient.sol",
+        messageProcess: "@vialabs-io/contracts/message/MessageClient.sol",
+        recoverToken: "@vialabs-io/contracts/message/MessageClient.sol",
+        setExsig: "@vialabs-io/contracts/message/MessageClient.sol",
+        setMaxfee: "@vialabs-io/contracts/message/MessageClient.sol",
+        setMaxgas: "@vialabs-io/contracts/message/MessageClient.sol",
+        transferMessageOwnership:
+          "@vialabs-io/contracts/message/MessageClient.sol",
+      },
+    },
+  },
+  48899: {
+    AdoptAPet: {
+      address: "0x289992562cba9EB7447C0579d626ABb7960802cb",
       abi: [
         {
           inputs: [],
@@ -3637,7 +5452,7 @@ const deployedContracts = {
   },
   11155420: {
     AdoptAPet: {
-      address: "0xC06c577f69f4974087d7Adb31f33ef02941e64Bd",
+      address: "0xeeF39DaF0F4F1d85203e049Baf7F6318BC748dFc",
       abi: [
         {
           inputs: [],

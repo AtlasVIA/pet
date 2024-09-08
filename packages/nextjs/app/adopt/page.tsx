@@ -27,7 +27,7 @@ const Adopt = () => {
 
   const handleAdopt = async (nftId: bigint) => {
     try {
-      await writeYourContractAsync({ functionName: "adoptPet", args: [BigInt(nftId)], value: parseEther("0.0001") });
+      await writeYourContractAsync({ functionName: "adoptPet", args: [BigInt(nftId)], value: parseEther("0.001") });
       router.push(`/mypets`);
     } catch (error) {
       console.error("Adoption failed", error);
