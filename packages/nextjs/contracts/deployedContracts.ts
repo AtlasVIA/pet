@@ -5,9 +5,9 @@
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
 const deployedContracts = {
-  44787: {
+  5003: {
     AdoptAPet: {
-      address: "0x12525dA5EC8024E5946a948a94acE4d9E8E6b4b6",
+      address: "0x9aDc3191F7695C6c8e5Db81D87978022c596156b",
       abi: [
         {
           inputs: [],
@@ -651,7 +651,7 @@ const deployedContracts = {
           ],
           name: "adoptPet",
           outputs: [],
-          stateMutability: "nonpayable",
+          stateMutability: "payable",
           type: "function",
         },
         {
@@ -938,6 +938,11 @@ const deployedContracts = {
                 {
                   internalType: "uint256",
                   name: "totalTreats",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "totalDonations",
                   type: "uint256",
                 },
                 {
@@ -1258,6 +1263,11 @@ const deployedContracts = {
             {
               internalType: "uint256",
               name: "totalTreats",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "totalDonations",
               type: "uint256",
             },
             {
@@ -1810,9 +1820,9 @@ const deployedContracts = {
       },
     },
   },
-  80002: {
+  44787: {
     AdoptAPet: {
-      address: "0x4B8Bd241ff179CcA25C54b3249b22395f36B4c83",
+      address: "0x409a08Fe68dD6cAbF8254a3d94C353138D12b9e1",
       abi: [
         {
           inputs: [],
@@ -2381,6 +2391,11 @@ const deployedContracts = {
             },
             {
               internalType: "string",
+              name: "_image",
+              type: "string",
+            },
+            {
+              internalType: "string",
               name: "_personality",
               type: "string",
             },
@@ -2392,6 +2407,11 @@ const deployedContracts = {
         },
         {
           inputs: [
+            {
+              internalType: "address",
+              name: "_accountant",
+              type: "address",
+            },
             {
               internalType: "string",
               name: "_name",
@@ -2446,7 +2466,7 @@ const deployedContracts = {
           ],
           name: "adoptPet",
           outputs: [],
-          stateMutability: "nonpayable",
+          stateMutability: "payable",
           type: "function",
         },
         {
@@ -2626,7 +2646,7 @@ const deployedContracts = {
           ],
           name: "feed",
           outputs: [],
-          stateMutability: "nonpayable",
+          stateMutability: "payable",
           type: "function",
         },
         {
@@ -2736,6 +2756,11 @@ const deployedContracts = {
                   type: "uint256",
                 },
                 {
+                  internalType: "uint256",
+                  name: "totalDonations",
+                  type: "uint256",
+                },
+                {
                   internalType: "string",
                   name: "name",
                   type: "string",
@@ -2743,6 +2768,11 @@ const deployedContracts = {
                 {
                   internalType: "string",
                   name: "personality",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "image",
                   type: "string",
                 },
                 {
@@ -2795,6 +2825,11 @@ const deployedContracts = {
                   internalType: "string",
                   name: "email",
                   type: "string",
+                },
+                {
+                  internalType: "address",
+                  name: "accountant",
+                  type: "address",
                 },
               ],
               internalType: "struct AdoptAPet.ShelterData",
@@ -3046,6 +3081,11 @@ const deployedContracts = {
               type: "uint256",
             },
             {
+              internalType: "uint256",
+              name: "totalDonations",
+              type: "uint256",
+            },
+            {
               internalType: "string",
               name: "name",
               type: "string",
@@ -3053,6 +3093,11 @@ const deployedContracts = {
             {
               internalType: "string",
               name: "personality",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "image",
               type: "string",
             },
             {
@@ -3122,7 +3167,7 @@ const deployedContracts = {
           ],
           name: "rescue",
           outputs: [],
-          stateMutability: "nonpayable",
+          stateMutability: "payable",
           type: "function",
         },
         {
@@ -3253,6 +3298,25 @@ const deployedContracts = {
               name: "",
               type: "uint256",
             },
+          ],
+          name: "shelterAccountant",
+          outputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
             {
               internalType: "address",
               name: "",
@@ -3299,6 +3363,11 @@ const deployedContracts = {
               internalType: "string",
               name: "email",
               type: "string",
+            },
+            {
+              internalType: "address",
+              name: "accountant",
+              type: "address",
             },
           ],
           stateMutability: "view",
@@ -3470,7 +3539,7 @@ const deployedContracts = {
           ],
           name: "treat",
           outputs: [],
-          stateMutability: "nonpayable",
+          stateMutability: "payable",
           type: "function",
         },
         {
@@ -3483,7 +3552,7 @@ const deployedContracts = {
           ],
           name: "walk",
           outputs: [],
-          stateMutability: "nonpayable",
+          stateMutability: "payable",
           type: "function",
         },
         {

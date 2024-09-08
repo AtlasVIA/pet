@@ -26,6 +26,8 @@ contract AdoptAPet is ERC721, ERC721Enumerable, Ownable, MessageClient {
         uint totalFeeds;
         uint totalTreats;
 
+        uint totalDonations;
+
         string name;
         string personality;
         string image;
@@ -72,6 +74,7 @@ contract AdoptAPet is ERC721, ERC721Enumerable, Ownable, MessageClient {
 
         pets[_nftId].lastWalk = block.timestamp;
         pets[_nftId].totalWalks++;
+        pets[_nftId].totalDonations += msg.value;
 
         emit MetadataUpdate(_nftId);
         emit PetWalked(_nftId);
@@ -86,6 +89,7 @@ contract AdoptAPet is ERC721, ERC721Enumerable, Ownable, MessageClient {
         PetData storage pet = pets[_nftId];
         pet.lastFeed = block.timestamp;
         pet.totalFeeds++;
+        pets[_nftId].totalDonations += msg.value;
 
         emit MetadataUpdate(_nftId);
         emit PetFed(_nftId);
@@ -100,6 +104,7 @@ contract AdoptAPet is ERC721, ERC721Enumerable, Ownable, MessageClient {
         PetData storage pet = pets[_nftId];
         pet.lastTreat = block.timestamp;
         pet.totalTreats++;
+        pets[_nftId].totalDonations += msg.value;
 
         emit MetadataUpdate(_nftId);
         emit PetTreated(_nftId);
@@ -144,13 +149,17 @@ contract AdoptAPet is ERC721, ERC721Enumerable, Ownable, MessageClient {
         return pets[_nftId];
     }
 
-    function adoptPet(uint _nftId) external {
+    function adoptPet(uint _nftId) external payable {
         require(_exists(_nftId), "AdoptAPet: Pet does not exist");
+        require(msg.value >= actionCost, "AdoptAPet: Insufficient funds");
         require(ownerOf(_nftId) == address(this), "AdoptAPet: Already adopted by someone");
+
+        payable(shelterAccountant[pets[_nftId].shelterId]).transfer(msg.value);
 
         pets[_nftId].lastWalk = block.timestamp - 1 days;
         pets[_nftId].lastFeed = block.timestamp - 3 days;
         pets[_nftId].lastTreat = block.timestamp - 5 days;
+        pets[_nftId].totalDonations += msg.value;
 
         _transfer(address(this), msg.sender, _nftId);
         
@@ -216,6 +225,7 @@ contract AdoptAPet is ERC721, ERC721Enumerable, Ownable, MessageClient {
             pets[_nftId].lastWalk,
             pets[_nftId].lastFeed,
             pets[_nftId].lastTreat,
+            pets[_nftId].totalDonations,
             pets[_nftId].totalWalks,
             pets[_nftId].totalFeeds,
             pets[_nftId].totalTreats,
@@ -236,17 +246,18 @@ contract AdoptAPet is ERC721, ERC721Enumerable, Ownable, MessageClient {
         // parse metadata
         (
             string memory _name, 
-            string memory _personality, 
             string memory _image,
+            string memory _personality, 
             uint _shelterId, 
             uint _lastWalk, 
             uint _lastFeed, 
             uint _lastTreat, 
+            uint _totalDonations,
             uint _totalWalks, 
             uint _totalFeeds, 
             uint _totalTreats,
             bool _adopted
-        ) = abi.decode(_nftMetadata, (string, string, string, uint, uint, uint, uint, uint, uint, uint, bool));
+        ) = abi.decode(_nftMetadata, (string, string, string, uint, uint,  uint, uint, uint, uint, uint, uint, bool));
 
         // store metadata
         pets[_nftId] = PetData({
@@ -257,6 +268,7 @@ contract AdoptAPet is ERC721, ERC721Enumerable, Ownable, MessageClient {
             lastWalk: _lastWalk,
             lastFeed: _lastFeed,
             lastTreat: _lastTreat,
+            totalDonations: _totalDonations,
             totalWalks: _totalWalks,
             totalFeeds: _totalFeeds,
             totalTreats: _totalTreats,

@@ -50,6 +50,12 @@ const config: any = {
       live: false,
       accounts: accounts,
     },
+    "optimism-testnet": {
+      chainId: 11155420,
+      url: "https://sepolia.optimism.io",
+      live: false,
+      accounts: accounts,
+    },
     hardhat: {
       live: false,
       deploy: ["deploy/hardhat/"],

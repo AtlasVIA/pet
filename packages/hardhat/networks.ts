@@ -1,6 +1,6 @@
 const networks = [
-    "celo-testnet",
-    "polygon-amoy",
-    "mantle-testnet",
+  "celo-testnet",
+  //"optimism-testnet",
+  "mantle-testnet",
 ];
 export default networks;

@@ -24,12 +24,14 @@ const MyPets = () => {
   }, [nftData]);
 
   return (
-    <div className="flex-grow bg-base-300 w-full px-8 py-12">
+    <div className="flex-grow bg-gradient-to-br from-purple-300 via-pink-200 to-yellow-200 p-10 rounded-xl transform transition-all duration-500 hover:scale-105 hover:shadow-2xl w-full px-8 py-12">
       <div className="flex justify-center items-center gap-12 flex-col sm:flex-row">
-        {isLoading && <p>Loading your Pets...</p>}
-        {isError && <p>Failed to load Pets</p>}
-        {!isLoading && !isError && nftIds.length === 0 && <p>You do not currently have any Pets</p>}
-
+        {isLoading && <p className="text-lg text-gray-600">Loading your Pets...</p>}
+        {isError && <p className="text-lg text-red-500">Failed to load Pets</p>}
+        {!isLoading && !isError && nftIds.length === 0 && (
+          <p className="text-lg text-gray-600">You do not currently have any Pets</p>
+        )}
+  
         {nftIds.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {nftIds.map((nftId) => (
@@ -39,7 +41,7 @@ const MyPets = () => {
         )}
       </div>
     </div>
-  );
+  );  
 };
 
 const PetCard = ({ nftId }: { nftId: number }) => {
@@ -107,7 +109,6 @@ const PetCard = ({ nftId }: { nftId: number }) => {
         <h2 className="card-title text-xl font-bold text-pink-600 mt-3 text-center truncate w-full">
           {nftData?.name}
         </h2>
-        <p className="text-sm text-gray-700 text-center">{nftData?.personality}</p>
 
         <div className="stats mt-4 w-full flex flex-col space-y-4 text-sm">
           <div className="stat flex justify-between items-center">
