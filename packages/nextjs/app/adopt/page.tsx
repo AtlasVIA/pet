@@ -47,7 +47,7 @@ const Adopt = () => {
         {isLoading && <p className="text-lg text-gray-600 text-center">Loading available pets...</p>}
         {isError && <p className="text-lg text-red-500 text-center">Failed to load pets</p>}
         {!isLoading && !isError && nftIds.length === 0 && (
-          <p className="text-lg text-gray-600 text-center">There are no pets available for adoption at the moment!</p>
+          <p className="text-lg text-gray-600 text-center">There are no pets available for adoption at the moment! Please try another chain!</p>
         )}
 
         {nftIds.length > 0 && (

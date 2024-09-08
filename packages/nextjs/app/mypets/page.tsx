@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
-import { parseEther } from "viem";
+import { parseEther, formatEther } from "viem";
 import { FaSmile, FaFrown, FaExclamationTriangle, FaSkull } from 'react-icons/fa';
 
 const MyPets = () => {
@@ -29,9 +29,9 @@ const MyPets = () => {
         {isLoading && <p className="text-lg text-gray-600">Loading your Pets...</p>}
         {isError && <p className="text-lg text-red-500">Failed to load Pets</p>}
         {!isLoading && !isError && nftIds.length === 0 && (
-          <p className="text-lg text-gray-600">You do not currently have any Pets</p>
+          <p className="text-lg text-gray-600">You do not currently have any Pets on this chain. Switch chains to see your Pets on other chains.</p>
         )}
-  
+
         {nftIds.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {nftIds.map((nftId) => (
@@ -41,18 +41,56 @@ const MyPets = () => {
         )}
       </div>
     </div>
-  );  
+  );
 };
 
 const PetCard = ({ nftId }: { nftId: number }) => {
   const [nftData, setNftData] = useState<any>(null);
+  const [selectedChain, setSelectedChain] = useState<number | null>(null);
+  const { address: connectedAddress } = useAccount();
+
+  // Chains available for bridging
+  const allChainOptions = [
+    { id: 44787, name: 'Celo Testnet' },
+    { id: 5003, name: 'Mantle Testnet' },
+  ];
+  const chainOptions = allChainOptions.filter(option => option.id !== selectedChain);
+
+  const { writeContractAsync: bridgePet } = useScaffoldWriteContract("AdoptAPet");
 
   // Fetch individual pet data for each NFT
-  const { data: fetchedNftData } = useScaffoldReadContract({
+  const { data: fetchedNftData, refetch } = useScaffoldReadContract({
     contractName: "AdoptAPet",
     functionName: "getPet",
     args: [BigInt(nftId)],
   });
+
+  console.log(fetchedNftData);
+  useEffect(() => {
+    if (fetchedNftData) {
+      setNftData(fetchedNftData);
+    }
+  }, [fetchedNftData]);
+
+  const handleBridge = async () => {
+    const selectElement = document.getElementById(`chainSelect-${nftId}`) as HTMLSelectElement;
+    const chosenChain = selectElement.value;
+
+    if (!chosenChain) {
+      alert("Please select a chain.");
+      return;
+    }
+
+    try {
+      await bridgePet({
+        functionName: "bridge",
+        args: [BigInt(chosenChain), connectedAddress, BigInt(nftId)],
+      });
+      refetch(); // Refresh NFT data after bridging
+    } catch (error) {
+      console.error("Bridge failed", error);
+    }
+  };
 
   useEffect(() => {
     if (fetchedNftData) {
@@ -90,6 +128,7 @@ const PetCard = ({ nftId }: { nftId: number }) => {
 
   const interactWithPet = async (action: "walk" | "feed" | "treat") => {
     await writeYourContractAsync({ functionName: action, args: [BigInt(nftId)], value: parseEther("0.0001") });
+    refetch();
   };
 
   if (!nftData) {
@@ -106,10 +145,14 @@ const PetCard = ({ nftId }: { nftId: number }) => {
             className="w-full h-full object-cover"
           />
         </div>
+
         <h2 className="card-title text-xl font-bold text-pink-600 mt-3 text-center truncate w-full">
           {nftData?.name}
         </h2>
 
+        <p className="text-lg text-gray-600 mt-1 text-center">
+          Donations: {formatEther(nftData?.totalDonations) || 0} ETH
+        </p>
         <div className="stats mt-4 w-full flex flex-col space-y-4 text-sm">
           <div className="stat flex justify-between items-center">
             <div className="stat-title text-left">Walk Status</div>
@@ -177,6 +220,32 @@ const PetCard = ({ nftId }: { nftId: number }) => {
           onClick={() => interactWithPet("treat")}
         >
           🍬 Treat
+        </button>
+      </div>
+
+      {/* Bridge Section */}
+      <div className="w-full mt-4">
+        <label htmlFor={`chainSelect-${nftId}`} className="block text-sm font-medium text-gray-700">
+          Select Destination Chain
+        </label>
+        <select
+          id={`chainSelect-${nftId}`}
+          className="form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+          defaultValue=""
+        >
+          <option value="" disabled>Select chain</option>
+          {chainOptions.map((chain) => (
+            <option key={chain.id} value={chain.id}>
+              {chain.name}
+            </option>
+          ))}
+        </select>
+
+        <button
+          onClick={handleBridge}
+          className="btn bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-2 px-4 mt-4 rounded-full hover:from-pink-600 hover:to-purple-600 transition-all duration-300 w-full"
+        >
+          Bridge
         </button>
       </div>
 

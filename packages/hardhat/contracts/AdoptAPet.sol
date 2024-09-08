@@ -46,7 +46,7 @@ contract AdoptAPet is ERC721, ERC721Enumerable, Ownable, MessageClient {
     uint[] public allShelters;
     uint[] public availablePets;
 
-    uint public actionCost = 0.0001 ether;
+    uint public actionCost = 0.001 ether;
 
     event MetadataUpdate(uint256 _nftId);
     event ShelterAdded(uint256 _shelterId);
@@ -295,11 +295,8 @@ contract AdoptAPet is ERC721, ERC721Enumerable, Ownable, MessageClient {
                     "{\"trait_type\":\"Total Walks\",\"value\":\"", uint2str(pets[tokenId].totalWalks), "\"},",
                     "{\"trait_type\":\"Total Feeds\",\"value\":\"", uint2str(pets[tokenId].totalFeeds), "\"},",
                     "{\"trait_type\":\"Total Treats\",\"value\":\"", uint2str(pets[tokenId].totalTreats), "\"},",
-                    "{\"trait_type\":\"Adopted\",\"value\":\"", pets[tokenId].adopted ? "true" : "false", "\"},",
-                    "{\"trait_type\":\"Shelter\",\"value\":\"", string(shelters[pets[tokenId].shelterId].name), "\"},",
-                    "{\"trait_type\":\"Location\",\"value\":\"", string(shelters[pets[tokenId].shelterId].location), "\"},",
-                    "{\"trait_type\":\"Website\",\"value\":\"", string(shelters[pets[tokenId].shelterId].website), "\"},",
-                    "{\"trait_type\":\"Email\",\"value\":\"", string(shelters[pets[tokenId].shelterId].email), "\"}",
+                    "{\"trait_type\":\"Total Donations\",\"value\":\"", uint2str(pets[tokenId].totalDonations), "\"},",
+                    "{\"trait_type\":\"Adopted\",\"value\":\"", pets[tokenId].adopted ? "true" : "false", "\"}",
                 "]}"
             )))
         ));
