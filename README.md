@@ -1,81 +1,66 @@
-# 🏗 Scaffold-ETH 2
+# Adopt A Pet NFT 🐕 | Warsaw ETH Hackathon 2024 Submission
 
-<h4 align="center">
-  <a href="https://docs.scaffoldeth.io">Documentation</a> |
-  <a href="https://scaffoldeth.io">Website</a>
-</h4>
+## Introduction
 
-🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
+Welcome to our **Tomagachi-style Pet NFT** project, built for the **Warsaw ETH Hackathon 2024**! This project brings together blockchain technology and the real-world mission of supporting pet shelters. With our on-chain solution, users can **adopt and care for virtual pets** submitted by real pet shelters, providing donations to these shelters in the process.
 
-⚙️ Built using NextJS, RainbowKit, Hardhat, Wagmi, Viem, and Typescript.
+Our MVP showcases the potential to create a **meaningful social impact** rather than yet another meme token or trading app. By caring for your pet through the blockchain, every interaction benefits real-world shelters, each action being a micro-donation that goes to directly to care for the shelter animals.
 
-- ✅ **Contract Hot Reload**: Your frontend auto-adapts to your smart contract as you edit it.
-- 🪝 **[Custom hooks](https://docs.scaffoldeth.io/hooks/)**: Collection of React hooks wrapper around [wagmi](https://wagmi.sh/) to simplify interactions with smart contracts with typescript autocompletion.
-- 🧱 [**Components**](https://docs.scaffoldeth.io/components/): Collection of common web3 components to quickly build your frontend.
-- 🔥 **Burner Wallet & Local Faucet**: Quickly test your application with a burner wallet and local faucet.
-- 🔐 **Integration with Wallet Providers**: Connect to different wallet providers and interact with the Ethereum network.
+## Project Vision 🌟
 
-![Debug Contracts tab](https://github.com/scaffold-eth/scaffold-eth-2/assets/55535804/b237af0c-5027-4849-a5c1-2e31495cccb1)
+The aim of this project is to give shelters a way to earn microdonations by allowing people to "adopt" pets in a gamified, on-chain environment. With the ever-growing popularity of NFTs, this platform turns the focus away from profit-driven motives to **social good** and tangible impact.
 
-## Requirements
+Each pet interaction (feeding, treating, and walking) translates to a **microdonation** that goes directly to the shelter. This means that users’ care for their pets not only keeps them happy but also directly benefits the pet shelters financially.
 
-Before you begin, you need to install the following tools:
+If pets are neglected (i.e., not fed, treated, or walked within 7 days), they will be **returned to the shelter**, giving others a chance to adopt and ensure that these organizations receive continuous donations.
 
-- [Node (>= v18.17)](https://nodejs.org/en/download/)
-- Yarn ([v1](https://classic.yarnpkg.com/en/docs/install/) or [v2+](https://yarnpkg.com/getting-started/install))
-- [Git](https://git-scm.com/downloads)
+## Features
 
-## Quickstart
+- **On-Chain Pet Adoption:** Adopt NFTs that represent real pets submitted by shelters.
+- **Microdonations for Actions:** Every action you take (feeding, treating, walking) sends a small donation to the shelter.
+- **Real-World Impact:** Unlike other meme-based projects, this NFT project is connected to real-world causes.
+- **Multi-Chain Support:** You can adopt pets on multiple chains, including **Celo**, **Mantle**, **Aleph Zero**, **Optimism**, and **Starknet**.
+- **On-Chain Metadata Preservation:** Pets and their metadata are stored on-chain, ensuring that pets and their history can be bridged across chains without losing any data.
+- **Cross-Chain Bridging:** Move your pets between supported chains with seamless on-chain bridging, keeping all metadata intact.
 
-To get started with Scaffold-ETH 2, follow the steps below:
+## Why This Project Matters
 
-1. Clone this repo & install dependencies
+Most blockchain-based projects today focus on trading and speculation, offering little to no real-world value. This project flips the narrative, showing how **decentralized technologies** can drive social good. Instead of swapping meme tokens, you’re interacting with a platform that supports **pet shelters** and drives donations to where they are needed most.
 
-```
-git clone https://github.com/scaffold-eth/scaffold-eth-2.git
-cd scaffold-eth-2
-yarn install
-```
+By combining blockchain with charitable giving, this platform could revolutionize the way donations and gamified experiences are structured, providing a fun, interactive, and impactful way for users to contribute to a cause.
 
-2. Run a local network in the first terminal:
+## Multi-Chain Architecture 🌐
 
-```
-yarn chain
-```
+Our platform is **multi-chain**, currently deployed on:
+- **Celo**
+- **Mantle**
+- **Aleph Zero**
+- **Optimism**
+- **Starknet**
 
-This command starts a local Ethereum network using Hardhat. The network runs on your local machine and can be used for testing and development. You can customize the network configuration in `hardhat.config.ts`.
+Users can easily **bridge** their pets between these chains, maintaining the same on-chain metadata and keeping track of their pet’s interactions and status.
 
-3. On a second terminal, deploy the test contract:
+## Tech Stack 💻
 
-```
-yarn deploy
-```
+This project was built using **[Scaffold-ETH 2](https://github.com/scaffold-eth/scaffold-eth-2)**, which allowed us to rapidly develop a decentralized application (dApp) with all the essential tools to integrate smart contracts, a frontend UI, and cross-chain functionality.
 
-This command deploys a test smart contract to the local network. The contract is located in `packages/hardhat/contracts` and can be modified to suit your needs. The `yarn deploy` command uses the deploy script located in `packages/hardhat/deploy` to deploy the contract to the network. You can also customize the deploy script.
+## Future Development Plans 🚀
 
-4. On a third terminal, start your NextJS app:
+Bounties won during this hackathon will be directly reinvested into **enhancing the platform**:
+- **Expanding gamification**: We plan to add more game-like elements to increase user engagement while also boosting donations.
+- **Advanced NFT features**: We will further develop the NFT aspects of the platform, possibly adding customization options, leveling systems, and more.
+- **More chain integrations**: Expand to other EVM-compatible chains and L2 solutions to bring even more users and shelters onboard.
+- **Broader shelter partnerships**: Collaborate with shelters globally to list more pets on-chain and drive even greater impact.
 
-```
-yarn start
-```
+By pushing forward these improvements, we hope to turn this MVP into a full-fledged platform for **gamified donations** that continues to support the shelters long after the hackathon is over.
 
-Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page. You can tweak the app config in `packages/nextjs/scaffold.config.ts`.
+## Conclusion
 
-**What's next**:
+Thank you for checking out our submission for the **Warsaw ETH Hackathon 2024**! Together, we can care for virtual pets while providing real-world help to those in need.
 
-- Edit your smart contract `YourContract.sol` in `packages/hardhat/contracts`
-- Edit your frontend homepage at `packages/nextjs/app/page.tsx`. For guidance on [routing](https://nextjs.org/docs/app/building-your-application/routing/defining-routes) and configuring [pages/layouts](https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts) checkout the Next.js documentation.
-- Edit your deployment scripts in `packages/hardhat/deploy`
-- Edit your smart contract test in: `packages/hardhat/test`. To run test use `yarn hardhat:test`
+**Let’s bridge the gap between blockchain and social impact—one pet at a time!** 🐕❤️
 
-## Documentation
+---
 
-Visit our [docs](https://docs.scaffoldeth.io) to learn how to start building with Scaffold-ETH 2.
-
-To know more about its features, check out our [website](https://scaffoldeth.io).
-
-## Contributing to Scaffold-ETH 2
-
-We welcome contributions to Scaffold-ETH 2!
-
-Please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to Scaffold-ETH 2.
+**Project Submitted by: o)-<|**  
+For inquiries, please contact: atlas@vialabs.io
