@@ -7,8 +7,8 @@
     "start": "next dev",
     "build": "next build",
     "serve": "next start",
-    "lint": "",
-    "format": "",
+    "lint": "next lint",
+    "format": "prettier --write . '!(node_modules|.next|contracts)/**/*'",
     "check-types": "",
     "vercel": "vercel",
     "vercel:yolo": "vercel --build-env NEXT_PUBLIC_IGNORE_BUILD_ERROR=true"
