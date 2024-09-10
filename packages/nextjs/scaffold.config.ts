@@ -1,14 +1,14 @@
 import { defineChain } from "viem";
 import * as chains from "viem/chains";
- 
+
 export const alephZeroTestnet = defineChain({
   ...chains.celoAlfajores,
-  name: 'Aleph Zero',
-  rpcUrl: 'https://rpc.alephzero-testnet.gelato.digital',
-  explorerUrl: 'https://test.azero.dev/#/explorer',
+  name: "Aleph Zero",
+  rpcUrl: "https://rpc.alephzero-testnet.gelato.digital",
+  explorerUrl: "https://test.azero.dev/#/explorer",
   nativeCurrency: {
-    name: 'Aleph Zero',
-    symbol: 'AZERO',
+    name: "Aleph Zero",
+    symbol: "AZERO",
     decimals: 18,
   },
   chainId: 2039,
@@ -18,12 +18,12 @@ export const alephZeroTestnet = defineChain({
 
 export const zircuitTestnet = defineChain({
   ...chains.celoAlfajores,
-  name: 'Zircuit',
-  rpcUrl: 'https://zircuit1.p2pify.com',
-  explorerUrl: 'https://zircuit1.p2pify.com',
+  name: "Zircuit",
+  rpcUrl: "https://zircuit1.p2pify.com",
+  explorerUrl: "https://zircuit1.p2pify.com",
   nativeCurrency: {
-    name: 'Zircuit',
-    symbol: 'ZIRC',
+    name: "Zircuit",
+    symbol: "ZIRC",
     decimals: 18,
   },
   chainId: 48899,
@@ -41,7 +41,13 @@ export type ScaffoldConfig = {
 
 const scaffoldConfig = {
   // The networks on which your DApp is live
-  targetNetworks: [chains.celoAlfajores, chains.optimismSepolia, chains.mantleSepoliaTestnet, alephZeroTestnet, zircuitTestnet],
+  targetNetworks: [
+    chains.celoAlfajores,
+    chains.optimismSepolia,
+    chains.mantleSepoliaTestnet,
+    alephZeroTestnet,
+    zircuitTestnet,
+  ],
 
   // The interval at which your front-end polls the RPC servers for new data
   // it has no effect if you only target the local network (default is 4000)
