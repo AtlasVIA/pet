@@ -13,8 +13,7 @@ const Home: NextPage = () => {
         </div>
 
         <div className="flex-grow bg-base-300 w-full mt-16 px-8 py-12">
-          <div className="flex justify-center items-center gap-12 flex-col sm:flex-row">
-          </div>
+          <div className="flex justify-center items-center gap-12 flex-col sm:flex-row"></div>
         </div>
       </div>
     </>

@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useDeployedContractInfo, useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 import { parseEther } from "viem";
+import { useDeployedContractInfo, useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
 const Adopt = () => {
   const [nftIds, setNftIds] = useState<number[]>([]);
@@ -11,7 +11,11 @@ const Adopt = () => {
 
   const { data: deployedContractData } = useDeployedContractInfo("AdoptAPet");
 
-  const { data: nftData, isLoading, isError } = useScaffoldReadContract({
+  const {
+    data: nftData,
+    isLoading,
+    isError,
+  } = useScaffoldReadContract({
     contractName: "AdoptAPet",
     functionName: "walletOfOwner",
     args: [deployedContractData?.address],
@@ -47,12 +51,14 @@ const Adopt = () => {
         {isLoading && <p className="text-lg text-gray-600 text-center">Loading available pets...</p>}
         {isError && <p className="text-lg text-red-500 text-center">Failed to load pets</p>}
         {!isLoading && !isError && nftIds.length === 0 && (
-          <p className="text-lg text-gray-600 text-center">There are no pets available for adoption at the moment! Please try another chain!</p>
+          <p className="text-lg text-gray-600 text-center">
+            There are no pets available for adoption at the moment! Please try another chain!
+          </p>
         )}
 
         {nftIds.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-6">
-            {nftIds.map((nftId) => (
+            {nftIds.map(nftId => (
               <PetCard key={nftId} nftId={nftId} onAdopt={handleAdopt} />
             ))}
           </div>

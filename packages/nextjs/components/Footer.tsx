@@ -44,11 +44,9 @@ export const Footer = () => {
       <div className="w-full">
         <ul className="menu menu-horizontal w-full">
           <div className="flex justify-center items-center gap-2 text-sm w-full">
-            <div className="text-center">
-            </div>
+            <div className="text-center"></div>
             <span>·</span>
-            <div className="text-center">
-            </div>
+            <div className="text-center"></div>
           </div>
         </ul>
       </div>
