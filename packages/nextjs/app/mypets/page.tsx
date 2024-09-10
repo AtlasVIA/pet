@@ -46,7 +46,7 @@ const MyPets = () => {
 
 const PetCard = ({ nftId }: { nftId: number }) => {
   const [nftData, setNftData] = useState<any>(null);
-  const [selectedChain, setSelectedChain] = useState<number | null>(null);
+  const [selectedChain ] = useState<number | null>(null);
   const { address: connectedAddress } = useAccount();
 
   // Chains available for bridging
