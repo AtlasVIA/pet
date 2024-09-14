@@ -1,15 +1,16 @@
 import "@rainbow-me/rainbowkit/styles.css";
+import { ReactNode } from "react";
 import { ScaffoldEthAppWithProviders } from "~~/components/ScaffoldEthAppWithProviders";
 import { ThemeProvider } from "~~/components/ThemeProvider";
-import "~~/styles/globals.css";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
+import "~~/styles/globals.css";
 
 export const metadata = getMetadata({
-  title: "Adopt A Pet",
+  title: "Blue's Dog",
   description: "",
 });
 
-const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
+const HomePageLayout = ({ children }: { children: ReactNode }) => {
   return (
     <html suppressHydrationWarning>
       <body>
@@ -21,4 +22,4 @@ const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default ScaffoldEthApp;
+export default HomePageLayout;

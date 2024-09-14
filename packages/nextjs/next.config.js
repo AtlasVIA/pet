@@ -14,6 +14,9 @@ const nextConfig = {
     config.externals.push("pino-pretty", "lokijs", "encoding");
     return config;
   },
+  //output: "export",
+  assetPrefix: process.env.ASSET_PREFIX || "",
+  basePath: process.env.BASE_PATH || "",
 };
 
 module.exports = nextConfig;
