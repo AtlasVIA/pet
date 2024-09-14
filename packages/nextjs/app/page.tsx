@@ -1,13 +1,12 @@
-// page.tsx
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
+import axios from "axios";
 import { formatEther, parseEther } from "viem";
 import { useAccount, useBalance } from "wagmi";
-import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
-import axios from "axios";
-import Image from "next/image";
 import { readContract } from "wagmi/actions";
+import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
 const HomePage = () => {
   const { address: connectedAddress } = useAccount();
@@ -156,8 +155,6 @@ const HomePage = () => {
             const totalDonationsToken = totalDonationsData ? parseFloat(formatEther(totalDonationsData)) : 0;
             totalUSD += totalDonationsToken * price;
 
-
-
             if (messagesData && Array.isArray(messagesData)) {
               allMessages.push(
                 ...messagesData.map((msg: any) => ({
@@ -279,15 +276,17 @@ const HomePage = () => {
       {/* Project Description and Award Announcement */}
       <div className="text-center max-w-2xl mt-6">
         <p className="text-xl text-gray-700 leading-relaxed">
-          Hi there, I'm Blue, and I could really use your help! I'm building something special called <span className="font-bold text-blue-600">Blue's Dog</span> to make sure every pup like me finds a loving home. But to make it happen, I need some extra paws on deck.
+          Hi there, I'm Blue, and I could really use your help! I'm building something special called{" "}
+          <span className="font-bold text-blue-600">Dogachi.Pet</span> to make sure every pup like me finds a loving
+          home. But to make it happen, I need some extra paws on deck.
         </p>
         <br />
         <p className="text-xl text-gray-700 leading-relaxed">
-          <span className="font-bold text-blue-600">Blue's Dog</span> is a Tamagotchi-style NFT project
-          where <span className="font-bold">every interaction</span> with your virtual
-          pet <span className="font-bold">creates microdonations</span> to the shelter that
-          your furry pal calls home. These microdonations provide shelters
-          with <span className="font-bold">sustainable, ongoing support</span> to care for dogs in need.
+          <span className="font-bold text-blue-600">Dogachi.Pet</span> is a Tamagotchi-style NFT project where{" "}
+          <span className="font-bold">every interaction</span> with your virtual pet{" "}
+          <span className="font-bold">creates microdonations</span> to the shelter that your furry pal calls home. These
+          microdonations provide shelters with <span className="font-bold">sustainable, ongoing support</span> to care
+          for dogs in need.
         </p>
         <br />
         <p className="text-xl text-gray-700 leading-relaxed">
@@ -332,10 +331,11 @@ const HomePage = () => {
                   setDonationAmountUSD(amount);
                   setShowOtherAmount(false);
                 }}
-                className={`px-5 py-3 rounded-full font-bold ${donationAmountUSD === amount && !showOtherAmount
-                  ? "bg-pink-500 text-white"
-                  : "bg-gray-200 text-gray-800 hover:bg-gray-300"
-                  }`}
+                className={`px-5 py-3 rounded-full font-bold ${
+                  donationAmountUSD === amount && !showOtherAmount
+                    ? "bg-pink-500 text-white"
+                    : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+                }`}
               >
                 ${amount}
               </button>
@@ -346,8 +346,9 @@ const HomePage = () => {
                 setDonationAmountToken("");
                 setShowOtherAmount(true);
               }}
-              className={`px-5 py-3 rounded-full font-bold ${showOtherAmount ? "bg-pink-500 text-white" : "bg-gray-200 text-gray-800 hover:bg-gray-300"
-                }`}
+              className={`px-5 py-3 rounded-full font-bold ${
+                showOtherAmount ? "bg-pink-500 text-white" : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+              }`}
             >
               Other
             </button>
@@ -396,7 +397,7 @@ const HomePage = () => {
 
       <div className="w-full max-w-2xl text-center">
         <p className="text-xl text-gray-700 leading-relaxed">
-          We are thrilled to announce that Blue's Dog (Adopt A Pet) won the{" "}
+          We are thrilled to announce that Dogachi.Pet (Adopt A Pet) won the{" "}
           <span className="font-bold text-pink-600">ETHWarsaw 2024 Hackathon top prize!</span>
           <br />
           <a

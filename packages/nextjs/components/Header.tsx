@@ -67,8 +67,8 @@ export const Header = () => {
 
         {/* Mobile text "AAP", desktop text "Adopt A Pet" */}
         <Link href="/" className="text-2xl sm:text-3xl font-extrabold text-purple-700">
-          <span className="block sm:hidden">BD</span>
-          <span className="hidden sm:block">Blue's Dog</span>
+          <span className="block sm:hidden">DP</span>
+          <span className="hidden sm:block">Dogachi.Pet</span>
         </Link>
       </div>
 

@@ -6,7 +6,7 @@ import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 import "~~/styles/globals.css";
 
 export const metadata = getMetadata({
-  title: "Blue's Dog",
+  title: "Dogachi.Pet",
   description: "",
 });
 
