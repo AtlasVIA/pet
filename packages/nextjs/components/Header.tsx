@@ -16,10 +16,11 @@ const CustomConnectButton = () => (
       openAccountModal,
       openChainModal,
       openConnectModal,
+      authenticationStatus,
       mounted,
     }) => {
-      const ready = mounted;
-      const connected = ready && account && chain;
+      const ready = mounted && authenticationStatus !== "loading";
+      const connected = ready && account && chain && (!authenticationStatus || authenticationStatus === "authenticated");
 
       return (
         <div className="flex items-center">
@@ -35,12 +36,7 @@ const CustomConnectButton = () => (
               onClick={openAccountModal}
               className="flex items-center bg-blue-100 px-3 py-2 rounded-md text-blue-800 font-medium hover:bg-blue-200 transition-colors duration-200"
             >
-              {account.displayName}
-              {account.displayBalance && (
-                <span className="ml-2 text-blue-600">
-                  ({account.displayBalance})
-                </span>
-              )}
+              {account.address.slice(0, 6) + '...' + account.address.slice(-4)}
             </button>
           )}
         </div>
