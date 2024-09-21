@@ -27,7 +27,14 @@ const DonationsPage = () => {
   const scrollToDonationForm = () => {
     const donationForm = document.getElementById('donation-form');
     if (donationForm) {
-      donationForm.scrollIntoView({ behavior: 'smooth' });
+      const headerOffset = 100; // Adjust this value as needed
+      const elementPosition = donationForm.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
     }
   };
 
