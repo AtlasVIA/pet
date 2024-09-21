@@ -97,7 +97,7 @@ const DonationsPage = () => {
         <div className="bg-white bg-opacity-80 rounded-3xl shadow-lg p-6 sm:p-12 mb-24 animate-fade-in-up transition-all duration-500 ease-in-out hover:shadow-2xl relative overflow-hidden hover:scale-[1.02] hover:-translate-y-2">
           <div className="absolute top-0 left-0 w-full h-3 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 animate-gradient-x"></div>
           <h2 className="text-3xl sm:text-4xl font-bold text-indigo-800 mb-8 sm:mb-12 relative inline-block">
-            Blue's Barking Mission
+            Blue's Mission
             <span className="absolute -bottom-2 left-0 w-full h-1 bg-indigo-500"></span>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12">
