@@ -69,7 +69,6 @@ export const DonationForm: React.FC<DonationFormProps> = ({
 
   const handleChainChange = useCallback(
     (chainId: number | null) => {
-      console.log(`Chain changed to: ${chainId}`);
       setSelectedChain(chainId);
       setSelectedToken("native");
       setTokenSelectKey(prevKey => prevKey + 1);
@@ -79,7 +78,6 @@ export const DonationForm: React.FC<DonationFormProps> = ({
 
   const handleTokenChange = useCallback(
     (tokenId: string) => {
-      console.log(`Token changed to: ${tokenId}`);
       setSelectedToken(tokenId);
     },
     [],
@@ -88,8 +86,6 @@ export const DonationForm: React.FC<DonationFormProps> = ({
   const tokenOptions = useMemo(() => {
     if (!selectedChain) return [];
     const chainInfo = getChainInfo(selectedChain);
-    console.log(`Getting token options for chain: ${selectedChain}`);
-    console.log(`Native balance: ${nativeBalance}, USDC balance: ${usdcBalance}`);
     return [
       {
         id: "native",
@@ -117,27 +113,12 @@ export const DonationForm: React.FC<DonationFormProps> = ({
       const tokenAmount = (parseFloat(donationAmountUSD) / tokenPrice).toFixed(18);
       setDonationAmountToken(tokenAmount);
     }
-    console.log(`Donation amount updated - USD: ${donationAmountUSD}, Token: ${donationAmountToken}`);
   }, [selectedToken, donationAmountUSD, setDonationAmountToken, tokenPrice, selectedChain]);
 
-  useEffect(() => {
-    console.log("TokenOptions updated:", tokenOptions);
-  }, [tokenOptions]);
-
-  useEffect(() => {
-    if (selectedChain) {
-      console.log(`Chain changed to: ${selectedChain}`);
-    }
-  }, [selectedChain]);
-
-  useEffect(() => {
-    console.log(`TokenSymbol updated: ${tokenSymbol}`);
-  }, [tokenSymbol]);
-
   return (
-    <div className="w-full bg-white bg-opacity-50 rounded-xl p-6 shadow-lg transition-all duration-300 hover:shadow-xl">
-      <div className="mb-8 space-y-6">
-        <div className="transition-all duration-300 transform hover:scale-102 relative z-30">
+    <div className="donation-form w-full bg-white bg-opacity-50 rounded-xl p-4 sm:p-6 shadow-lg">
+      <div className="space-y-4 sm:space-y-6">
+        <div className="relative z-30">
           <ChainSelect
             label="Select Chain"
             options={chainOptions}
@@ -149,7 +130,7 @@ export const DonationForm: React.FC<DonationFormProps> = ({
           />
         </div>
 
-        <div className="transition-all duration-300 transform hover:scale-102 relative z-20">
+        <div className="relative z-20">
           <TokenSelect
             key={tokenSelectKey}
             label="Select Token"
@@ -163,7 +144,7 @@ export const DonationForm: React.FC<DonationFormProps> = ({
           />
         </div>
 
-        <div className="transition-all duration-300 transform hover:scale-102 relative z-10">
+        <div className="relative z-10">
           <DonationAmountSelector 
             donationAmountUSD={donationAmountUSD} 
             setDonationAmountUSD={setDonationAmountUSD}
@@ -175,12 +156,12 @@ export const DonationForm: React.FC<DonationFormProps> = ({
         </div>
       </div>
 
-      <div className="mb-8">
+      <div className="mt-4 sm:mt-6">
         <textarea
           placeholder="Your Message (optional)"
           value={message}
           onChange={e => setMessage(e.target.value)}
-          className="w-full px-4 py-3 rounded-lg border border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 resize-none shadow-inner"
+          className="w-full px-3 py-2 sm:px-4 sm:py-3 rounded-lg border border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none shadow-inner"
           rows={4}
         />
       </div>
@@ -188,12 +169,12 @@ export const DonationForm: React.FC<DonationFormProps> = ({
       <button
         onClick={handleDonate}
         disabled={isLoading || currentChainId !== selectedChain || isInsufficientBalance}
-        className="w-full py-4 px-6 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-bold text-lg rounded-lg shadow-md hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 relative overflow-hidden"
+        className="w-full mt-4 sm:mt-6 py-3 sm:py-4 px-4 sm:px-6 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-bold text-lg rounded-lg shadow-md hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden"
       >
         {isLoading && (
           <span className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30">
             <svg
-              className="animate-spin h-8 w-8 text-white"
+              className="animate-spin h-6 w-6 sm:h-8 sm:w-8 text-white"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
