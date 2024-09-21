@@ -118,63 +118,65 @@ export const DonationForm: React.FC<DonationFormProps> = ({
   }, [tokenSymbol]);
 
   return (
-    <div className="w-full">
-      <div className="mb-6">
-        <ChainSelect
-          label="Select Chain"
-          options={chainOptions}
-          value={selectedChain}
-          onChange={handleChainChange}
-          isLoading={isNetworkSwitching}
-          disabled={false}
-          className="w-full"
-        />
+    <div className="w-full bg-white bg-opacity-50 rounded-xl p-6 shadow-lg transition-all duration-300 hover:shadow-xl">
+      <div className="mb-8 space-y-6">
+        <div className="transition-all duration-300 transform hover:scale-102">
+          <ChainSelect
+            label="Select Chain"
+            options={chainOptions}
+            value={selectedChain}
+            onChange={handleChainChange}
+            isLoading={isNetworkSwitching}
+            disabled={false}
+            className="w-full"
+          />
+        </div>
+
+        <div className="transition-all duration-300 transform hover:scale-102">
+          <TokenSelect
+            key={tokenSelectKey}
+            label="Select Token"
+            options={tokenOptions}
+            value={selectedToken}
+            onChange={handleTokenChange}
+            isLoading={isUSDCContractLoading}
+            disabled={!selectedChain}
+            className="w-full"
+            selectedChain={selectedChain}
+          />
+        </div>
+
+        <div className="transition-all duration-300 transform hover:scale-102">
+          <DonationAmountSelector donationAmountUSD={donationAmountUSD} setDonationAmountUSD={setDonationAmountUSD} />
+        </div>
       </div>
 
-      <div className="mb-6">
-        <TokenSelect
-          key={tokenSelectKey}
-          label="Select Token"
-          options={tokenOptions}
-          value={selectedToken}
-          onChange={handleTokenChange}
-          isLoading={isUSDCContractLoading}
-          disabled={!selectedChain}
-          className="w-full"
-          selectedChain={selectedChain}
-        />
-      </div>
-
-      <div className="mb-6">
-        <DonationAmountSelector donationAmountUSD={donationAmountUSD} setDonationAmountUSD={setDonationAmountUSD} />
-      </div>
-
-      <div className="text-sm text-gray-600 mb-4 text-center">
+      <div className="text-lg text-indigo-800 mb-6 text-center bg-indigo-100 rounded-lg p-4 shadow-inner">
         Donation Amount:{" "}
-        <span className="font-semibold">
+        <span className="font-bold text-2xl">
           {donationAmountToken || "0"} {selectedToken === "usdc" ? "USDC" : (getChainInfo(selectedChain)?.nativeCurrency?.symbol || tokenSymbol)}
         </span>
         <br />
-        <span className="text-xs">(~${donationAmountUSD || "0"} USD)</span>
+        <span className="text-sm text-indigo-600">(~${donationAmountUSD || "0"} USD)</span>
       </div>
 
       <textarea
         placeholder="Your Message (optional)"
         value={message}
         onChange={e => setMessage(e.target.value)}
-        className="w-full mb-6 px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 resize-none"
+        className="w-full mb-8 px-4 py-3 rounded-lg border border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 resize-none shadow-inner"
         rows={4}
       />
 
       <button
         onClick={handleDonate}
         disabled={isLoading || currentChainId !== selectedChain || isInsufficientBalance}
-        className="w-full py-3 px-6 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold rounded-lg shadow-md hover:from-indigo-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 relative"
+        className="w-full py-4 px-6 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-bold text-lg rounded-lg shadow-md hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 relative overflow-hidden"
       >
         {isLoading && (
-          <span className="absolute inset-0 flex items-center justify-center">
+          <span className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30">
             <svg
-              className="animate-spin h-5 w-5 text-white"
+              className="animate-spin h-8 w-8 text-white"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
