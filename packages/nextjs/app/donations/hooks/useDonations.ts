@@ -1,16 +1,14 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDonationContract } from "./useDonationContract";
 import { useNetworkSwitching } from "./useNetworkSwitching";
 import { useTokenPrice } from "./useTokenPrice";
-import { parseUnits } from "viem";
-import { useAccount, useChainId, usePublicClient, useWalletClient } from "wagmi";
+import { useAccount, useChainId, useWalletClient } from "wagmi";
 import { notification } from "~~/utils/scaffold-eth";
 import { Chain, getUsdcAddress } from "~~/utils/scaffold-eth/contractAddresses";
 
 export const useDonations = (selectedChain: number | null) => {
   const { address: connectedAddress } = useAccount();
   const { data: walletClient } = useWalletClient();
-  const publicClient = usePublicClient();
   const currentChainId = useChainId();
 
   const [donationAmountUSD, setDonationAmountUSD] = useState("10");
@@ -30,22 +28,29 @@ export const useDonations = (selectedChain: number | null) => {
     nativeSymbol,
     isContractLoading,
     isUSDCContractLoading,
-  } = useDonationContract(walletClient);
+  } = useDonationContract(walletClient, selectedChain);
   const { isNetworkSwitching, handleNetworkSwitch } = useNetworkSwitching();
 
   useEffect(() => {
+    console.log("useDonations: selectedChain changed", { selectedChain, currentChainId });
     if (selectedChain) {
       const usdcAddress = getUsdcAddress(selectedChain as Chain);
       setIsUSDCSupported(!!usdcAddress);
       setUseUSDC(false); // Reset to native token when changing chains
     }
-  }, [selectedChain]);
+  }, [selectedChain, currentChainId]);
 
-  const fetchBalances = useCallback(async (chainId: number) => {
-    console.log(`Fetching balances for chain: ${chainId}`);
-    // The balances are now automatically updated through the useBalance hooks in useDonationContract
-    // So we don't need to manually fetch them here
-  }, []);
+  useEffect(() => {
+    console.log("useDonations: Balances updated", {
+      selectedChain,
+      currentChainId,
+      nativeBalance,
+      usdcBalance,
+      useUSDC,
+      tokenSymbol,
+      nativeSymbol,
+    });
+  }, [selectedChain, currentChainId, nativeBalance, usdcBalance, useUSDC, tokenSymbol, nativeSymbol]);
 
   useEffect(() => {
     if (tokenPrice !== undefined && tokenPrice > 0 && donationAmountUSD) {
@@ -83,7 +88,6 @@ export const useDonations = (selectedChain: number | null) => {
       notification.success("Donation successful!");
       setDonationAmountUSD("");
       setMessage("");
-      await fetchBalances(selectedChain);
     } catch (error) {
       console.error("Donation failed", error);
       setError(error instanceof Error ? error.message : "Donation failed. Please try again.");
@@ -119,6 +123,5 @@ export const useDonations = (selectedChain: number | null) => {
     error,
     isContractLoading,
     isUSDCContractLoading,
-    fetchBalances,
   };
 };

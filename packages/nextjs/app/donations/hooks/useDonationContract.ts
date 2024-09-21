@@ -1,12 +1,13 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { formatEther, formatUnits, parseUnits } from "viem";
 import { useAccount, useBalance, useChainId } from "wagmi";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 import { useScaffoldContract } from "~~/hooks/scaffold-eth/useScaffoldContract";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { chains } from "~~/utils/scaffold-eth/chains";
+import { getUsdcAddress } from "~~/utils/scaffold-eth/contractAddresses";
 
-export const useDonationContract = (walletClient: any) => {
+export const useDonationContract = (walletClient: any, selectedChain: number | null) => {
   const { address } = useAccount();
   const chainId = useChainId();
   const { data: donationsContract, isLoading: isContractLoading } = useScaffoldContract({
@@ -20,15 +21,27 @@ export const useDonationContract = (walletClient: any) => {
   const { data: nativeBalance } = useBalance({
     address,
     watch: true,
-    chainId,
+    chainId: selectedChain || chainId,
   });
+
+  const usdcAddress = selectedChain ? getUsdcAddress(selectedChain) : undefined;
 
   const { data: usdcBalance } = useBalance({
     address,
-    token: usdcContractData?.address,
+    token: usdcAddress,
     watch: true,
-    chainId,
+    chainId: selectedChain || chainId,
   });
+
+  useEffect(() => {
+    console.log("useDonationContract: Chain changed", {
+      selectedChain,
+      chainId,
+      nativeBalance: nativeBalance?.formatted,
+      usdcBalance: usdcBalance?.formatted,
+      usdcAddress,
+    });
+  }, [selectedChain, chainId, nativeBalance, usdcBalance, usdcAddress]);
 
   const fetchTotalDonations = useCallback(async () => {
     if (isContractLoading) {
@@ -93,7 +106,7 @@ export const useDonationContract = (walletClient: any) => {
       if (isContractLoading || isUSDCContractLoading) {
         throw new Error("Contracts are still loading. Please wait.");
       }
-      if (!donationsContract || !address || !usdcContractData) {
+      if (!donationsContract || !address || !usdcAddress) {
         throw new Error(
           "Donations contract, user address, or USDC contract not available. Please check your connection and try again.",
         );
@@ -102,8 +115,8 @@ export const useDonationContract = (walletClient: any) => {
       try {
         // First, approve the USDC transfer
         const approveTx = await walletClient.writeContract({
-          address: usdcContractData.address,
-          abi: usdcContractData.abi,
+          address: usdcAddress,
+          abi: usdcContractData?.abi,
           functionName: "approve",
           args: [donationsContract.address, parseUnits(amount, 6)],
         });
@@ -119,13 +132,13 @@ export const useDonationContract = (walletClient: any) => {
         );
       }
     },
-    [donationsContract, address, usdcContractData, walletClient, isContractLoading, isUSDCContractLoading],
+    [donationsContract, address, usdcAddress, usdcContractData, walletClient, isContractLoading, isUSDCContractLoading],
   );
 
   const getNativeSymbol = useCallback(() => {
-    const chainInfo = chains.find(chain => chain.id === chainId);
+    const chainInfo = chains.find(chain => chain.id === (selectedChain || chainId));
     return chainInfo?.nativeCurrency?.symbol || targetNetwork.nativeCurrency.symbol;
-  }, [chainId, targetNetwork.nativeCurrency.symbol]);
+  }, [selectedChain, chainId, targetNetwork.nativeCurrency.symbol]);
 
   return {
     donationsContract,

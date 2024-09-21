@@ -37,7 +37,8 @@ const DonationsPage = () => {
         <header className="text-center mb-16 animate-fade-in-down">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-indigo-900 mb-6">Support Dogachi.Pet</h1>
           <p className="text-xl sm:text-2xl text-gray-800 leading-relaxed max-w-3xl mx-auto mb-8">
-            Join us in creating a brighter future for shelter dogs through innovative technology and sustainable support.
+            Join us in creating a brighter future for shelter dogs through innovative technology and sustainable
+            support.
           </p>
           <button
             onClick={scrollToDonationForm}
