@@ -1,15 +1,55 @@
 import { parseUnits } from "viem";
 
 export const chains = [
-  { name: "Arbitrum Testnet", id: 421614, gasFee: parseUnits("0.1", 6) },
-  { name: "Avalanche Testnet", id: 43113, gasFee: parseUnits("0", 6) },
-  { name: "Base Testnet", id: 84532, gasFee: parseUnits("0", 6) },
-  { name: "Ethereum Testnet", id: 11155111, gasFee: parseUnits("10", 6) },
-  { name: "Optimism Testnet", id: 11155420, gasFee: parseUnits("0.05", 6) },
-  { name: "Polygon Testnet", id: 80002, gasFee: parseUnits("0", 6) },
-  { name: "Meter Testnet", id: 83, gasFee: parseUnits("0", 6) },
-  { name: "XLayer Testnet", id: 195, gasFee: parseUnits("0", 6) },
-  //{ name: "Sonic Testnet", id: 64165, gasFee: parseUnits("0", 6) },
+  {
+    name: "Arbitrum Testnet",
+    id: 421614,
+    gasFee: parseUnits("0.1", 6),
+    nativeCurrency: { symbol: "ETH" },
+  },
+  {
+    name: "Avalanche Testnet",
+    id: 43113,
+    gasFee: parseUnits("0", 6),
+    nativeCurrency: { symbol: "AVAX" },
+  },
+  {
+    name: "Base Testnet",
+    id: 84532,
+    gasFee: parseUnits("0", 6),
+    nativeCurrency: { symbol: "ETH" },
+  },
+  {
+    name: "Ethereum Testnet",
+    id: 11155111,
+    gasFee: parseUnits("10", 6),
+    nativeCurrency: { symbol: "ETH" },
+  },
+  {
+    name: "Optimism Testnet",
+    id: 11155420,
+    gasFee: parseUnits("0.05", 6),
+    nativeCurrency: { symbol: "ETH" },
+  },
+  {
+    name: "Polygon Testnet",
+    id: 80002,
+    gasFee: parseUnits("0", 6),
+    nativeCurrency: { symbol: "MATIC" },
+  },
+  {
+    name: "Meter Testnet",
+    id: 83,
+    gasFee: parseUnits("0", 6),
+    nativeCurrency: { symbol: "MTR" },
+  },
+  {
+    name: "XLayer Testnet",
+    id: 195,
+    gasFee: parseUnits("0", 6),
+    nativeCurrency: { symbol: "XLD" },
+  },
+  //{ name: "Sonic Testnet", id: 64165, gasFee: parseUnits("0", 6), nativeCurrency: { symbol: "SONIC" } },
 ];
 
 export type Chain = 421614 | 43113 | 84532 | 11155111 | 11155420 | 80002 | 83 | 195 | 64165;

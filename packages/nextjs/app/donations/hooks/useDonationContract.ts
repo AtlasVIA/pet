@@ -4,6 +4,7 @@ import { useAccount, useBalance, useChainId } from "wagmi";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 import { useScaffoldContract } from "~~/hooks/scaffold-eth/useScaffoldContract";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
+import { chains } from "~~/utils/scaffold-eth/chains";
 
 export const useDonationContract = (walletClient: any) => {
   const { address } = useAccount();
@@ -121,6 +122,11 @@ export const useDonationContract = (walletClient: any) => {
     [donationsContract, address, usdcContractData, walletClient, isContractLoading, isUSDCContractLoading],
   );
 
+  const getNativeSymbol = useCallback(() => {
+    const chainInfo = chains.find(chain => chain.id === chainId);
+    return chainInfo?.nativeCurrency?.symbol || targetNetwork.nativeCurrency.symbol;
+  }, [chainId, targetNetwork.nativeCurrency.symbol]);
+
   return {
     donationsContract,
     fetchTotalDonations,
@@ -129,7 +135,7 @@ export const useDonationContract = (walletClient: any) => {
     donateUSDC,
     nativeBalance: nativeBalance ? formatEther(nativeBalance.value) : "0",
     usdcBalance: usdcBalance ? formatUnits(usdcBalance.value, 6) : "0",
-    nativeSymbol: targetNetwork.nativeCurrency.symbol,
+    nativeSymbol: getNativeSymbol(),
     isContractLoading,
     isUSDCContractLoading,
   };

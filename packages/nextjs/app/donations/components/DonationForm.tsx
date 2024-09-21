@@ -21,7 +21,6 @@ interface DonationFormProps {
   isUSDCContractLoading: boolean;
   handleDonate: () => void;
   isUSDCSupported: boolean;
-  fetchBalances: (chainId: number) => Promise<void>;
 }
 
 export const DonationForm: React.FC<DonationFormProps> = ({
@@ -41,7 +40,6 @@ export const DonationForm: React.FC<DonationFormProps> = ({
   isUSDCContractLoading,
   handleDonate,
   isUSDCSupported,
-  fetchBalances,
 }) => {
   const [selectedToken, setSelectedToken] = useState("native");
   const [tokenSelectKey, setTokenSelectKey] = useState(0);
@@ -66,12 +64,9 @@ export const DonationForm: React.FC<DonationFormProps> = ({
       setSelectedToken("native");
       setDonationAmountUSD("0");
       setMessage("");
-      if (chainId) {
-        fetchBalances(chainId);
-      }
       setTokenSelectKey(prevKey => prevKey + 1);
     },
-    [setSelectedChain, setDonationAmountUSD, setMessage, fetchBalances],
+    [setSelectedChain, setDonationAmountUSD, setMessage],
   );
 
   const handleTokenChange = useCallback(
@@ -114,10 +109,14 @@ export const DonationForm: React.FC<DonationFormProps> = ({
 
   useEffect(() => {
     if (selectedChain) {
-      console.log(`Fetching balances for chain: ${selectedChain}`);
-      fetchBalances(selectedChain);
+      console.log(`Chain changed to: ${selectedChain}`);
     }
-  }, [selectedChain, fetchBalances]);
+  }, [selectedChain]);
+
+  // New useEffect to log tokenSymbol changes
+  useEffect(() => {
+    console.log(`TokenSymbol updated: ${tokenSymbol}`);
+  }, [tokenSymbol]);
 
   return (
     <div className="bg-gradient-to-br from-indigo-100 to-purple-100 p-8 rounded-2xl shadow-2xl w-full max-w-lg mx-auto transition-all duration-300 hover:shadow-3xl">
@@ -156,7 +155,7 @@ export const DonationForm: React.FC<DonationFormProps> = ({
       <div className="text-sm text-gray-600 mb-2 text-center">
         Donation Amount:{" "}
         <span className="font-semibold">
-          {donationAmountToken || "0"} {selectedToken === "usdc" ? "USDC" : tokenSymbol}
+          {donationAmountToken || "0"} {selectedToken === "usdc" ? "USDC" : (getChainInfo(selectedChain)?.nativeCurrency?.symbol || tokenSymbol)}
         </span>
         <br />
         <span className="text-xs">(~${donationAmountUSD || "0"} USD)</span>
@@ -199,7 +198,7 @@ export const DonationForm: React.FC<DonationFormProps> = ({
             ? "Switch Network"
             : isInsufficientBalance
             ? "Insufficient Balance"
-            : `Donate Now with ${selectedToken === "usdc" ? "USDC" : tokenSymbol}`}
+            : `Donate Now with ${selectedToken === "usdc" ? "USDC" : (getChainInfo(selectedChain)?.nativeCurrency?.symbol || tokenSymbol)}`}
         </span>
       </button>
     </div>

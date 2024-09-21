@@ -22,7 +22,6 @@ const DonationsPage = () => {
     isUSDCSupported,
     isContractLoading,
     isUSDCContractLoading,
-    fetchBalances,
   } = useDonations(selectedChain);
 
   const scrollToDonationForm = () => {
@@ -101,7 +100,6 @@ const DonationsPage = () => {
               isUSDCContractLoading={isUSDCContractLoading}
               handleDonate={handleDonate}
               isUSDCSupported={isUSDCSupported}
-              fetchBalances={fetchBalances}
             />
           </div>
           <div className="bg-white rounded-2xl shadow-xl p-6 animate-fade-in-up flex flex-col justify-between transition-all duration-300 hover:shadow-2xl">

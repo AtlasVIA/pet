@@ -30,8 +30,6 @@ export const useDonations = (selectedChain: number | null) => {
     nativeSymbol,
     isContractLoading,
     isUSDCContractLoading,
-    fetchNativeBalance,
-    fetchUSDCBalance,
   } = useDonationContract(walletClient);
   const { isNetworkSwitching, handleNetworkSwitch } = useNetworkSwitching();
 
@@ -45,16 +43,9 @@ export const useDonations = (selectedChain: number | null) => {
 
   const fetchBalances = useCallback(async (chainId: number) => {
     console.log(`Fetching balances for chain: ${chainId}`);
-    try {
-      await fetchNativeBalance();
-      if (isUSDCSupported) {
-        await fetchUSDCBalance();
-      }
-    } catch (error) {
-      console.error("Error fetching balances:", error);
-      setError("Failed to fetch balances. Please try again later.");
-    }
-  }, [fetchNativeBalance, fetchUSDCBalance, isUSDCSupported]);
+    // The balances are now automatically updated through the useBalance hooks in useDonationContract
+    // So we don't need to manually fetch them here
+  }, []);
 
   useEffect(() => {
     if (tokenPrice !== undefined && tokenPrice > 0 && donationAmountUSD) {
