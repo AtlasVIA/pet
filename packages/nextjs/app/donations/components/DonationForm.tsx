@@ -113,16 +113,13 @@ export const DonationForm: React.FC<DonationFormProps> = ({
     }
   }, [selectedChain]);
 
-  // New useEffect to log tokenSymbol changes
   useEffect(() => {
     console.log(`TokenSymbol updated: ${tokenSymbol}`);
   }, [tokenSymbol]);
 
   return (
-    <div className="bg-gradient-to-br from-indigo-100 to-purple-100 p-8 rounded-2xl shadow-2xl w-full max-w-lg mx-auto transition-all duration-300 hover:shadow-3xl">
-      <h2 className="text-3xl font-bold text-center mb-8 text-indigo-800">Make a Donation</h2>
-
-      <div className="mb-8">
+    <div className="w-full">
+      <div className="mb-6">
         <ChainSelect
           label="Select Chain"
           options={chainOptions}
@@ -134,7 +131,7 @@ export const DonationForm: React.FC<DonationFormProps> = ({
         />
       </div>
 
-      <div className="mb-8">
+      <div className="mb-6">
         <TokenSelect
           key={tokenSelectKey}
           label="Select Token"
@@ -148,11 +145,11 @@ export const DonationForm: React.FC<DonationFormProps> = ({
         />
       </div>
 
-      <div className="mb-8">
+      <div className="mb-6">
         <DonationAmountSelector donationAmountUSD={donationAmountUSD} setDonationAmountUSD={setDonationAmountUSD} />
       </div>
 
-      <div className="text-sm text-gray-600 mb-2 text-center">
+      <div className="text-sm text-gray-600 mb-4 text-center">
         Donation Amount:{" "}
         <span className="font-semibold">
           {donationAmountToken || "0"} {selectedToken === "usdc" ? "USDC" : (getChainInfo(selectedChain)?.nativeCurrency?.symbol || tokenSymbol)}
@@ -165,7 +162,7 @@ export const DonationForm: React.FC<DonationFormProps> = ({
         placeholder="Your Message (optional)"
         value={message}
         onChange={e => setMessage(e.target.value)}
-        className="w-full mb-8 px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 resize-none"
+        className="w-full mb-6 px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 resize-none"
         rows={4}
       />
 

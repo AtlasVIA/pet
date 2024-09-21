@@ -82,31 +82,39 @@ const DonationsPage = () => {
           </div>
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-          <div id="donation-form" className="lg:col-span-2 animate-fade-in-up">
-            <DonationForm
-              selectedChain={selectedChain}
-              setSelectedChain={setSelectedChain}
-              nativeBalance={nativeBalance}
-              usdcBalance={usdcBalance}
-              tokenSymbol={tokenSymbol}
-              currentChainId={currentChainId}
-              donationAmountUSD={donationAmountUSD}
-              setDonationAmountUSD={setDonationAmountUSD}
-              donationAmountToken={donationAmountToken}
-              message={message}
-              setMessage={setMessage}
-              isNetworkSwitching={isNetworkSwitching}
-              isContractLoading={isContractLoading}
-              isUSDCContractLoading={isUSDCContractLoading}
-              handleDonate={handleDonate}
-              isUSDCSupported={isUSDCSupported}
-            />
-          </div>
-          <div className="bg-white rounded-2xl shadow-xl p-6 animate-fade-in-up flex flex-col justify-between transition-all duration-300 hover:shadow-2xl">
-            <div>
-              <h2 className="text-2xl font-semibold text-indigo-800 mb-6">App Preview</h2>
-              <AppPreview />
+        <div id="donation-form" className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 animate-fade-in-up transition-all duration-300 hover:shadow-2xl">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="md:col-span-2">
+              <h2 className="text-3xl font-semibold text-indigo-800 mb-6">Make a Donation</h2>
+              <DonationForm
+                selectedChain={selectedChain}
+                setSelectedChain={setSelectedChain}
+                nativeBalance={nativeBalance}
+                usdcBalance={usdcBalance}
+                tokenSymbol={tokenSymbol}
+                currentChainId={currentChainId}
+                donationAmountUSD={donationAmountUSD}
+                setDonationAmountUSD={setDonationAmountUSD}
+                donationAmountToken={donationAmountToken}
+                message={message}
+                setMessage={setMessage}
+                isNetworkSwitching={isNetworkSwitching}
+                isContractLoading={isContractLoading}
+                isUSDCContractLoading={isUSDCContractLoading}
+                handleDonate={handleDonate}
+                isUSDCSupported={isUSDCSupported}
+              />
+            </div>
+            <div className="flex flex-col justify-between md:border-l md:border-indigo-100 md:pl-8">
+              <div>
+                <h2 className="text-2xl font-semibold text-indigo-800 mb-6"></h2>
+                <AppPreview />
+              </div>
+              <div className="mt-8 text-center md:text-left">
+                <p className="text-gray-700 italic">
+                  "Every donation helps us create a better world for our furry friends!"
+                </p>
+              </div>
             </div>
           </div>
         </div>

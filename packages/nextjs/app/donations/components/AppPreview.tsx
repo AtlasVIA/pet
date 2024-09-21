@@ -2,8 +2,8 @@ import React from "react";
 
 export const AppPreview: React.FC = () => {
   return (
-    <div className="mt-8 md:mt-0 md:ml-8 flex justify-center items-center">
-      <div className="w-64 h-128 bg-gray-100 rounded-3xl shadow-xl overflow-hidden border-8 border-gray-800 relative">
+    <div className="flex flex-col items-center">
+      <div className="w-full max-w-xs bg-gray-100 rounded-3xl shadow-xl overflow-hidden border-8 border-gray-800 relative">
         <div className="bg-indigo-600 h-24 w-full flex items-center justify-center">
           <h3 className="text-white text-2xl font-bold">Dogachi.Pet</h3>
         </div>
@@ -29,6 +29,9 @@ export const AppPreview: React.FC = () => {
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-1 bg-black rounded-full mx-16"></div>
       </div>
+      <p className="mt-4 text-sm text-gray-600 text-center">
+        Interact with your virtual pet and support real animal shelters!
+      </p>
     </div>
   );
 };
