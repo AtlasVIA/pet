@@ -6,6 +6,7 @@ import Image from "next/image";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { usePathname } from "next/navigation";
 import { FiMenu, FiX } from "react-icons/fi";
+import ComingSoon from "./ComingSoon";
 
 const CustomConnectButton = () => (
   <ConnectButton.Custom>
@@ -57,9 +58,8 @@ export const Header = () => {
   };
 
   const navItems = [
-    { name: "Home", path: "/" },
-    { name: "Adopt", path: "/adopt" },
-    { name: "My Pets", path: "/mypets" },
+    { name: "Adopt", path: "/adopt", comingSoon: true },
+    { name: "My Pets", path: "/mypets", comingSoon: true },
     { name: "Donations", path: "/donations" },
   ];
 
@@ -76,17 +76,17 @@ export const Header = () => {
             </span>
           </Link>
 
-          <nav className="hidden md:flex space-x-6">
+          <nav className="hidden md:flex space-x-6 relative">
             {navItems.map((item) => (
-              <Link
-                key={item.path}
-                href={item.path}
-                className={`text-base font-medium ${
-                  isActive(item.path) ? "text-yellow-300" : "text-white hover:text-yellow-200"
-                } transition-colors duration-200`}
-              >
-                {item.name}
-              </Link>
+              <div key={item.path} className={`text-base font-medium ${
+                isActive(item.path) ? "text-yellow-300" : "text-white hover:text-yellow-200"
+              } transition-colors duration-200`}>
+                {item.comingSoon ? (
+                  <ComingSoon name={item.name} />
+                ) : (
+                  <Link href={item.path}>{item.name}</Link>
+                )}
+              </div>
             ))}
           </nav>
 
@@ -114,18 +114,20 @@ export const Header = () => {
         <div className="md:hidden bg-blue-500 border-t border-blue-400">
           <div className="px-2 pt-2 pb-3 space-y-1">
             {navItems.map((item) => (
-              <Link
+              <div
                 key={item.path}
-                href={item.path}
                 className={`block px-3 py-2 text-base font-medium ${
                   isActive(item.path)
                     ? "text-yellow-300"
                     : "text-white hover:text-yellow-200"
                 } transition-colors duration-200`}
-                onClick={() => setIsMenuOpen(false)}
               >
-                {item.name}
-              </Link>
+                {item.comingSoon ? (
+                  <ComingSoon name={item.name} />
+                ) : (
+                  <Link href={item.path} onClick={() => setIsMenuOpen(false)}>{item.name}</Link>
+                )}
+              </div>
             ))}
             <div className="mt-4 px-3 py-2">
               <CustomConnectButton />
