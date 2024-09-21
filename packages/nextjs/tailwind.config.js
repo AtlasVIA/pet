@@ -81,7 +81,38 @@ module.exports = {
       },
       animation: {
         "pulse-fast": "pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "fade-in-up": "fadeInUp 0.5s ease-out",
+        "gradient-x": "gradient-x 15s ease infinite",
+        "float": "float 3s ease-in-out infinite",
       },
+      keyframes: {
+        fadeInUp: {
+          "0%": { opacity: "0", transform: "translateY(10px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        "gradient-x": {
+          "0%, 100%": {
+            "background-size": "200% 200%",
+            "background-position": "left center",
+          },
+          "50%": {
+            "background-size": "200% 200%",
+            "background-position": "right center",
+          },
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
+      },
+    },
+  },
+  utilities: {
+    ".animation-delay-2000": {
+      "animation-delay": "2000ms",
+    },
+    ".animation-delay-4000": {
+      "animation-delay": "4000ms",
     },
   },
 };

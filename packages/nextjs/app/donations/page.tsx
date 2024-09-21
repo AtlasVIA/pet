@@ -154,8 +154,12 @@ const DonationsPage = () => {
           </div>
         </div>
 
-        <div className="mt-24">
-          <Roadmap />
+        <div className="flex justify-center my-24">
+          <div className="w-24 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full animate-gradient-x"></div>
+        </div>
+
+        <div className="animate-fade-in-up">
+          <Roadmap scrollToDonationForm={scrollToDonationForm} />
         </div>
       </div>
     </div>
