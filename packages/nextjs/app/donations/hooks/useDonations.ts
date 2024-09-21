@@ -7,13 +7,6 @@ import { useAccount, useChainId, usePublicClient, useWalletClient } from "wagmi"
 import { notification } from "~~/utils/scaffold-eth";
 import { Chain, getUsdcAddress } from "~~/utils/scaffold-eth/contractAddresses";
 
-interface Message {
-  sender: string;
-  message: string;
-  amount: bigint;
-  timestamp: bigint;
-}
-
 export const useDonations = (selectedChain: number | null) => {
   const { address: connectedAddress } = useAccount();
   const { data: walletClient } = useWalletClient();
@@ -23,8 +16,6 @@ export const useDonations = (selectedChain: number | null) => {
   const [donationAmountUSD, setDonationAmountUSD] = useState("10");
   const [donationAmountToken, setDonationAmountToken] = useState("");
   const [message, setMessage] = useState("");
-  const [totalDonationsUSD, setTotalDonationsUSD] = useState("0");
-  const [messages, setMessages] = useState<Message[]>([]);
   const [useUSDC, setUseUSDC] = useState(false);
   const [isUSDCSupported, setIsUSDCSupported] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -32,8 +23,6 @@ export const useDonations = (selectedChain: number | null) => {
   const { tokenSymbol, tokenPrice } = useTokenPrice(selectedChain);
   const {
     donationsContract,
-    fetchTotalDonations,
-    fetchRecentMessages,
     donateNative,
     donateUSDC,
     nativeBalance,
@@ -41,6 +30,8 @@ export const useDonations = (selectedChain: number | null) => {
     nativeSymbol,
     isContractLoading,
     isUSDCContractLoading,
+    fetchNativeBalance,
+    fetchUSDCBalance,
   } = useDonationContract(walletClient);
   const { isNetworkSwitching, handleNetworkSwitch } = useNetworkSwitching();
 
@@ -52,31 +43,18 @@ export const useDonations = (selectedChain: number | null) => {
     }
   }, [selectedChain]);
 
-  const updateDonations = useCallback(async () => {
-    if (isContractLoading) {
-      return;
-    }
-
+  const fetchBalances = useCallback(async (chainId: number) => {
+    console.log(`Fetching balances for chain: ${chainId}`);
     try {
-      const total = await fetchTotalDonations();
-      setTotalDonationsUSD(total);
+      await fetchNativeBalance();
+      if (isUSDCSupported) {
+        await fetchUSDCBalance();
+      }
     } catch (error) {
-      console.error("Error fetching total donations:", error);
-      setError("Failed to fetch donation data. Please try again later.");
+      console.error("Error fetching balances:", error);
+      setError("Failed to fetch balances. Please try again later.");
     }
-
-    try {
-      const recent = await fetchRecentMessages();
-      setMessages(recent);
-    } catch (error) {
-      console.error("Error fetching recent messages:", error);
-      setError("Failed to fetch donation data. Please try again later.");
-    }
-  }, [fetchTotalDonations, fetchRecentMessages, isContractLoading]);
-
-  useEffect(() => {
-    updateDonations();
-  }, [updateDonations]);
+  }, [fetchNativeBalance, fetchUSDCBalance, isUSDCSupported]);
 
   useEffect(() => {
     if (tokenPrice !== undefined && tokenPrice > 0 && donationAmountUSD) {
@@ -114,7 +92,7 @@ export const useDonations = (selectedChain: number | null) => {
       notification.success("Donation successful!");
       setDonationAmountUSD("");
       setMessage("");
-      await updateDonations();
+      await fetchBalances(selectedChain);
     } catch (error) {
       console.error("Donation failed", error);
       setError(error instanceof Error ? error.message : "Donation failed. Please try again.");
@@ -136,8 +114,6 @@ export const useDonations = (selectedChain: number | null) => {
     donationAmountToken,
     message,
     setMessage,
-    totalDonationsUSD,
-    messages,
     tokenSymbol: useUSDC ? "USDC" : nativeSymbol,
     tokenPrice,
     isNetworkSwitching,
@@ -152,6 +128,6 @@ export const useDonations = (selectedChain: number | null) => {
     error,
     isContractLoading,
     isUSDCContractLoading,
-    updateDonations,
+    fetchBalances,
   };
 };

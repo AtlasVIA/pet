@@ -16,7 +16,7 @@ interface TokenSelectProps {
   isLoading: boolean;
   disabled?: boolean;
   className?: string;
-  selectedChain: number | null; // New prop for selected chain
+  selectedChain: number | null;
 }
 
 const TokenSelect: React.FC<TokenSelectProps> = ({
@@ -27,7 +27,7 @@ const TokenSelect: React.FC<TokenSelectProps> = ({
   isLoading,
   disabled,
   className,
-  selectedChain, // New prop
+  selectedChain,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -58,15 +58,27 @@ const TokenSelect: React.FC<TokenSelectProps> = ({
 
   // Reset selected token when chain changes
   useEffect(() => {
-    onChange(options[0]?.id || '');
-  }, [selectedChain, onChange, options]);
+    console.log(`TokenSelect: Chain changed to ${selectedChain}, resetting selected token`);
+    if (options.length > 0 && options[0].id !== value) {
+      console.log(`TokenSelect: Resetting token to ${options[0].id}`);
+      onChange(options[0].id);
+    }
+  }, [selectedChain, onChange, options, value]);
+
+  // Log when options change
+  useEffect(() => {
+    console.log("TokenSelect: Options updated", options);
+  }, [options]);
 
   const handleSelect = (optionId: string) => {
+    console.log(`TokenSelect: Token selected: ${optionId}`);
     setIsOpen(false);
     onChange(optionId);
   };
 
   const selectedOption = options.find(option => option.id === value);
+
+  console.log(`TokenSelect: Rendering with selectedChain: ${selectedChain}, value: ${value}, options:`, options);
 
   return (
     <div className={className}>

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { chains } from "../../../utils/scaffold-eth/chains";
 import ChainSelect from "./ChainSelect";
 import { DonationAmountSelector } from "./DonationAmountSelector";
@@ -21,6 +21,7 @@ interface DonationFormProps {
   isUSDCContractLoading: boolean;
   handleDonate: () => void;
   isUSDCSupported: boolean;
+  fetchBalances: (chainId: number) => Promise<void>;
 }
 
 export const DonationForm: React.FC<DonationFormProps> = ({
@@ -40,8 +41,10 @@ export const DonationForm: React.FC<DonationFormProps> = ({
   isUSDCContractLoading,
   handleDonate,
   isUSDCSupported,
+  fetchBalances,
 }) => {
   const [selectedToken, setSelectedToken] = useState("native");
+  const [tokenSelectKey, setTokenSelectKey] = useState(0);
 
   const currentBalance = selectedToken === "usdc" ? usdcBalance : nativeBalance;
   const isInsufficientBalance = parseFloat(donationAmountToken) > parseFloat(currentBalance);
@@ -63,12 +66,17 @@ export const DonationForm: React.FC<DonationFormProps> = ({
       setSelectedToken("native");
       setDonationAmountUSD("0");
       setMessage("");
+      if (chainId) {
+        fetchBalances(chainId);
+      }
+      setTokenSelectKey(prevKey => prevKey + 1);
     },
-    [setSelectedChain, setDonationAmountUSD, setMessage],
+    [setSelectedChain, setDonationAmountUSD, setMessage, fetchBalances],
   );
 
   const handleTokenChange = useCallback(
     (tokenId: string) => {
+      console.log(`Token changed to: ${tokenId}`);
       setSelectedToken(tokenId);
       setDonationAmountUSD("0");
     },
@@ -100,6 +108,17 @@ export const DonationForm: React.FC<DonationFormProps> = ({
     ];
   }, [selectedChain, tokenSymbol, isUSDCSupported, nativeBalance, usdcBalance, getChainInfo]);
 
+  useEffect(() => {
+    console.log("TokenOptions updated:", tokenOptions);
+  }, [tokenOptions]);
+
+  useEffect(() => {
+    if (selectedChain) {
+      console.log(`Fetching balances for chain: ${selectedChain}`);
+      fetchBalances(selectedChain);
+    }
+  }, [selectedChain, fetchBalances]);
+
   return (
     <div className="bg-gradient-to-br from-indigo-100 to-purple-100 p-8 rounded-2xl shadow-2xl w-full max-w-lg mx-auto transition-all duration-300 hover:shadow-3xl">
       <h2 className="text-3xl font-bold text-center mb-8 text-indigo-800">Make a Donation</h2>
@@ -118,6 +137,7 @@ export const DonationForm: React.FC<DonationFormProps> = ({
 
       <div className="mb-8">
         <TokenSelect
+          key={tokenSelectKey}
           label="Select Token"
           options={tokenOptions}
           value={selectedToken}

@@ -22,6 +22,7 @@ const DonationsPage = () => {
     isUSDCSupported,
     isContractLoading,
     isUSDCContractLoading,
+    fetchBalances,
   } = useDonations(selectedChain);
 
   const scrollToDonationForm = () => {
@@ -46,35 +47,6 @@ const DonationsPage = () => {
             Donate Now
           </button>
         </header>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-          <div id="donation-form" className="lg:col-span-2 animate-fade-in-up">
-            <DonationForm
-              selectedChain={selectedChain}
-              setSelectedChain={setSelectedChain}
-              nativeBalance={nativeBalance}
-              usdcBalance={usdcBalance}
-              tokenSymbol={tokenSymbol}
-              currentChainId={currentChainId}
-              donationAmountUSD={donationAmountUSD}
-              setDonationAmountUSD={setDonationAmountUSD}
-              donationAmountToken={donationAmountToken}
-              message={message}
-              setMessage={setMessage}
-              isNetworkSwitching={isNetworkSwitching}
-              isContractLoading={isContractLoading}
-              isUSDCContractLoading={isUSDCContractLoading}
-              handleDonate={handleDonate}
-              isUSDCSupported={isUSDCSupported}
-            />
-          </div>
-          <div className="bg-white rounded-2xl shadow-xl p-6 animate-fade-in-up flex flex-col justify-between transition-all duration-300 hover:shadow-2xl">
-            <div>
-              <h2 className="text-2xl font-semibold text-indigo-800 mb-6">App Preview</h2>
-              <AppPreview />
-            </div>
-          </div>
-        </div>
 
         <div className="bg-white rounded-2xl shadow-xl p-8 mb-16 animate-fade-in-up transition-all duration-300 hover:shadow-2xl">
           <h2 className="text-3xl font-semibold text-indigo-800 mb-8">Our Mission</h2>
@@ -106,6 +78,36 @@ const DonationsPage = () => {
                   Read More About Our Achievement
                 </a>
               </div>
+            </div>
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+          <div id="donation-form" className="lg:col-span-2 animate-fade-in-up">
+            <DonationForm
+              selectedChain={selectedChain}
+              setSelectedChain={setSelectedChain}
+              nativeBalance={nativeBalance}
+              usdcBalance={usdcBalance}
+              tokenSymbol={tokenSymbol}
+              currentChainId={currentChainId}
+              donationAmountUSD={donationAmountUSD}
+              setDonationAmountUSD={setDonationAmountUSD}
+              donationAmountToken={donationAmountToken}
+              message={message}
+              setMessage={setMessage}
+              isNetworkSwitching={isNetworkSwitching}
+              isContractLoading={isContractLoading}
+              isUSDCContractLoading={isUSDCContractLoading}
+              handleDonate={handleDonate}
+              isUSDCSupported={isUSDCSupported}
+              fetchBalances={fetchBalances}
+            />
+          </div>
+          <div className="bg-white rounded-2xl shadow-xl p-6 animate-fade-in-up flex flex-col justify-between transition-all duration-300 hover:shadow-2xl">
+            <div>
+              <h2 className="text-2xl font-semibold text-indigo-800 mb-6">App Preview</h2>
+              <AppPreview />
             </div>
           </div>
         </div>
