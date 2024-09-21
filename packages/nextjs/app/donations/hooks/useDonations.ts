@@ -54,7 +54,9 @@ export const useDonations = (selectedChain: number | null) => {
 
   useEffect(() => {
     if (tokenPrice !== undefined && tokenPrice > 0 && donationAmountUSD) {
-      const tokenAmount = (parseFloat(donationAmountUSD) / tokenPrice).toFixed(useUSDC ? 6 : 18);
+      const tokenAmount = useUSDC
+        ? donationAmountUSD // For USDC, use the USD amount directly
+        : (parseFloat(donationAmountUSD) / tokenPrice).toFixed(18); // For native tokens, convert USD to token amount
       setDonationAmountToken(tokenAmount);
     } else {
       setDonationAmountToken("");
@@ -107,6 +109,7 @@ export const useDonations = (selectedChain: number | null) => {
     donationAmountUSD,
     setDonationAmountUSD,
     donationAmountToken,
+    setDonationAmountToken,
     message,
     setMessage,
     tokenSymbol: useUSDC ? "USDC" : nativeSymbol,

@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { formatTokenBalance } from "../../../utils/formatTokenBalance";
 
 interface TokenOption {
   id: string;
@@ -113,7 +114,9 @@ const TokenSelect: React.FC<TokenSelectProps> = ({
             </div>
             {selectedOption && (
               <div className="flex items-center">
-                <span className="mr-2">{isLoading ? "Loading..." : selectedOption.balance}</span>
+                <span className="mr-2">
+                  {isLoading ? "Loading..." : formatTokenBalance(selectedOption.balance, selectedOption.id)}
+                </span>
               </div>
             )}
           </div>
@@ -141,7 +144,7 @@ const TokenSelect: React.FC<TokenSelectProps> = ({
                   />
                   <span>{option.name}</span>
                 </div>
-                <span>{isLoading ? "Loading..." : option.balance}</span>
+                <span>{isLoading ? "Loading..." : formatTokenBalance(option.balance, option.id)}</span>
               </div>
             ))}
           </div>

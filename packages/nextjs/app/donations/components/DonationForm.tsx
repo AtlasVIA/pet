@@ -3,6 +3,7 @@ import { chains } from "../../../utils/scaffold-eth/chains";
 import ChainSelect from "./ChainSelect";
 import { DonationAmountSelector } from "./DonationAmountSelector";
 import TokenSelect from "./TokenSelect";
+import { formatTokenBalance } from "../../../utils/formatTokenBalance";
 
 interface DonationFormProps {
   selectedChain: number | null;
@@ -14,6 +15,7 @@ interface DonationFormProps {
   donationAmountUSD: string;
   setDonationAmountUSD: (amount: string) => void;
   donationAmountToken: string;
+  setDonationAmountToken: (amount: string) => void;
   message: string;
   setMessage: (message: string) => void;
   isNetworkSwitching: boolean;
@@ -21,7 +23,13 @@ interface DonationFormProps {
   isUSDCContractLoading: boolean;
   handleDonate: () => void;
   isUSDCSupported: boolean;
+  tokenPrice: number;
 }
+
+const formatUSD = (amount: string): string => {
+  const numAmount = parseFloat(amount);
+  return isNaN(numAmount) ? "0.00" : numAmount.toFixed(2);
+};
 
 export const DonationForm: React.FC<DonationFormProps> = ({
   selectedChain,
@@ -33,6 +41,7 @@ export const DonationForm: React.FC<DonationFormProps> = ({
   donationAmountUSD,
   setDonationAmountUSD,
   donationAmountToken,
+  setDonationAmountToken,
   message,
   setMessage,
   isNetworkSwitching,
@@ -40,6 +49,7 @@ export const DonationForm: React.FC<DonationFormProps> = ({
   isUSDCContractLoading,
   handleDonate,
   isUSDCSupported,
+  tokenPrice,
 }) => {
   const [selectedToken, setSelectedToken] = useState("native");
   const [tokenSelectKey, setTokenSelectKey] = useState(0);
@@ -63,10 +73,11 @@ export const DonationForm: React.FC<DonationFormProps> = ({
       setSelectedChain(chainId);
       setSelectedToken("native");
       setDonationAmountUSD("0");
+      setDonationAmountToken("0");
       setMessage("");
       setTokenSelectKey(prevKey => prevKey + 1);
     },
-    [setSelectedChain, setDonationAmountUSD, setMessage],
+    [setSelectedChain, setDonationAmountUSD, setDonationAmountToken, setMessage],
   );
 
   const handleTokenChange = useCallback(
@@ -74,8 +85,9 @@ export const DonationForm: React.FC<DonationFormProps> = ({
       console.log(`Token changed to: ${tokenId}`);
       setSelectedToken(tokenId);
       setDonationAmountUSD("0");
+      setDonationAmountToken("0");
     },
-    [setDonationAmountUSD],
+    [setDonationAmountUSD, setDonationAmountToken],
   );
 
   const tokenOptions = useMemo(() => {
@@ -104,6 +116,16 @@ export const DonationForm: React.FC<DonationFormProps> = ({
   }, [selectedChain, tokenSymbol, isUSDCSupported, nativeBalance, usdcBalance, getChainInfo]);
 
   useEffect(() => {
+    if (selectedToken === "usdc") {
+      setDonationAmountToken(donationAmountUSD);
+    } else if (tokenPrice > 0) {
+      const tokenAmount = (parseFloat(donationAmountUSD) / tokenPrice).toFixed(18);
+      setDonationAmountToken(tokenAmount);
+    }
+    console.log(`Donation amount updated - USD: ${donationAmountUSD}, Token: ${donationAmountToken}`);
+  }, [selectedToken, donationAmountUSD, setDonationAmountToken, tokenPrice]);
+
+  useEffect(() => {
     console.log("TokenOptions updated:", tokenOptions);
   }, [tokenOptions]);
 
@@ -116,6 +138,12 @@ export const DonationForm: React.FC<DonationFormProps> = ({
   useEffect(() => {
     console.log(`TokenSymbol updated: ${tokenSymbol}`);
   }, [tokenSymbol]);
+
+  const formattedDonationAmount = selectedToken === "usdc" 
+    ? formatUSD(donationAmountUSD)
+    : formatTokenBalance(donationAmountToken, selectedToken);
+
+  console.log(`Formatted donation amount: ${formattedDonationAmount}`);
 
   return (
     <div className="w-full bg-white bg-opacity-50 rounded-xl p-6 shadow-lg transition-all duration-300 hover:shadow-xl">
@@ -147,17 +175,27 @@ export const DonationForm: React.FC<DonationFormProps> = ({
         </div>
 
         <div className="transition-all duration-300 transform hover:scale-102 relative z-10">
-          <DonationAmountSelector donationAmountUSD={donationAmountUSD} setDonationAmountUSD={setDonationAmountUSD} />
+          <DonationAmountSelector 
+            donationAmountUSD={donationAmountUSD} 
+            setDonationAmountUSD={setDonationAmountUSD}
+            setDonationAmountToken={setDonationAmountToken}
+            selectedToken={selectedToken}
+            tokenPrice={tokenPrice}
+            tokenSymbol={tokenSymbol}
+          />
         </div>
       </div>
 
-      <div className="text-lg text-indigo-800 mb-6 text-center bg-indigo-100 rounded-lg p-4 shadow-inner">
-        Donation Amount:{" "}
-        <span className="font-bold text-2xl">
-          {donationAmountToken || "0"} {selectedToken === "usdc" ? "USDC" : (getChainInfo(selectedChain)?.nativeCurrency?.symbol || tokenSymbol)}
-        </span>
-        <br />
-        <span className="text-sm text-indigo-600">(~${donationAmountUSD || "0"} USD)</span>
+      <div className="text-lg text-indigo-800 mb-6 text-center bg-gradient-to-r from-indigo-100 to-purple-100 rounded-lg p-6 shadow-inner">
+        <span className="font-semibold text-xl">Donation Amount:</span>
+        <div className="font-bold text-4xl mt-3 text-indigo-600">
+          {selectedToken === "usdc" ? "$" : ""}{formattedDonationAmount} {selectedToken === "usdc" ? "USDC" : (getChainInfo(selectedChain)?.nativeCurrency?.symbol || tokenSymbol)}
+        </div>
+        {selectedToken !== "usdc" && (
+          <div className="text-base text-indigo-500 mt-2">
+            (≈ ${formatUSD(donationAmountUSD)} USD)
+          </div>
+        )}
       </div>
 
       <textarea
