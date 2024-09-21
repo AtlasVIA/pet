@@ -94,7 +94,7 @@ const ChainSelect: React.FC<ChainSelectProps> = ({
           </svg>
         </div>
         {isOpen && !disabled && (
-          <div className="absolute top-full left-0 w-full bg-base-100 border border-base-300 rounded-md mt-1 shadow-lg z-10">
+          <div className="absolute top-full left-0 w-full bg-base-100 border border-base-300 rounded-md mt-1 shadow-lg z-50">
             {options.map(option => (
               <div
                 key={option.id}

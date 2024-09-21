@@ -37,7 +37,7 @@ const DonationsPage = () => {
       <div className="w-full max-w-6xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 mx-auto relative z-10">
         <header className="text-center mb-24 animate-fade-in-down">
           <div className="mb-8">
-            <h1 className="text-6xl sm:text-7xl lg:text-8xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 inline-block transform hover:scale-105 transition-transform duration-300">
+            <h1 className="text-6xl sm:text-7xl lg:text-8xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 inline-block transition-all duration-300 ease-in-out hover:scale-105">
               Woof! I'm Blue!
             </h1>
           </div>
@@ -46,14 +46,14 @@ const DonationsPage = () => {
           </p>
           <button
             onClick={scrollToDonationForm}
-            className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold py-4 px-10 rounded-full hover:from-indigo-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 hover:rotate-1 shadow-lg animate-bounce"
+            className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold py-4 px-10 rounded-full transition-all duration-300 ease-in-out hover:from-indigo-600 hover:to-purple-700 hover:scale-105 shadow-lg hover:shadow-xl animate-bounce"
           >
             Help Me Help My Friends! 🐾
           </button>
         </header>
 
-        <div className="bg-white bg-opacity-80 rounded-3xl shadow-2xl p-12 mb-24 animate-fade-in-up transition-all duration-300 hover:shadow-3xl relative overflow-hidden transform hover:-rotate-1">
-          <div className="absolute top-0 left-0 w-full h-3 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
+        <div className="bg-white bg-opacity-80 rounded-3xl shadow-lg p-12 mb-24 animate-fade-in-up transition-all duration-500 ease-in-out hover:shadow-2xl relative overflow-hidden hover:scale-[1.02] hover:-translate-y-2">
+          <div className="absolute top-0 left-0 w-full h-3 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 animate-gradient-x"></div>
           <h2 className="text-4xl font-bold text-indigo-800 mb-12 relative inline-block">
             Blue's Barking Mission
             <span className="absolute -bottom-2 left-0 w-full h-1 bg-indigo-500"></span>
@@ -71,7 +71,7 @@ const DonationsPage = () => {
               </p>
             </div>
             <div className="space-y-8">
-              <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl p-8 shadow-inner transform hover:scale-105 transition-all duration-300">
+              <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl p-8 shadow transition-all duration-500 ease-in-out hover:shadow-lg hover:scale-[1.02] hover:-translate-y-1">
                 <h3 className="text-3xl font-bold text-indigo-800 mb-6">What Your Help Means to Us Dogs</h3>
                 <ul className="list-none text-gray-800 text-xl leading-relaxed mb-6 space-y-4">
                   <li className="flex items-center"><span className="text-2xl mr-3">🍖</span> More yummy food and cozy beds for shelter pups</li>
@@ -89,10 +89,10 @@ const DonationsPage = () => {
         </div>
         
         <div className="flex justify-center mb-24">
-          <div className="w-24 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full"></div>
+          <div className="w-24 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full animate-gradient-x"></div>
         </div>
         
-        <div id="donation-form" className="bg-white bg-opacity-90 rounded-3xl shadow-2xl p-12 animate-fade-in-up transition-all duration-300 hover:shadow-3xl transform hover:rotate-1">
+        <div id="donation-form" className="bg-white bg-opacity-90 rounded-3xl shadow-lg p-12 animate-fade-in-up transition-all duration-500 ease-in-out hover:shadow-2xl hover:scale-[1.02] hover:-translate-y-2">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             <div className="lg:col-span-2">
               <h2 className="text-4xl font-bold text-indigo-800 mb-8">Lend a Paw! 🐾</h2>
