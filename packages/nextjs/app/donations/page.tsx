@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { AppPreview } from "./components/AppPreview";
 import { DonationForm } from "./components/DonationForm";
 import { useDonations } from "./hooks/useDonations";
+import Roadmap from "./components/Roadmap";
 
 const DonationsPage = () => {
   const [selectedChain, setSelectedChain] = useState<number | null>(null);
@@ -151,6 +152,10 @@ const DonationsPage = () => {
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="mt-24">
+          <Roadmap />
         </div>
       </div>
     </div>
