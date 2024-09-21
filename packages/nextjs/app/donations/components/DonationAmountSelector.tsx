@@ -13,9 +13,9 @@ export const DonationAmountSelector: React.FC<DonationAmountSelectorProps> = ({
   const donationOptionsUSD = ["10", "50", "100", "500", "1000"];
 
   return (
-    <>
-      <label className="block text-lg font-semibold text-gray-800 mb-6">💖 Select Your Donation Amount</label>
-      <div className="grid grid-cols-3 gap-4 mb-6 w-full">
+    <div className="w-full">
+      <label className="block text-lg font-semibold text-indigo-800 mb-4">💖 Select Your Donation Amount</label>
+      <div className="grid grid-cols-3 gap-3 mb-4">
         {donationOptionsUSD.map(amount => (
           <button
             key={amount}
@@ -23,10 +23,10 @@ export const DonationAmountSelector: React.FC<DonationAmountSelectorProps> = ({
               setDonationAmountUSD(amount);
               setShowOtherAmount(false);
             }}
-            className={`px-5 py-3 rounded-full font-bold ${
+            className={`px-4 py-2 rounded-lg font-bold transition-all duration-200 ${
               donationAmountUSD === amount && !showOtherAmount
-                ? "bg-pink-500 text-white"
-                : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+                ? "bg-indigo-600 text-white shadow-md transform scale-105"
+                : "bg-gray-100 text-gray-800 hover:bg-gray-200 hover:shadow-sm"
             }`}
           >
             ${amount}
@@ -37,22 +37,27 @@ export const DonationAmountSelector: React.FC<DonationAmountSelectorProps> = ({
             setDonationAmountUSD("");
             setShowOtherAmount(true);
           }}
-          className={`px-5 py-3 rounded-full font-bold ${
-            showOtherAmount ? "bg-pink-500 text-white" : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+          className={`px-4 py-2 rounded-lg font-bold transition-all duration-200 ${
+            showOtherAmount
+              ? "bg-indigo-600 text-white shadow-md transform scale-105"
+              : "bg-gray-100 text-gray-800 hover:bg-gray-200 hover:shadow-sm"
           }`}
         >
           Other
         </button>
       </div>
       {showOtherAmount && (
-        <input
-          type="text"
-          placeholder="Enter Amount in USD"
-          value={donationAmountUSD}
-          onChange={e => setDonationAmountUSD(e.target.value)}
-          className="input input-bordered w-full mb-4 px-4 py-3 rounded-full"
-        />
+        <div className="relative mt-4">
+          <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-600">$</span>
+          <input
+            type="text"
+            placeholder="Enter custom amount"
+            value={donationAmountUSD}
+            onChange={e => setDonationAmountUSD(e.target.value)}
+            className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+          />
+        </div>
       )}
-    </>
+    </div>
   );
 };
