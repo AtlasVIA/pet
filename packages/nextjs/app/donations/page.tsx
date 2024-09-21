@@ -5,10 +5,12 @@ import { AppPreview } from "./components/AppPreview";
 import { DonationForm } from "./components/DonationForm";
 import { useDonations } from "./hooks/useDonations";
 import Roadmap from "./components/Roadmap";
+import { FaArrowUp } from "react-icons/fa";
 
 const DonationsPage = () => {
   const [selectedChain, setSelectedChain] = useState<number | null>(null);
   const [isScrolling, setIsScrolling] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
   const {
     tokenSymbol,
     nativeBalance,
@@ -25,6 +27,7 @@ const DonationsPage = () => {
     isUSDCSupported,
     isContractLoading,
     isUSDCContractLoading,
+    tokenPrice,
   } = useDonations(selectedChain);
 
   const scrollToDonationForm = () => {
@@ -55,11 +58,19 @@ const DonationsPage = () => {
           }
         }
       }
+      setShowScrollTop(window.pageYOffset > 300);
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isScrolling]);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-gradient-to-br from-indigo-200 via-purple-100 to-pink-100 bg-opacity-90 relative">
@@ -67,7 +78,7 @@ const DonationsPage = () => {
       <div className="w-full max-w-6xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 mx-auto relative z-10">
         <header className="text-center mb-24 animate-fade-in-down">
           <div className="mb-8">
-            <h1 className="text-4xl sm:text-6xl lg:text-8xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 inline-block transition-all duration-300 ease-in-out hover:scale-105">
+            <h1 className="text-4xl sm:text-6xl lg:text-8xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 inline-block transition-all duration-300 ease-in-out hover:scale-105 animate-text-shimmer">
               Woof! I'm Blue!
             </h1>
           </div>
@@ -77,6 +88,7 @@ const DonationsPage = () => {
           <button
             onClick={scrollToDonationForm}
             className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold py-3 sm:py-4 px-6 sm:px-10 rounded-full transition-all duration-300 ease-in-out hover:from-indigo-600 hover:to-purple-700 hover:scale-105 shadow-lg hover:shadow-xl animate-bounce"
+            aria-label="Scroll to donation form"
           >
             Help Me Help My Friends! 🐾
           </button>
@@ -144,6 +156,7 @@ const DonationsPage = () => {
                 isUSDCContractLoading={isUSDCContractLoading}
                 handleDonate={handleDonate}
                 isUSDCSupported={isUSDCSupported}
+                tokenPrice={tokenPrice}
               />
             </div>
             <div className="flex flex-col justify-between lg:border-l lg:border-indigo-200 lg:pl-12">
@@ -162,6 +175,16 @@ const DonationsPage = () => {
           <Roadmap scrollToDonationForm={scrollToDonationForm} />
         </div>
       </div>
+
+      {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-8 right-8 bg-indigo-600 text-white p-3 rounded-full shadow-lg hover:bg-indigo-700 transition-all duration-300 z-50"
+          aria-label="Scroll to top"
+        >
+          <FaArrowUp />
+        </button>
+      )}
     </div>
   );
 };

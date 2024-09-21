@@ -83,6 +83,7 @@ const Roadmap: React.FC<RoadmapProps> = ({ scrollToDonationForm }) => {
         <button
           onClick={scrollToDonationForm}
           className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 ease-in-out hover:from-indigo-600 hover:to-purple-700 transform hover:scale-105 shadow-lg hover:shadow-xl"
+          aria-label="Join our pack and make a donation"
         >
           Join Our Pack
         </button>
