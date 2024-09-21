@@ -61,7 +61,7 @@ export const useDonations = (selectedChain: number | null) => {
     } else {
       setDonationAmountToken("");
     }
-  }, [donationAmountUSD, tokenPrice, useUSDC]);
+  }, [donationAmountUSD, tokenPrice, useUSDC, selectedChain]);
 
   const handleDonate = async () => {
     if (!donationAmountToken || isNaN(Number(donationAmountToken))) {
@@ -88,8 +88,7 @@ export const useDonations = (selectedChain: number | null) => {
         await donateNative(donationAmountToken, message);
       }
       notification.success("Donation successful!");
-      setDonationAmountUSD("");
-      setMessage("");
+      // We're not resetting donationAmountUSD and message here anymore
     } catch (error) {
       console.error("Donation failed", error);
       setError(error instanceof Error ? error.message : "Donation failed. Please try again.");

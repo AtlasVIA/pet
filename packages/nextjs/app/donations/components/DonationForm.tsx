@@ -72,22 +72,17 @@ export const DonationForm: React.FC<DonationFormProps> = ({
       console.log(`Chain changed to: ${chainId}`);
       setSelectedChain(chainId);
       setSelectedToken("native");
-      setDonationAmountUSD("0");
-      setDonationAmountToken("0");
-      setMessage("");
       setTokenSelectKey(prevKey => prevKey + 1);
     },
-    [setSelectedChain, setDonationAmountUSD, setDonationAmountToken, setMessage],
+    [setSelectedChain],
   );
 
   const handleTokenChange = useCallback(
     (tokenId: string) => {
       console.log(`Token changed to: ${tokenId}`);
       setSelectedToken(tokenId);
-      setDonationAmountUSD("0");
-      setDonationAmountToken("0");
     },
-    [setDonationAmountUSD, setDonationAmountToken],
+    [],
   );
 
   const tokenOptions = useMemo(() => {
@@ -123,7 +118,7 @@ export const DonationForm: React.FC<DonationFormProps> = ({
       setDonationAmountToken(tokenAmount);
     }
     console.log(`Donation amount updated - USD: ${donationAmountUSD}, Token: ${donationAmountToken}`);
-  }, [selectedToken, donationAmountUSD, setDonationAmountToken, tokenPrice]);
+  }, [selectedToken, donationAmountUSD, setDonationAmountToken, tokenPrice, selectedChain]);
 
   useEffect(() => {
     console.log("TokenOptions updated:", tokenOptions);
@@ -138,12 +133,6 @@ export const DonationForm: React.FC<DonationFormProps> = ({
   useEffect(() => {
     console.log(`TokenSymbol updated: ${tokenSymbol}`);
   }, [tokenSymbol]);
-
-  const formattedDonationAmount = selectedToken === "usdc" 
-    ? formatUSD(donationAmountUSD)
-    : formatTokenBalance(donationAmountToken, selectedToken);
-
-  console.log(`Formatted donation amount: ${formattedDonationAmount}`);
 
   return (
     <div className="w-full bg-white bg-opacity-50 rounded-xl p-6 shadow-lg transition-all duration-300 hover:shadow-xl">
@@ -186,25 +175,15 @@ export const DonationForm: React.FC<DonationFormProps> = ({
         </div>
       </div>
 
-      <div className="text-lg text-indigo-800 mb-6 text-center bg-gradient-to-r from-indigo-100 to-purple-100 rounded-lg p-6 shadow-inner">
-        <span className="font-semibold text-xl">Donation Amount:</span>
-        <div className="font-bold text-4xl mt-3 text-indigo-600">
-          {selectedToken === "usdc" ? "$" : ""}{formattedDonationAmount} {selectedToken === "usdc" ? "USDC" : (getChainInfo(selectedChain)?.nativeCurrency?.symbol || tokenSymbol)}
-        </div>
-        {selectedToken !== "usdc" && (
-          <div className="text-base text-indigo-500 mt-2">
-            (≈ ${formatUSD(donationAmountUSD)} USD)
-          </div>
-        )}
+      <div className="mb-8">
+        <textarea
+          placeholder="Your Message (optional)"
+          value={message}
+          onChange={e => setMessage(e.target.value)}
+          className="w-full px-4 py-3 rounded-lg border border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 resize-none shadow-inner"
+          rows={4}
+        />
       </div>
-
-      <textarea
-        placeholder="Your Message (optional)"
-        value={message}
-        onChange={e => setMessage(e.target.value)}
-        className="w-full mb-8 px-4 py-3 rounded-lg border border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 resize-none shadow-inner"
-        rows={4}
-      />
 
       <button
         onClick={handleDonate}

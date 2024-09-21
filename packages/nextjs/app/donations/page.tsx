@@ -126,13 +126,7 @@ const DonationsPage = () => {
             </div>
             <div className="flex flex-col justify-between lg:border-l lg:border-indigo-200 lg:pl-12">
               <div>
-                <h2 className="text-3xl font-bold text-indigo-800 mb-8">Peek at the Puppy Fun!</h2>
                 <AppPreview />
-              </div>
-              <div className="mt-12 text-center lg:text-left">
-                <p className="text-2xl text-indigo-600 italic font-semibold">
-                  "Woof! Your support means more happy tails and wet noses!" 🐶💖
-                </p>
               </div>
             </div>
           </div>
