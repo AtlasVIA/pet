@@ -120,7 +120,7 @@ export const DonationForm: React.FC<DonationFormProps> = ({
   return (
     <div className="w-full bg-white bg-opacity-50 rounded-xl p-6 shadow-lg transition-all duration-300 hover:shadow-xl">
       <div className="mb-8 space-y-6">
-        <div className="transition-all duration-300 transform hover:scale-102 relative z-50">
+        <div className="transition-all duration-300 transform hover:scale-102 relative z-30">
           <ChainSelect
             label="Select Chain"
             options={chainOptions}
@@ -132,7 +132,7 @@ export const DonationForm: React.FC<DonationFormProps> = ({
           />
         </div>
 
-        <div className="transition-all duration-300 transform hover:scale-102">
+        <div className="transition-all duration-300 transform hover:scale-102 relative z-20">
           <TokenSelect
             key={tokenSelectKey}
             label="Select Token"
@@ -146,7 +146,7 @@ export const DonationForm: React.FC<DonationFormProps> = ({
           />
         </div>
 
-        <div className="transition-all duration-300 transform hover:scale-102">
+        <div className="transition-all duration-300 transform hover:scale-102 relative z-10">
           <DonationAmountSelector donationAmountUSD={donationAmountUSD} setDonationAmountUSD={setDonationAmountUSD} />
         </div>
       </div>

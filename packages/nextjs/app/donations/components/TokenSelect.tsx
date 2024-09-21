@@ -31,6 +31,7 @@ const TokenSelect: React.FC<TokenSelectProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const prevChainRef = useRef<number | null>(null);
 
   const preloadImages = useCallback(() => {
     options.forEach(option => {
@@ -58,10 +59,13 @@ const TokenSelect: React.FC<TokenSelectProps> = ({
 
   // Reset selected token when chain changes
   useEffect(() => {
-    console.log(`TokenSelect: Chain changed to ${selectedChain}, resetting selected token`);
-    if (options.length > 0 && options[0].id !== value) {
-      console.log(`TokenSelect: Resetting token to ${options[0].id}`);
-      onChange(options[0].id);
+    if (selectedChain !== prevChainRef.current) {
+      console.log(`TokenSelect: Chain changed from ${prevChainRef.current} to ${selectedChain}, resetting selected token`);
+      if (options.length > 0 && options[0].id !== value) {
+        console.log(`TokenSelect: Resetting token to ${options[0].id}`);
+        onChange(options[0].id);
+      }
+      prevChainRef.current = selectedChain;
     }
   }, [selectedChain, onChange, options, value]);
 
@@ -120,7 +124,7 @@ const TokenSelect: React.FC<TokenSelectProps> = ({
           </svg>
         </div>
         {isOpen && !disabled && (
-          <div className="absolute top-full left-0 w-full bg-base-100 border border-base-300 rounded-md mt-1 shadow-lg z-10">
+          <div className="absolute top-full left-0 w-full bg-base-100 border border-base-300 rounded-md mt-1 shadow-lg z-[100]">
             {options.map(option => (
               <div
                 key={option.id}
