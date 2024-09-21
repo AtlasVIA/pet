@@ -1,21 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { AppPreview } from "./components/AppPreview";
 import { DonationForm } from "./components/DonationForm";
-import { MessageList } from "./components/MessageList";
 import { useDonations } from "./hooks/useDonations";
 
 const DonationsPage = () => {
   const [selectedChain, setSelectedChain] = useState<number | null>(null);
-  const [animatedDonation, setAnimatedDonation] = useState("0");
   const {
-    totalDonationsUSD,
-    messages,
     tokenSymbol,
-    tokenPrice,
-    useUSDC,
-    toggleTokenType,
     nativeBalance,
     usdcBalance,
     currentChainId,
@@ -27,28 +20,9 @@ const DonationsPage = () => {
     isNetworkSwitching,
     handleDonate,
     isUSDCSupported,
-    error,
     isContractLoading,
     isUSDCContractLoading,
-    updateDonations,
   } = useDonations(selectedChain);
-
-  useEffect(() => {
-    if (totalDonationsUSD) {
-      const target = parseFloat(totalDonationsUSD);
-      let current = 0;
-      const increment = target / 100;
-      const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-          clearInterval(timer);
-          setAnimatedDonation(target.toFixed(2));
-        } else {
-          setAnimatedDonation(current.toFixed(2));
-        }
-      }, 20);
-    }
-  }, [totalDonationsUSD]);
 
   const scrollToDonationForm = () => {
     const donationForm = document.getElementById('donation-form');
@@ -78,8 +52,6 @@ const DonationsPage = () => {
             <DonationForm
               selectedChain={selectedChain}
               setSelectedChain={setSelectedChain}
-              useUSDC={useUSDC}
-              toggleTokenType={toggleTokenType}
               nativeBalance={nativeBalance}
               usdcBalance={usdcBalance}
               tokenSymbol={tokenSymbol}
@@ -94,19 +66,12 @@ const DonationsPage = () => {
               isUSDCContractLoading={isUSDCContractLoading}
               handleDonate={handleDonate}
               isUSDCSupported={isUSDCSupported}
-              error={error}
             />
           </div>
           <div className="bg-white rounded-2xl shadow-xl p-6 animate-fade-in-up flex flex-col justify-between transition-all duration-300 hover:shadow-2xl">
             <div>
               <h2 className="text-2xl font-semibold text-indigo-800 mb-6">App Preview</h2>
               <AppPreview />
-            </div>
-            <div className="mt-8">
-              <h3 className="text-xl font-semibold text-indigo-700 mb-4">Total Donations</h3>
-              <p className="text-4xl font-bold text-indigo-600 transition-all duration-300">
-                ${animatedDonation}
-              </p>
             </div>
           </div>
         </div>
@@ -143,19 +108,6 @@ const DonationsPage = () => {
               </div>
             </div>
           </div>
-        </div>
-
-        <div className="bg-white rounded-2xl shadow-xl p-8 animate-fade-in-up transition-all duration-300 hover:shadow-2xl">
-          <h2 className="text-3xl font-semibold text-indigo-800 mb-8">Donation Messages</h2>
-          <MessageList
-            messages={messages}
-            selectedChain={selectedChain}
-            tokenSymbol={tokenSymbol}
-            tokenPrice={tokenPrice}
-            isContractLoading={isContractLoading}
-            error={error}
-            refetchMessages={updateDonations}
-          />
         </div>
       </div>
     </div>

@@ -17,6 +17,9 @@ const nextConfig = {
   //output: "export",
   assetPrefix: process.env.ASSET_PREFIX || "",
   basePath: process.env.BASE_PATH || "",
+  images: {
+    domains: ["localhost", "scan.vialabs.io", "anytoany.io"],
+  },
 };
 
 module.exports = nextConfig;
