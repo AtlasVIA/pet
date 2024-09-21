@@ -114,7 +114,7 @@ const DonationsPage = () => {
             </div>
             <div className="space-y-8">
               <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl p-6 sm:p-8 shadow transition-all duration-500 ease-in-out hover:shadow-lg hover:scale-[1.02] hover:-translate-y-1">
-                <h3 className="text-2xl sm:text-3xl font-bold text-indigo-800 mb-6">What Your Help Means to Us Dogs</h3>
+                <h3 className="text-2xl sm:text-3xl font-bold text-indigo-800 mb-6">What Your Help Means</h3>
                 <ul className="list-none text-gray-800 text-lg sm:text-xl leading-relaxed mb-6 space-y-4">
                   <li className="flex items-center"><span className="text-2xl mr-3">🍖</span> More yummy food and cozy beds for shelter pups</li>
                   <li className="flex items-center"><span className="text-2xl mr-3">🎾</span> Lots of playtime and walks for dogs waiting for homes</li>
