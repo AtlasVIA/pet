@@ -5,6 +5,10 @@ import { ScaffoldEthAppWithProviders } from "~~/components/ScaffoldEthAppWithPro
 import { ThemeProvider } from "~~/components/ThemeProvider";
 import "~~/styles/globals.css";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
+import { Inter, Nunito } from 'next/font/google';
+
+const inter = Inter({ subsets: ['latin'] });
+const nunito = Nunito({ subsets: ['latin'] });
 
 export const metadata = getMetadata({
   title: "Dogachi.Pet",
@@ -13,7 +17,7 @@ export const metadata = getMetadata({
 
 const HomePageLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <html suppressHydrationWarning>
+    <html suppressHydrationWarning className={`${inter.className} ${nunito.className}`}>
       <body>
         <ThemeProvider enableSystem>
           <ScaffoldEthAppWithProviders>
