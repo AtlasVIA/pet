@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AppPreview } from "./components/AppPreview";
 import { DonationForm } from "./components/DonationForm";
 import { useDonations } from "./hooks/useDonations";
 
 const DonationsPage = () => {
   const [selectedChain, setSelectedChain] = useState<number | null>(null);
+  const [isScrolling, setIsScrolling] = useState(false);
   const {
     tokenSymbol,
     nativeBalance,
@@ -28,7 +29,8 @@ const DonationsPage = () => {
   const scrollToDonationForm = () => {
     const donationForm = document.getElementById('donation-form');
     if (donationForm) {
-      const headerOffset = 100; // Adjust this value as needed
+      setIsScrolling(true);
+      const headerOffset = 100;
       const elementPosition = donationForm.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
@@ -36,8 +38,27 @@ const DonationsPage = () => {
         top: offsetPosition,
         behavior: 'smooth'
       });
+
+      setTimeout(() => setIsScrolling(false), 1000);
     }
   };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!isScrolling) {
+        const donationForm = document.getElementById('donation-form');
+        if (donationForm) {
+          const rect = donationForm.getBoundingClientRect();
+          if (rect.top <= window.innerHeight && rect.bottom >= 0) {
+            donationForm.classList.add('animate-fade-in-up');
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isScrolling]);
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-gradient-to-br from-indigo-200 via-purple-100 to-pink-100 bg-opacity-90 relative">
@@ -100,7 +121,7 @@ const DonationsPage = () => {
           <div className="w-24 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full animate-gradient-x"></div>
         </div>
         
-        <div id="donation-form" className="bg-white bg-opacity-90 rounded-3xl shadow-lg p-12 animate-fade-in-up transition-all duration-500 ease-in-out hover:shadow-2xl hover:scale-[1.02] hover:-translate-y-2">
+        <div id="donation-form" className="bg-white bg-opacity-90 rounded-3xl shadow-lg p-12 transition-all duration-500 ease-in-out hover:shadow-2xl hover:scale-[1.02] hover:-translate-y-2">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             <div className="lg:col-span-2">
               <h2 className="text-4xl font-bold text-indigo-800 mb-8">Lend a Paw! 🐾</h2>
