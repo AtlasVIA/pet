@@ -1,0 +1,36 @@
+{
+  "language": "Solidity",
+  "sources": {
+    "contracts/Donations.sol": {
+      "content": "// SPDX-License-Identifier: MIT\n// (c)2024 Atlas (atlas@vialabs.io)\npragma solidity =0.8.17;\n\ncontract Donations {\n    struct Message {\n        address sender;\n        uint256 timestamp;\n        string message;\n        uint256 amount;\n    }\n\n    Message[] public messages;\n    uint256 public totalDonations;\n    address public treasuryAddress;\n    address public owner;\n\n    event DonationReceived(address indexed sender, uint256 amount, string message);\n    event TreasuryAddressUpdated(address indexed oldAddress, address indexed newAddress);\n\n    modifier onlyOwner() {\n        require(msg.sender == owner, \"Not authorized\");\n        _;\n    }\n\n    constructor(address _treasuryAddress) {\n        treasuryAddress = _treasuryAddress;\n        owner = msg.sender;\n    }\n\n    function updateTreasuryAddress(address _newTreasuryAddress) public onlyOwner {\n        require(_newTreasuryAddress != address(0), \"Invalid address\");\n        emit TreasuryAddressUpdated(treasuryAddress, _newTreasuryAddress);\n        treasuryAddress = _newTreasuryAddress;\n    }\n\n    function donate(string memory _message) public payable {\n        require(msg.value > 0, \"Donation amount must be greater than zero\");\n        require(treasuryAddress != address(0), \"Treasury address not set\");\n\n        totalDonations += msg.value;\n\n        messages.push(Message({\n            sender: msg.sender,\n            timestamp: block.timestamp,\n            message: _message,\n            amount: msg.value\n        }));\n\n        (bool success, ) = treasuryAddress.call{value: msg.value}(\"\");\n        require(success, \"Transfer failed\");\n\n        emit DonationReceived(msg.sender, msg.value, _message);\n    }\n\n    function getMessages(uint256 _count) public view returns (Message[] memory) {\n        uint256 messageCount = messages.length;\n        if (_count > messageCount) {\n            _count = messageCount;\n        }\n\n        Message[] memory recentMessages = new Message[](_count);\n        for (uint256 i = 0; i < _count; i++) {\n            recentMessages[i] = messages[messageCount - i - 1];\n        }\n        return recentMessages;\n    }\n}\n"
+    }
+  },
+  "settings": {
+    "optimizer": {
+      "enabled": true,
+      "runs": 200
+    },
+    "viaIR": true,
+    "outputSelection": {
+      "*": {
+        "*": [
+          "abi",
+          "evm.bytecode",
+          "evm.deployedBytecode",
+          "evm.methodIdentifiers",
+          "metadata",
+          "devdoc",
+          "userdoc",
+          "storageLayout",
+          "evm.gasEstimates"
+        ],
+        "": [
+          "ast"
+        ]
+      }
+    },
+    "metadata": {
+      "useLiteralContent": true
+    }
+  }
+}

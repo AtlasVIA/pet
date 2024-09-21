@@ -6,20 +6,59 @@ import { formatEther, parseEther } from "viem";
 import { useAccount } from "wagmi";
 import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
+const allChainOptions = [
+  { id: 44787, name: "Celo Testnet" },
+  { id: 5003, name: "Mantle Testnet" },
+  { id: 11155420, name: "OP Sepolia" },
+  { id: 48899, name: "Zircuit Testnet" },
+  { id: 2039, name: "Aleph Zero Testnet" },
+];
+
+const useMultiChainNFTs = (contractName: string, functionName: string, args: any[]) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
+  const [data, setData] = useState<any[]>([]);
+
+  const celoResult = useScaffoldReadContract({
+    contractName,
+    functionName,
+    chainId: 44787,
+    args,
+  });
+
+  const mantleResult = useScaffoldReadContract({
+    contractName,
+    functionName,
+    chainId: 5003,
+    args,
+  });
+
+  const opResult = useScaffoldReadContract({
+    contractName,
+    functionName,
+    chainId: 11155420,
+    args,
+  });
+
+  useEffect(() => {
+    const results = [celoResult, mantleResult, opResult];
+    const loadingStates = results.map(result => result.isLoading);
+    const errorStates = results.map(result => result.isError);
+    const allData = results.flatMap(result => result.data || []);
+
+    setIsLoading(loadingStates.some(state => state));
+    setIsError(errorStates.some(state => state));
+    setData(allData);
+  }, [celoResult, mantleResult, opResult]);
+
+  return { isLoading, isError, data };
+};
+
 const MyPets = () => {
   const { address: connectedAddress } = useAccount();
   const [nftIds, setNftIds] = useState<number[]>([]);
 
-  // Fetch NFTs owned by the user
-  const {
-    data: nftData,
-    isLoading,
-    isError,
-  } = useScaffoldReadContract({
-    contractName: "AdoptAPet",
-    functionName: "walletOfOwner",
-    args: [connectedAddress],
-  });
+  const { isLoading, isError, data: nftData } = useMultiChainNFTs("AdoptAPet", "walletOfOwner", [connectedAddress]);
 
   useEffect(() => {
     if (nftData && Array.isArray(nftData)) {
@@ -34,7 +73,7 @@ const MyPets = () => {
         {isError && <p className="text-lg text-red-500">Failed to load Pets</p>}
         {!isLoading && !isError && nftIds.length === 0 && (
           <p className="text-lg text-gray-600">
-            You do not currently have any Pets on this chain. Switch chains to see your Pets on other chains.
+            You do not currently have any Pets on any of the supported chains.
           </p>
         )}
 
@@ -52,32 +91,18 @@ const MyPets = () => {
 
 const PetCard = ({ nftId }: { nftId: number }) => {
   const [nftData, setNftData] = useState<any>(null);
-  const [selectedChain] = useState<number | null>(null);
   const { address: connectedAddress } = useAccount();
 
-  // Chains available for bridging
-  const allChainOptions = [
-    { id: 44787, name: "Celo Testnet" },
-    { id: 5003, name: "Mantle Testnet" },
-    { id: 11155420, name: "OP Sepolia" },
-    { id: 48899, name: "Zircuit Testnet" },
-    { id: 2039, name: "Aleph Zero Testnet" },
-  ];
-  const chainOptions = allChainOptions.filter(option => option.id !== selectedChain);
+  const chainOptions = allChainOptions;
 
   const { writeContractAsync: bridgePet } = useScaffoldWriteContract("AdoptAPet");
+  const { writeContractAsync: writeYourContractAsync } = useScaffoldWriteContract("AdoptAPet");
 
-  // Fetch individual pet data for each NFT
-  const { data: fetchedNftData, refetch } = useScaffoldReadContract({
-    contractName: "AdoptAPet",
-    functionName: "getPet",
-    args: [BigInt(nftId)],
-  });
+  const { data: fetchedNftData, isLoading, isError } = useMultiChainNFTs("AdoptAPet", "getPet", [BigInt(nftId)]);
 
-  console.log(fetchedNftData);
   useEffect(() => {
-    if (fetchedNftData) {
-      setNftData(fetchedNftData);
+    if (fetchedNftData && fetchedNftData.length > 0) {
+      setNftData(fetchedNftData[0]);
     }
   }, [fetchedNftData]);
 
@@ -95,20 +120,11 @@ const PetCard = ({ nftId }: { nftId: number }) => {
         functionName: "bridge",
         args: [BigInt(chosenChain), connectedAddress, BigInt(nftId)],
       });
-      refetch(); // Refresh NFT data after bridging
+      // Refresh NFT data after bridging (you might need to implement a refetch mechanism)
     } catch (error) {
       console.error("Bridge failed", error);
     }
   };
-
-  useEffect(() => {
-    if (fetchedNftData) {
-      setNftData(fetchedNftData);
-    }
-  }, [fetchedNftData]);
-
-  // Contract write functions for interactions (walk, feed, treat)
-  const { writeContractAsync: writeYourContractAsync } = useScaffoldWriteContract("AdoptAPet");
 
   const getStatus = (lastInteraction: string) => {
     if (!lastInteraction) return "dead";
@@ -137,11 +153,15 @@ const PetCard = ({ nftId }: { nftId: number }) => {
 
   const interactWithPet = async (action: "walk" | "feed" | "treat") => {
     await writeYourContractAsync({ functionName: action, args: [BigInt(nftId)], value: parseEther("0.001") });
-    refetch();
+    // Refresh NFT data after interaction (you might need to implement a refetch mechanism)
   };
 
-  if (!nftData) {
+  if (isLoading) {
     return <div>Loading pet data...</div>;
+  }
+
+  if (isError || !nftData) {
+    return <div>Error loading pet data</div>;
   }
 
   return (

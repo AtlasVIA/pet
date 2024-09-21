@@ -2,50 +2,79 @@ import { useEffect, useState } from "react";
 import { useTargetNetwork } from "./useTargetNetwork";
 import { useIsMounted } from "usehooks-ts";
 import { usePublicClient } from "wagmi";
+import { Chain } from "~~/utils/scaffold-eth/chains";
 import { Contract, ContractCodeStatus, ContractName, contracts } from "~~/utils/scaffold-eth/contract";
+import { getProtocctpAddress, getUsdcAddress } from "~~/utils/scaffold-eth/contractAddresses";
+import { usdcAbi } from "~~/utils/scaffold-eth/usdcAbi";
 
 /**
  * Gets the matching contract info for the provided contract name from the contracts present in deployedContracts.ts
  * and externalContracts.ts corresponding to targetNetworks configured in scaffold.config.ts
+ * Also includes USDC and PROTOCCTP contracts from the newly added chains
  */
-export const useDeployedContractInfo = <TContractName extends ContractName>(contractName: TContractName) => {
+export const useDeployedContractInfo = <TContractName extends ContractName | "USDC" | "PROTOCCTP">(
+  contractName: TContractName,
+  chainId?: number | undefined,
+) => {
   const isMounted = useIsMounted();
   const { targetNetwork } = useTargetNetwork();
-  const deployedContract = contracts?.[targetNetwork.id]?.[contractName as ContractName] as Contract<TContractName>;
   const [status, setStatus] = useState<ContractCodeStatus>(ContractCodeStatus.LOADING);
-  const publicClient = usePublicClient({ chainId: targetNetwork.id });
+  const [deployedContract, setDeployedContract] = useState<Contract<TContractName> | undefined>(undefined);
+
+  const effectiveChainId = chainId || targetNetwork.id;
+  const publicClient = usePublicClient({ chainId: effectiveChainId });
 
   useEffect(() => {
     const checkContractDeployment = async () => {
-      try {
-        if (!isMounted() || !publicClient) return;
+      if (!isMounted() || !publicClient) return;
 
-        if (!deployedContract) {
+      try {
+        let contractData: Contract<TContractName> | undefined;
+
+        if (contractName === "USDC") {
+          const address = getUsdcAddress(effectiveChainId as Chain);
+          if (address) {
+            contractData = { address, abi: usdcAbi } as Contract<TContractName>;
+          }
+        } else if (contractName === "PROTOCCTP") {
+          const address = getProtocctpAddress(effectiveChainId as Chain);
+          if (address) {
+            contractData = { address, abi: [] } as Contract<TContractName>; // Note: We don't have the ABI for PROTOCCTP
+          }
+        } else {
+          contractData = contracts?.[effectiveChainId]?.[contractName as ContractName] as Contract<TContractName>;
+        }
+
+        if (!contractData) {
           setStatus(ContractCodeStatus.NOT_FOUND);
           return;
         }
 
         const code = await publicClient.getBytecode({
-          address: deployedContract.address,
+          address: contractData.address,
         });
 
-        // If contract code is `0x` => no contract deployed on that address
         if (code === "0x") {
           setStatus(ContractCodeStatus.NOT_FOUND);
-          return;
+        } else {
+          setStatus(ContractCodeStatus.DEPLOYED);
+          setDeployedContract(contractData);
         }
-        setStatus(ContractCodeStatus.DEPLOYED);
       } catch (e) {
-        console.error(e);
+        console.error(`Error checking contract deployment for ${contractName}:`, e);
         setStatus(ContractCodeStatus.NOT_FOUND);
       }
     };
 
     checkContractDeployment();
-  }, [isMounted, contractName, deployedContract, publicClient]);
+  }, [isMounted, contractName, effectiveChainId, publicClient]);
 
   return {
     data: status === ContractCodeStatus.DEPLOYED ? deployedContract : undefined,
     isLoading: status === ContractCodeStatus.LOADING,
+    error:
+      status === ContractCodeStatus.NOT_FOUND
+        ? new Error(`Contract ${contractName} not found on chain ${effectiveChainId}`)
+        : undefined,
   };
 };

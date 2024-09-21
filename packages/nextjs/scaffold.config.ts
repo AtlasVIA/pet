@@ -1,3 +1,4 @@
+import { chains as customChains } from "./utils/scaffold-eth/chains";
 import { defineChain } from "viem";
 import * as chains from "viem/chains";
 
@@ -47,6 +48,24 @@ const scaffoldConfig = {
     chains.mantleSepoliaTestnet,
     alephZeroTestnet,
     zircuitTestnet,
+    ...customChains.map(chain =>
+      defineChain({
+        id: chain.id,
+        name: chain.name,
+        network: chain.name.toLowerCase().replace(" ", "-"),
+        nativeCurrency: {
+          name: chain.name.split(" ")[0],
+          symbol: chain.name.split(" ")[0].toUpperCase(),
+          decimals: 18,
+        },
+        rpcUrls: {
+          default: { http: [`https://rpc.${chain.name.toLowerCase().replace(" ", "-")}.io`] },
+        },
+        blockExplorers: {
+          default: { name: chain.name, url: `https://explorer.${chain.name.toLowerCase().replace(" ", "-")}.io` },
+        },
+      }),
+    ),
   ],
 
   // The interval at which your front-end polls the RPC servers for new data
