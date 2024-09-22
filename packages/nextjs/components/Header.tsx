@@ -68,9 +68,9 @@ export const Header = () => {
   };
 
   const navItems = [
-    { name: "Adopt", path: "/adopt", comingSoon: true },
-    { name: "My Pets", path: "/mypets", comingSoon: true },
-    { name: "Donations", path: "/donations" },
+    { name: "Adopt", path: "/adopt", emoji: "🐾", comingSoon: true },
+    { name: "My Pets", path: "/mypets", emoji: "🏠", comingSoon: true },
+    { name: "Donations", path: "/donations", emoji: "💖" },
   ];
 
   return (
@@ -86,15 +86,20 @@ export const Header = () => {
             </span>
           </Link>
 
-          <nav className="hidden md:flex space-x-4 relative">
+          <nav className="hidden md:flex space-x-6 relative">
             {navItems.map((item) => (
               <div key={item.path} className={`text-sm lg:text-base font-medium ${
-                isActive(item.path) ? "text-yellow-300" : "text-white hover:text-yellow-200"
-              } transition-colors duration-200`}>
+                isActive(item.path) 
+                  ? "text-yellow-300 bg-blue-700" 
+                  : "text-white hover:text-yellow-200 hover:bg-blue-600"
+              } transition-all duration-200 px-3 py-2 rounded-md flex items-center`}>
                 {item.comingSoon ? (
-                  <ComingSoon name={item.name} />
+                  <ComingSoon name={`${item.emoji} ${item.name}`} />
                 ) : (
-                  <Link href={item.path}>{item.name}</Link>
+                  <Link href={item.path} className="flex items-center">
+                    <span className="mr-2">{item.emoji}</span>
+                    {item.name}
+                  </Link>
                 )}
               </div>
             ))}
@@ -130,14 +135,17 @@ export const Header = () => {
                 key={item.path}
                 className={`block px-3 py-2 text-base font-medium ${
                   isActive(item.path)
-                    ? "text-yellow-300"
-                    : "text-white hover:text-yellow-200"
-                } transition-colors duration-200`}
+                    ? "text-yellow-300 bg-blue-700"
+                    : "text-white hover:text-yellow-200 hover:bg-blue-600"
+                } transition-all duration-200 rounded-md`}
               >
                 {item.comingSoon ? (
-                  <ComingSoon name={item.name} />
+                  <ComingSoon name={`${item.emoji} ${item.name}`} />
                 ) : (
-                  <Link href={item.path} onClick={() => setIsMenuOpen(false)}>{item.name}</Link>
+                  <Link href={item.path} onClick={() => setIsMenuOpen(false)} className="flex items-center">
+                    <span className="mr-2">{item.emoji}</span>
+                    {item.name}
+                  </Link>
                 )}
               </div>
             ))}
