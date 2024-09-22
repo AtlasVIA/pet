@@ -1,12 +1,12 @@
-import { useState, useMemo, useCallback } from "react";
-import { parseUnits } from "viem";
+import { useCallback, useMemo, useState } from "react";
 import { useChainInfo } from "./useChainInfo";
 import { useNetworkSwitching } from "./useNetworkSwitching";
-import { useTokenPrice } from "./useTokenPrice";
 import { useTokenBalances } from "./useTokenBalances";
+import { useTokenPrice } from "./useTokenPrice";
+import { parseUnits } from "viem";
 import { useWalletClient } from "wagmi";
+import { useDeployedContractInfo, useScaffoldContract } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
-import { useScaffoldContract, useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 
 export const useDonations = (selectedChain: number | null) => {
   const { data: walletClient } = useWalletClient();
@@ -55,39 +55,45 @@ export const useDonations = (selectedChain: number | null) => {
     notification.error(errorMessage);
   }, []);
 
-  const donateNative = useCallback(async (amount: string, message: string) => {
-    if (!donationsContract) {
-      throw new Error("Donation contract not available. Please check your connection.");
-    }
+  const donateNative = useCallback(
+    async (amount: string, message: string) => {
+      if (!donationsContract) {
+        throw new Error("Donation contract not available. Please check your connection.");
+      }
 
-    try {
-      return await donationsContract.write.donate([message], {
-        value: parseUnits(amount, 18),
-      });
-    } catch (error) {
-      throw new Error("Failed to process native token donation. Please try again.");
-    }
-  }, [donationsContract]);
+      try {
+        return await donationsContract.write.donate([message], {
+          value: parseUnits(amount, 18),
+        });
+      } catch (error) {
+        throw new Error("Failed to process native token donation. Please try again.");
+      }
+    },
+    [donationsContract],
+  );
 
-  const donateUSDC = useCallback(async (amount: string, message: string) => {
-    if (!donationsContract || !usdcAddress || !usdcContractData?.abi) {
-      throw new Error("Required contracts or addresses not available. Please check your connection.");
-    }
+  const donateUSDC = useCallback(
+    async (amount: string, message: string) => {
+      if (!donationsContract || !usdcAddress || !usdcContractData?.abi) {
+        throw new Error("Required contracts or addresses not available. Please check your connection.");
+      }
 
-    try {
-      const approveTx = await walletClient?.writeContract({
-        address: usdcAddress,
-        abi: usdcContractData.abi,
-        functionName: "approve",
-        args: [donationsContract.address, parseUnits(amount, 6)],
-      });
-      await approveTx?.wait();
+      try {
+        const approveTx = await walletClient?.writeContract({
+          address: usdcAddress,
+          abi: usdcContractData.abi,
+          functionName: "approve",
+          args: [donationsContract.address, parseUnits(amount, 6)],
+        });
+        await approveTx?.wait();
 
-      return await donationsContract.write.donateUSDC([parseUnits(amount, 6), message]);
-    } catch (error) {
-      throw new Error("Failed to process USDC donation. Please try again.");
-    }
-  }, [donationsContract, usdcAddress, usdcContractData, walletClient]);
+        return await donationsContract.write.donateUSDC([parseUnits(amount, 6), message]);
+      } catch (error) {
+        throw new Error("Failed to process USDC donation. Please try again.");
+      }
+    },
+    [donationsContract, usdcAddress, usdcContractData, walletClient],
+  );
 
   const handleDonate = useCallback(async () => {
     if (!donationAmountToken || isNaN(Number(donationAmountToken))) {
@@ -117,7 +123,17 @@ export const useDonations = (selectedChain: number | null) => {
     } catch (error) {
       handleError(error);
     }
-  }, [donationAmountToken, selectedChain, handleNetworkSwitch, useUSDC, isUSDCContractLoading, donateUSDC, donateNative, message, handleError]);
+  }, [
+    donationAmountToken,
+    selectedChain,
+    handleNetworkSwitch,
+    useUSDC,
+    isUSDCContractLoading,
+    donateUSDC,
+    donateNative,
+    message,
+    handleError,
+  ]);
 
   return {
     donationAmountUSD,

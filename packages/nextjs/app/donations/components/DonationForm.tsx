@@ -2,8 +2,8 @@ import React, { useCallback, useMemo } from "react";
 import { chains } from "../../../utils/scaffold-eth/chains";
 import ChainSelect from "./ChainSelect";
 import { DonationAmountSelector } from "./DonationAmountSelector";
-import TokenSelect from "./TokenSelect";
 import { LoadingSpinner } from "./LoadingSpinner";
+import TokenSelect from "./TokenSelect";
 
 interface DonationFormProps {
   selectedChain: number | null;
@@ -48,10 +48,14 @@ export const DonationForm: React.FC<DonationFormProps> = ({
   useUSDC,
   toggleTokenType,
 }) => {
-  const chainOptions = useMemo(() => chains.map(chain => ({
-    id: chain.id,
-    name: chain.name,
-  })), []);
+  const chainOptions = useMemo(
+    () =>
+      chains.map(chain => ({
+        id: chain.id,
+        name: chain.name,
+      })),
+    [],
+  );
 
   const getChainInfo = useCallback((chainId: number | null) => {
     return chains.find(chain => chain.id === chainId);
@@ -111,7 +115,7 @@ export const DonationForm: React.FC<DonationFormProps> = ({
     if (isNetworkSwitching) return "Switching Network...";
     if (currentChainId !== selectedChain) return "Switch Network";
     if (isInsufficientBalance) return "Insufficient Balance";
-    return `Donate Now with ${useUSDC ? "USDC" : (getChainInfo(selectedChain)?.nativeCurrency?.symbol || tokenSymbol)}`;
+    return `Donate Now with ${useUSDC ? "USDC" : getChainInfo(selectedChain)?.nativeCurrency?.symbol || tokenSymbol}`;
   }, [isNetworkSwitching, currentChainId, selectedChain, isInsufficientBalance, useUSDC, getChainInfo, tokenSymbol]);
 
   return (
@@ -138,8 +142,8 @@ export const DonationForm: React.FC<DonationFormProps> = ({
           selectedChain={selectedChain}
         />
 
-        <DonationAmountSelector 
-          donationAmountUSD={donationAmountUSD} 
+        <DonationAmountSelector
+          donationAmountUSD={donationAmountUSD}
           setDonationAmountUSD={setDonationAmountUSD}
           selectedToken={useUSDC ? "usdc" : "native"}
           tokenPrice={tokenPrice}

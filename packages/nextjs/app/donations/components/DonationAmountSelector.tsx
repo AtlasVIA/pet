@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 interface DonationAmountSelectorProps {
   donationAmountUSD: string;
@@ -24,22 +24,28 @@ export const DonationAmountSelector: React.FC<DonationAmountSelectorProps> = ({
     setInputAmount(donationAmountUSD);
   }, [donationAmountUSD]);
 
-  const handleAmountChange = useCallback((amount: string) => {
-    const numAmount = parseFloat(amount);
-    if (isNaN(numAmount) || numAmount < 0) {
-      setInputAmount("");
-      setDonationAmountUSD("0");
-      return;
-    }
+  const handleAmountChange = useCallback(
+    (amount: string) => {
+      const numAmount = parseFloat(amount);
+      if (isNaN(numAmount) || numAmount < 0) {
+        setInputAmount("");
+        setDonationAmountUSD("0");
+        return;
+      }
 
-    setInputAmount(amount);
-    setDonationAmountUSD(amount);
-  }, [setDonationAmountUSD]);
+      setInputAmount(amount);
+      setDonationAmountUSD(amount);
+    },
+    [setDonationAmountUSD],
+  );
 
-  const handleOptionClick = useCallback((amount: string) => {
-    handleAmountChange(amount);
-    setShowOtherAmount(false);
-  }, [handleAmountChange]);
+  const handleOptionClick = useCallback(
+    (amount: string) => {
+      handleAmountChange(amount);
+      setShowOtherAmount(false);
+    },
+    [handleAmountChange],
+  );
 
   const handleOtherClick = useCallback(() => {
     handleAmountChange("");

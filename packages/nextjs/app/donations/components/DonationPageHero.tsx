@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface DonationPageHeroProps {
   scrollToDonationForm: () => void;
@@ -9,11 +9,12 @@ const DonationPageHero: React.FC<DonationPageHeroProps> = ({ scrollToDonationFor
     <div className="text-center mb-24 animate-fade-in-down">
       <div className="mb-8">
         <h1 className="text-4xl sm:text-6xl lg:text-8xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 inline-block transition-all duration-300 ease-in-out hover:scale-105 animate-text-shimmer">
-          Woof! I'm Blue!
+          Woof! I&apos;m Blue!
         </h1>
       </div>
       <p className="text-xl sm:text-2xl lg:text-3xl text-gray-800 leading-relaxed max-w-3xl mx-auto mb-12 font-light">
-        And I'm on a <span className="font-semibold text-indigo-600 animate-pulse">pawsome</span> mission to help my furry friends find their forever homes!
+        And I&apos;m on a <span className="font-semibold text-indigo-600 animate-pulse">pawsome</span> mission to help
+        my furry friends find their forever homes!
       </p>
       <button
         onClick={scrollToDonationForm}

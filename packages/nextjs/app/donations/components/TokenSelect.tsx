@@ -61,7 +61,9 @@ const TokenSelect: React.FC<TokenSelectProps> = ({
   // Reset selected token when chain changes
   useEffect(() => {
     if (selectedChain !== prevChainRef.current) {
-      console.log(`TokenSelect: Chain changed from ${prevChainRef.current} to ${selectedChain}, resetting selected token`);
+      console.log(
+        `TokenSelect: Chain changed from ${prevChainRef.current} to ${selectedChain}, resetting selected token`,
+      );
       if (options.length > 0 && options[0].id !== value) {
         console.log(`TokenSelect: Resetting token to ${options[0].id}`);
         onChange(options[0].id);
@@ -87,11 +89,7 @@ const TokenSelect: React.FC<TokenSelectProps> = ({
 
   return (
     <div className={className}>
-      {label && (
-        <label className="block text-sm font-medium mb-1 text-base-content">
-          {label}
-        </label>
-      )}
+      {label && <label className="block text-sm font-medium mb-1 text-base-content">{label}</label>}
       <div className="relative" ref={dropdownRef}>
         <div
           className={`block w-full px-3 py-2 border border-base-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm bg-base-100 text-base-content ${

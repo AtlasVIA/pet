@@ -75,9 +75,16 @@ export const MessageList: React.FC<MessageListProps> = ({
       <div key={index} className="p-6 bg-white rounded-xl shadow-md transition-all duration-300 hover:shadow-lg">
         <p className="text-gray-800 text-lg italic mb-4">&quot;{msg.message}&quot;</p>
         <div className="text-sm text-gray-600 flex flex-wrap justify-between items-center">
-          <span><span className="font-semibold text-indigo-600">From:</span> {msg.sender}</span>
-          <span><span className="font-semibold text-indigo-600">Donated:</span> {formatDonationAmount(msg.amount, tokenPrice)}</span>
-          <span><span className="font-semibold text-indigo-600">Chain:</span> {getChainName(selectedChain)}</span>
+          <span>
+            <span className="font-semibold text-indigo-600">From:</span> {msg.sender}
+          </span>
+          <span>
+            <span className="font-semibold text-indigo-600">Donated:</span>{" "}
+            {formatDonationAmount(msg.amount, tokenPrice)}
+          </span>
+          <span>
+            <span className="font-semibold text-indigo-600">Chain:</span> {getChainName(selectedChain)}
+          </span>
         </div>
       </div>
     ));

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 export const LoadingSpinner: React.FC = () => (
   <span className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30">
