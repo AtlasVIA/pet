@@ -5,6 +5,13 @@ import { useAccount, useBalance, useChainId } from "wagmi";
 import { useDeployedContractInfo, useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 
+interface StoredDonationParams {
+  amountUSD: string;
+  message: string;
+  isNative: boolean;
+  tokenPrice: number;
+}
+
 export const useDonationContract = (selectedChain: number | null) => {
   const { address } = useAccount();
   const { effectiveChainId, usdcAddress, nativeSymbol } = useChainInfo(selectedChain);
@@ -12,6 +19,8 @@ export const useDonationContract = (selectedChain: number | null) => {
   const currentChainId = useChainId();
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<{ message: string; details?: string } | null>(null);
+  const [chainSwitched, setChainSwitched] = useState(false);
+  const [storedDonationParams, setStoredDonationParams] = useState<StoredDonationParams | null>(null);
 
   const { data: usdcContractData, isLoading: isUSDCContractLoading } = useDeployedContractInfo("USDC");
   const { data: donationsContractData, isLoading: isDonationsContractLoading } = useDeployedContractInfo("Donations");
@@ -50,12 +59,88 @@ export const useDonationContract = (selectedChain: number | null) => {
 
   const isCorrectNetwork = currentChainId === effectiveChainId;
 
+  const executeDonation = useCallback(async (params: StoredDonationParams) => {
+    const { amountUSD, message, isNative, tokenPrice } = params;
+    setIsProcessing(true);
+    setError(null);
+
+    try {
+      if (!address) {
+        throw new Error("Cannot access account. Please ensure your wallet is connected.");
+      }
+
+      if (currentChainId !== effectiveChainId) {
+        throw new Error(`Chain mismatch. Expected ${effectiveChainId}, got ${currentChainId}`);
+      }
+
+      let donationHash;
+      if (isNative) {
+        const nativeAmount = Number(amountUSD) / tokenPrice;
+        let parsedAmount;
+        if (nativeAmount < 1e-18) {
+          parsedAmount = BigInt(1); // Minimum amount (1 wei)
+        } else {
+          parsedAmount = parseEther(nativeAmount.toFixed(18));
+        }
+
+        console.log(`Donating native token: ${parsedAmount.toString()} wei`);
+        donationHash = await writeDonationsContractAsync({
+          functionName: "donate",
+          args: [message],
+          value: parsedAmount,
+        });
+      } else {
+        if (!usdcContractData?.address) {
+          throw new Error("USDC contract address is not set");
+        }
+
+        const usdcAmount = parseUnits(amountUSD, 6);
+        console.log(`USDC amount to donate: ${usdcAmount.toString()}`);
+
+        if (!allowance || allowance < usdcAmount) {
+          console.log("Insufficient allowance, approving USDC spending");
+          const approvalTx = await approveUSDC({
+            functionName: "approve",
+            args: [donationsContractData?.address, usdcAmount],
+          });
+          console.log("USDC allowance approved, transaction hash:", approvalTx);
+        }
+
+        console.log("Initiating USDC donation");
+        donationHash = await writeUSDCDonationsContractAsync({
+          functionName: "donateUSDC",
+          args: [usdcAmount, message],
+        });
+        console.log("USDC donation transaction hash:", donationHash);
+      }
+
+      console.log(`${isNative ? "Native" : "USDC"} donation transaction hash:`, donationHash);
+      setIsProcessing(false);
+      setStoredDonationParams(null);
+      return donationHash;
+    } catch (error) {
+      console.error("Donation failed:", error);
+      let errorMessage = "An unexpected error occurred";
+      let errorDetails = "Please try again. If the problem persists, contact support.";
+
+      if (error instanceof Error) {
+        errorMessage = "Donation failed";
+        errorDetails = `Error: ${error.message}. Please check your input and try again.`;
+      }
+      handleError(errorMessage, errorDetails);
+    }
+  }, [address, currentChainId, effectiveChainId, writeDonationsContractAsync, writeUSDCDonationsContractAsync, approveUSDC, usdcContractData?.address, allowance, donationsContractData?.address, handleError]);
+
   const handleDonation = useCallback(
     async (amountUSD: string, message: string, isNative: boolean, tokenPrice: number) => {
       setIsProcessing(true);
       setError(null);
 
       try {
+        if (!selectedChain) {
+          throw new Error("No chain selected. Please select a chain before donating.");
+        }
+
         console.log(`Starting ${isNative ? "native" : "USDC"} donation process`);
         console.log(`Amount: ${amountUSD} USD, Message: ${message}`);
 
@@ -93,76 +178,18 @@ export const useDonationContract = (selectedChain: number | null) => {
         if (!isCorrectNetwork) {
           console.log(`Switching network to ${effectiveChainId}`);
           if (effectiveChainId) {
+            setStoredDonationParams({ amountUSD, message, isNative, tokenPrice });
             await switchNetwork(effectiveChainId);
-            // Wait for the chain to be updated
-            await new Promise<void>(resolve => {
-              const checkChain = () => {
-                if (currentChainId === effectiveChainId) {
-                  console.log("Network switch completed");
-                  resolve();
-                } else {
-                  setTimeout(checkChain, 100);
-                }
-              };
-              checkChain();
-            });
+            setChainSwitched(true);
+            setIsProcessing(false);
+            return null; // Return early to prevent further execution with stale data
           } else {
             throw new Error("Effective chain ID is undefined");
           }
         }
 
-        let donationHash;
-        if (isNative) {
-          // Convert USD to native token amount
-          const nativeAmount = numericAmountUSD / tokenPrice;
-          let parsedAmount;
-          if (nativeAmount < 1e-18) {
-            parsedAmount = BigInt(1); // Minimum amount (1 wei)
-          } else {
-            parsedAmount = parseEther(nativeAmount.toFixed(18));
-          }
-
-          console.log(`Donating native token: ${parsedAmount.toString()} wei`);
-          donationHash = await writeDonationsContractAsync({
-            functionName: "donate",
-            args: [message],
-            value: parsedAmount,
-          });
-        } else {
-          // Check if USDC contract address is set
-          if (!usdcContractData?.address) {
-            throw new Error("USDC contract address is not set");
-          }
-
-          const usdcAmount = parseUnits(amountUSD, 6);
-          console.log(`USDC amount to donate: ${usdcAmount.toString()}`);
-
-          // Check if we have sufficient allowance
-          console.log(`Current allowance: ${allowance?.toString()}`);
-          if (!allowance || allowance < usdcAmount) {
-            console.log("Insufficient allowance, approving USDC spending");
-            const approvalTx = await approveUSDC({
-              functionName: "approve",
-              args: [donationsContractData?.address, usdcAmount],
-            });
-            console.log("USDC allowance approved, transaction hash:", approvalTx);
-          } else {
-            console.log("Sufficient allowance available");
-          }
-
-          // Donate USDC
-          console.log("Initiating USDC donation");
-          console.log(usdcAmount);
-          donationHash = await writeUSDCDonationsContractAsync({
-            functionName: "donateUSDC",
-            args: [usdcAmount, message],
-          });
-          console.log("USDC donation transaction hash:", donationHash);
-        }
-
-        console.log(`${isNative ? "Native" : "USDC"} donation transaction hash:`, donationHash);
-        setIsProcessing(false);
-        return donationHash;
+        // If we're already on the correct network, execute the donation immediately
+        return await executeDonation({ amountUSD, message, isNative, tokenPrice });
       } catch (error) {
         console.error("Donation failed:", error);
         let errorMessage = "An unexpected error occurred";
@@ -175,18 +202,7 @@ export const useDonationContract = (selectedChain: number | null) => {
         handleError(errorMessage, errorDetails);
       }
     },
-    [
-      effectiveChainId,
-      switchNetwork,
-      writeDonationsContractAsync,
-      writeUSDCDonationsContractAsync,
-      approveUSDC,
-      handleError,
-      isCorrectNetwork,
-      currentChainId,
-      usdcContractData?.address,
-      allowance,
-    ],
+    [selectedChain, effectiveChainId, switchNetwork, isCorrectNetwork, executeDonation, handleError],
   );
 
   useEffect(() => {
@@ -212,5 +228,9 @@ export const useDonationContract = (selectedChain: number | null) => {
     isProcessing,
     error,
     isCorrectNetwork,
+    chainSwitched,
+    resetChainSwitched: () => setChainSwitched(false),
+    storedDonationParams,
+    executeDonation,
   };
 };

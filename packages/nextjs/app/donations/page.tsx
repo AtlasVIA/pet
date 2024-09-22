@@ -10,13 +10,15 @@ import ScrollToTopButton from "./components/ScrollToTopButton";
 import { useChainInfo } from "./hooks/useChainInfo";
 import { useDonationContract } from "./hooks/useDonationContract";
 import useScrolling from "./hooks/useScrolling";
+import { useChainId } from "wagmi";
 
 const DonationsPage = () => {
-  const [selectedChain, setSelectedChain] = useState<number | null>(null);
+  const currentChainId = useChainId();
+  const [selectedChain, setSelectedChain] = useState<number | null>(currentChainId);
   const [donationAmountUSD, setDonationAmountUSD] = useState("10");
   const [message, setMessage] = useState("");
   const [useUSDC, setUseUSDC] = useState(false);
-  const [notification, setNotification] = useState<{ type: 'success' | 'error', message: string } | null>(null);
+  const [notification, setNotification] = useState<{ type: 'success' | 'error' | 'info', message: string } | null>(null);
 
   const { effectiveChainId, nativeSymbol, isUSDCSupported, tokenPrice } = useChainInfo(selectedChain);
 
@@ -30,6 +32,10 @@ const DonationsPage = () => {
     isProcessing,
     error,
     isCorrectNetwork,
+    chainSwitched,
+    resetChainSwitched,
+    storedDonationParams,
+    executeDonation,
   } = useDonationContract(selectedChain);
 
   const { showScrollTop, scrollToDonationForm, scrollToTop } = useScrolling();
@@ -52,16 +58,45 @@ const DonationsPage = () => {
     setNotification({ type: 'error', message: `Donation failed: ${errorMessage}` });
   }, []);
 
+  const handleNetworkSwitch = useCallback(() => {
+    setNotification({ type: 'info', message: 'Network switched. Please click the donation button again to complete your donation.' });
+  }, []);
+
   useEffect(() => {
     if (error) {
       handleDonationError(error.message);
     }
   }, [error, handleDonationError]);
 
+  useEffect(() => {
+    if (chainSwitched) {
+      handleNetworkSwitch();
+    }
+  }, [chainSwitched, handleNetworkSwitch]);
+
+  const handleDonation = useCallback(async (isNative: boolean) => {
+    try {
+      let result;
+      if (isNative) {
+        result = await donateNative(donationAmountUSD, message, tokenPrice);
+      } else {
+        result = await donateUSDC(donationAmountUSD, message);
+      }
+      if (result !== null) {
+        handleDonationSuccess();
+      }
+    } catch (err) {
+      handleDonationError((err as Error).message);
+    }
+  }, [donateNative, donateUSDC, donationAmountUSD, message, tokenPrice, handleDonationSuccess, handleDonationError]);
+
   return (
     <div className="flex flex-col items-center min-h-screen bg-gradient-to-br from-indigo-200 via-purple-100 to-pink-100 bg-opacity-90 relative">
       {notification && (
-        <div className={`fixed top-4 right-4 p-4 rounded-md ${notification.type === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white`}>
+        <div className={`fixed top-4 right-4 p-4 rounded-md ${
+          notification.type === 'success' ? 'bg-green-500' : 
+          notification.type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+        } text-white`}>
           {notification.message}
           <button onClick={() => setNotification(null)} className="ml-2 font-bold">×</button>
         </div>
@@ -102,22 +137,8 @@ const DonationsPage = () => {
                 setMessage={setMessage}
                 isContractLoading={isContractLoading}
                 isUSDCContractLoading={isUSDCContractLoading}
-                donateNative={async (amount, msg, price) => {
-                  try {
-                    await donateNative(amount, msg, price);
-                    handleDonationSuccess();
-                  } catch (err) {
-                    handleDonationError((err as Error).message);
-                  }
-                }}
-                donateUSDC={async (amount, msg) => {
-                  try {
-                    await donateUSDC(amount, msg);
-                    handleDonationSuccess();
-                  } catch (err) {
-                    handleDonationError((err as Error).message);
-                  }
-                }}
+                donateNative={(amount, msg, price) => handleDonation(true)}
+                donateUSDC={(amount, msg) => handleDonation(false)}
                 isUSDCSupported={isUSDCSupported}
                 tokenPrice={tokenPrice}
                 useUSDC={useUSDC}
@@ -125,6 +146,10 @@ const DonationsPage = () => {
                 isProcessing={isProcessing}
                 error={error}
                 isCorrectNetwork={isCorrectNetwork}
+                chainSwitched={chainSwitched}
+                resetChainSwitched={resetChainSwitched}
+                storedDonationParams={storedDonationParams}
+                executeDonation={executeDonation}
               />
             </div>
             <div className="flex flex-col justify-between lg:border-l lg:border-indigo-200 lg:pl-12">

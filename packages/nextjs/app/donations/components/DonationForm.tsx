@@ -27,6 +27,10 @@ interface DonationFormProps {
   isProcessing: boolean;
   error: { message: string; details?: string } | null;
   isCorrectNetwork: boolean;
+  chainSwitched: boolean;
+  resetChainSwitched: () => void;
+  storedDonationParams: { amountUSD: string; message: string; isNative: boolean; tokenPrice: number } | null;
+  executeDonation: (params: { amountUSD: string; message: string; isNative: boolean; tokenPrice: number }) => Promise<void>;
 }
 
 export const DonationForm: React.FC<DonationFormProps> = ({
@@ -51,8 +55,13 @@ export const DonationForm: React.FC<DonationFormProps> = ({
   isProcessing,
   error,
   isCorrectNetwork,
+  chainSwitched,
+  resetChainSwitched,
+  storedDonationParams,
+  executeDonation,
 }) => {
   const [amountError, setAmountError] = useState<string | null>(null);
+  const [isReexecuting, setIsReexecuting] = useState(false);
 
   const chainOptions = useMemo(
     () =>
@@ -120,11 +129,13 @@ export const DonationForm: React.FC<DonationFormProps> = ({
 
   const buttonText = useMemo(() => {
     if (isProcessing) return "Processing...";
+    if (chainSwitched) return "Click to Complete Donation";
     if (isInsufficientBalance) return "Insufficient Balance";
     if (!isValidAmount) return "Enter Valid Amount";
     return `Donate Now with ${useUSDC ? "USDC" : getChainInfo(selectedChain)?.nativeCurrency?.symbol || nativeSymbol}`;
   }, [
     isProcessing,
+    chainSwitched,
     isInsufficientBalance,
     isValidAmount,
     useUSDC,
@@ -134,12 +145,15 @@ export const DonationForm: React.FC<DonationFormProps> = ({
   ]);
 
   const handleDonate = useCallback(async () => {
-    if (useUSDC) {
+    if (chainSwitched && storedDonationParams) {
+      await executeDonation(storedDonationParams);
+      resetChainSwitched();
+    } else if (useUSDC) {
       await donateUSDC(donationAmountUSD, message);
     } else {
       await donateNative(donationAmountUSD, message, tokenPrice);
     }
-  }, [useUSDC, donateUSDC, donateNative, donationAmountUSD, message, tokenPrice]);
+  }, [chainSwitched, storedDonationParams, executeDonation, resetChainSwitched, useUSDC, donateUSDC, donateNative, donationAmountUSD, message, tokenPrice]);
 
   useEffect(() => {
     console.log("Form state:", {
@@ -152,6 +166,9 @@ export const DonationForm: React.FC<DonationFormProps> = ({
       currentBalance,
       tokenPrice,
       selectedChain,
+      chainSwitched,
+      isReexecuting,
+      storedDonationParams,
     });
   }, [
     isLoading,
@@ -163,6 +180,9 @@ export const DonationForm: React.FC<DonationFormProps> = ({
     currentBalance,
     tokenPrice,
     selectedChain,
+    chainSwitched,
+    isReexecuting,
+    storedDonationParams,
   ]);
 
   return (
@@ -214,19 +234,39 @@ export const DonationForm: React.FC<DonationFormProps> = ({
         </div>
       )}
 
+      {error && (
+        <div className="mt-4 text-red-600 bg-red-100 border border-red-400 rounded-md p-3">
+          <p className="font-bold">{error.message}</p>
+          {error.details && <p>{error.details}</p>}
+        </div>
+      )}
+
       <button
         onClick={handleDonate}
         disabled={
           isLoading ||
           isInsufficientBalance ||
           !!amountError ||
-          !isValidAmount
+          (!chainSwitched && !isValidAmount) ||
+          isReexecuting
         }
         className="w-full mt-4 sm:mt-6 py-3 sm:py-4 px-4 sm:px-6 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-bold text-lg rounded-lg shadow-md hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden"
       >
         {isLoading && <LoadingSpinner />}
         <span className={isLoading ? "invisible" : ""}>{buttonText}</span>
       </button>
+
+      {chainSwitched && (
+        <p className="mt-2 text-sm text-green-600">
+          Network switched successfully. Please click the button above to complete your donation.
+        </p>
+      )}
+
+      {!isCorrectNetwork && !chainSwitched && (
+        <p className="mt-2 text-sm text-yellow-600">
+          Please switch to the correct network to make a donation.
+        </p>
+      )}
     </div>
   );
 };
