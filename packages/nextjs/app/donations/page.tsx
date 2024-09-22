@@ -7,32 +7,52 @@ import { DonationForm } from "./components/DonationForm";
 import DonationPageHero from "./components/DonationPageHero";
 import Roadmap from "./components/Roadmap";
 import ScrollToTopButton from "./components/ScrollToTopButton";
-import { useDonations } from "./hooks/useDonations";
+import { useChainInfo } from "./hooks/useChainInfo";
+import { useDonationContract } from "./hooks/useDonationContract";
 import useScrolling from "./hooks/useScrolling";
 
 const DonationsPage = () => {
   const [selectedChain, setSelectedChain] = useState<number | null>(null);
+  const [donationAmountUSD, setDonationAmountUSD] = useState("10");
+  const [message, setMessage] = useState("");
+  const [useUSDC, setUseUSDC] = useState(false);
+
+  const { nativeSymbol, isUSDCSupported, tokenPrice } = useChainInfo(selectedChain);
+
   const {
-    tokenSymbol,
+    donateNative,
+    donateUSDC,
     nativeBalance,
     usdcBalance,
-    currentChainId,
-    donationAmountUSD,
-    setDonationAmountUSD,
-    donationAmountToken,
-    message,
-    setMessage,
-    isNetworkSwitching,
-    handleDonate,
-    isUSDCSupported,
     isContractLoading,
     isUSDCContractLoading,
-    tokenPrice,
-    useUSDC,
-    toggleTokenType,
-  } = useDonations(selectedChain);
+    isProcessing,
+    error,
+    isCorrectNetwork,
+  } = useDonationContract(selectedChain);
 
   const { showScrollTop, scrollToDonationForm, scrollToTop } = useScrolling();
+
+  const toggleTokenType = () => setUseUSDC(!useUSDC);
+
+  const handleDonate = async () => {
+    const amount = useUSDC ? donationAmountUSD : (parseFloat(donationAmountUSD) / tokenPrice).toFixed(6);
+    try {
+      if (useUSDC) {
+        await donateUSDC(amount, message);
+      } else {
+        await donateNative(amount, message);
+      }
+      // Handle successful donation (e.g., show success message, reset form)
+      setMessage("");
+      setDonationAmountUSD("10");
+    } catch (err) {
+      // Error handling is now managed by useDonationContract
+      console.error("Donation failed:", err);
+    }
+  };
+
+  const donationAmountToken = useUSDC ? donationAmountUSD : (parseFloat(donationAmountUSD) / tokenPrice).toFixed(6);
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-gradient-to-br from-indigo-200 via-purple-100 to-pink-100 bg-opacity-90 relative">
@@ -64,14 +84,12 @@ const DonationsPage = () => {
                 setSelectedChain={setSelectedChain}
                 nativeBalance={nativeBalance}
                 usdcBalance={usdcBalance}
-                tokenSymbol={tokenSymbol}
-                currentChainId={currentChainId}
+                nativeSymbol={nativeSymbol}
                 donationAmountUSD={donationAmountUSD}
                 setDonationAmountUSD={setDonationAmountUSD}
                 donationAmountToken={donationAmountToken}
                 message={message}
                 setMessage={setMessage}
-                isNetworkSwitching={isNetworkSwitching}
                 isContractLoading={isContractLoading}
                 isUSDCContractLoading={isUSDCContractLoading}
                 handleDonate={handleDonate}
@@ -79,6 +97,9 @@ const DonationsPage = () => {
                 tokenPrice={tokenPrice}
                 useUSDC={useUSDC}
                 toggleTokenType={toggleTokenType}
+                isProcessing={isProcessing}
+                error={error}
+                isCorrectNetwork={isCorrectNetwork}
               />
             </div>
             <div className="flex flex-col justify-between lg:border-l lg:border-indigo-200 lg:pl-12">

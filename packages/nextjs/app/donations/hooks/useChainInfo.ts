@@ -1,7 +1,8 @@
 import { useMemo } from "react";
 import { useChainId } from "wagmi";
 import { chains } from "~~/utils/scaffold-eth/chains";
-import { Chain, getUsdcAddress } from "~~/utils/scaffold-eth/contractAddresses";
+import { Chain } from "~~/utils/scaffold-eth/chains";
+import { getUsdcAddress } from "~~/utils/scaffold-eth/contractAddresses";
 
 /**
  * A custom hook that provides chain-related information for the donation system.

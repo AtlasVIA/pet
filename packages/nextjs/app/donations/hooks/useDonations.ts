@@ -4,12 +4,10 @@ import { useNetworkSwitching } from "./useNetworkSwitching";
 import { useTokenBalances } from "./useTokenBalances";
 import { useTokenPrice } from "./useTokenPrice";
 import { parseUnits } from "viem";
-import { useWalletClient } from "wagmi";
-import { useDeployedContractInfo, useScaffoldContract } from "~~/hooks/scaffold-eth";
+import { useDeployedContractInfo, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 
 export const useDonations = (selectedChain: number | null) => {
-  const { data: walletClient } = useWalletClient();
   const { effectiveChainId, isUSDCSupported, currentChainId, usdcAddress } = useChainInfo(selectedChain);
   const { nativeBalance, usdcBalance } = useTokenBalances(selectedChain);
 
@@ -21,16 +19,28 @@ export const useDonations = (selectedChain: number | null) => {
   const { tokenSymbol, tokenPrice } = useTokenPrice(selectedChain);
   const { isNetworkSwitching, handleNetworkSwitch } = useNetworkSwitching();
 
-  const { data: donationsContract, isLoading: isContractLoading } = useScaffoldContract({
-    contractName: "Donations",
-    walletClient,
-  });
   const { data: usdcContractData, isLoading: isUSDCContractLoading } = useDeployedContractInfo("USDC");
 
   const donationAmountToken = useMemo(() => {
     if (useUSDC) return donationAmountUSD;
     return tokenPrice > 0 ? (parseFloat(donationAmountUSD) / tokenPrice).toFixed(18) : "0";
   }, [donationAmountUSD, tokenPrice, useUSDC]);
+
+  const { writeAsync: writeDonateNative } = useScaffoldWriteContract({
+    contractName: "Donations",
+    functionName: "donate",
+    value: donationAmountToken ? parseUnits(donationAmountToken, 18) : undefined,
+  });
+
+  const { writeAsync: writeDonateUSDC } = useScaffoldWriteContract({
+    contractName: "Donations",
+    functionName: "donateUSDC",
+  });
+
+  const { writeAsync: writeApproveUSDC } = useScaffoldWriteContract({
+    contractName: "USDC",
+    functionName: "approve",
+  });
 
   const setDonationAmount = useCallback((amount: string) => {
     setDonationAmountUSD(amount);
@@ -57,46 +67,53 @@ export const useDonations = (selectedChain: number | null) => {
 
   const donateNative = useCallback(
     async (amount: string, message: string) => {
-      if (!donationsContract) {
-        throw new Error("Donation contract not available. Please check your connection.");
-      }
-
       try {
-        return await donationsContract.write.donate([message], {
-          value: parseUnits(amount, 18),
-        });
+        const tx = await writeDonateNative({ args: [message] });
+        await tx.wait();
+        return tx;
       } catch (error) {
+        console.error("Error in donateNative:", error);
         throw new Error("Failed to process native token donation. Please try again.");
       }
     },
-    [donationsContract],
+    [writeDonateNative],
   );
 
   const donateUSDC = useCallback(
     async (amount: string, message: string) => {
-      if (!donationsContract || !usdcAddress || !usdcContractData?.abi) {
-        throw new Error("Required contracts or addresses not available. Please check your connection.");
+      if (!usdcAddress) {
+        throw new Error("USDC address not available. Please check your connection.");
       }
 
       try {
-        const approveTx = await walletClient?.writeContract({
-          address: usdcAddress,
-          abi: usdcContractData.abi,
-          functionName: "approve",
-          args: [donationsContract.address, parseUnits(amount, 6)],
-        });
-        await approveTx?.wait();
+        if (typeof writeApproveUSDC === 'function') {
+          console.log("Approving USDC...");
+          const approveTx = await writeApproveUSDC({
+            args: [usdcAddress, parseUnits(amount, 6)],
+          });
+          await approveTx.wait();
+          console.log("USDC approved successfully");
+        } else {
+          console.warn("USDC approval function not available. Proceeding without approval.");
+        }
 
-        return await donationsContract.write.donateUSDC([parseUnits(amount, 6), message]);
+        console.log("Donating USDC...");
+        const donateTx = await writeDonateUSDC({
+          args: [parseUnits(amount, 6), message],
+        });
+        await donateTx.wait();
+        console.log("USDC donated successfully");
+        return donateTx;
       } catch (error) {
+        console.error("Error in donateUSDC:", error);
         throw new Error("Failed to process USDC donation. Please try again.");
       }
     },
-    [donationsContract, usdcAddress, usdcContractData, walletClient],
+    [usdcAddress, writeApproveUSDC, writeDonateUSDC],
   );
 
   const handleDonate = useCallback(async () => {
-    if (!donationAmountToken || isNaN(Number(donationAmountToken))) {
+    if (!donationAmountUSD || isNaN(Number(donationAmountUSD))) {
       notification.error("Please enter a valid donation amount.");
       return;
     }
@@ -115,7 +132,7 @@ export const useDonations = (selectedChain: number | null) => {
         if (isUSDCContractLoading) {
           throw new Error("USDC contract is still loading. Please wait and try again.");
         }
-        await donateUSDC(donationAmountToken, message);
+        await donateUSDC(donationAmountUSD, message);
       } else {
         await donateNative(donationAmountToken, message);
       }
@@ -124,6 +141,7 @@ export const useDonations = (selectedChain: number | null) => {
       handleError(error);
     }
   }, [
+    donationAmountUSD,
     donationAmountToken,
     selectedChain,
     handleNetworkSwitch,
@@ -153,7 +171,6 @@ export const useDonations = (selectedChain: number | null) => {
     currentChainId,
     isUSDCSupported,
     error,
-    isContractLoading,
     isUSDCContractLoading,
     effectiveChainId,
   };

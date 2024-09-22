@@ -10,14 +10,12 @@ interface DonationFormProps {
   setSelectedChain: (chain: number | null) => void;
   nativeBalance: string;
   usdcBalance: string;
-  tokenSymbol: string;
-  currentChainId: number | undefined;
+  nativeSymbol: string;
   donationAmountUSD: string;
   setDonationAmountUSD: (amount: string) => void;
   donationAmountToken: string;
   message: string;
   setMessage: (message: string) => void;
-  isNetworkSwitching: boolean;
   isContractLoading: boolean;
   isUSDCContractLoading: boolean;
   handleDonate: () => void;
@@ -25,6 +23,9 @@ interface DonationFormProps {
   tokenPrice: number;
   useUSDC: boolean;
   toggleTokenType: () => void;
+  isProcessing: boolean;
+  error: { message: string; details?: string } | null;
+  isCorrectNetwork: boolean;
 }
 
 export const DonationForm: React.FC<DonationFormProps> = ({
@@ -32,14 +33,12 @@ export const DonationForm: React.FC<DonationFormProps> = ({
   setSelectedChain,
   nativeBalance,
   usdcBalance,
-  tokenSymbol,
-  currentChainId,
+  nativeSymbol,
   donationAmountUSD,
   setDonationAmountUSD,
   donationAmountToken,
   message,
   setMessage,
-  isNetworkSwitching,
   isContractLoading,
   isUSDCContractLoading,
   handleDonate,
@@ -47,6 +46,9 @@ export const DonationForm: React.FC<DonationFormProps> = ({
   tokenPrice,
   useUSDC,
   toggleTokenType,
+  isProcessing,
+  error,
+  isCorrectNetwork,
 }) => {
   const chainOptions = useMemo(
     () =>
@@ -90,7 +92,7 @@ export const DonationForm: React.FC<DonationFormProps> = ({
     return [
       {
         id: "native",
-        name: chainInfo?.nativeCurrency?.symbol || tokenSymbol,
+        name: chainInfo?.nativeCurrency?.symbol || nativeSymbol,
         logo: `https://scan.vialabs.io/images/logos/chains/${selectedChain}.png`,
         balance: nativeBalance,
       },
@@ -105,18 +107,18 @@ export const DonationForm: React.FC<DonationFormProps> = ({
           ]
         : []),
     ];
-  }, [selectedChain, tokenSymbol, isUSDCSupported, nativeBalance, usdcBalance, getChainInfo]);
+  }, [selectedChain, nativeSymbol, isUSDCSupported, nativeBalance, usdcBalance, getChainInfo]);
 
   const currentBalance = useUSDC ? usdcBalance : nativeBalance;
   const isInsufficientBalance = parseFloat(donationAmountToken) > parseFloat(currentBalance);
-  const isLoading = isNetworkSwitching || isContractLoading || (useUSDC && isUSDCContractLoading);
+  const isLoading = isProcessing || isContractLoading || (useUSDC && isUSDCContractLoading);
 
   const buttonText = useMemo(() => {
-    if (isNetworkSwitching) return "Switching Network...";
-    if (currentChainId !== selectedChain) return "Switch Network";
+    if (isProcessing) return "Processing...";
+    if (!isCorrectNetwork) return "Switch Network";
     if (isInsufficientBalance) return "Insufficient Balance";
-    return `Donate Now with ${useUSDC ? "USDC" : getChainInfo(selectedChain)?.nativeCurrency?.symbol || tokenSymbol}`;
-  }, [isNetworkSwitching, currentChainId, selectedChain, isInsufficientBalance, useUSDC, getChainInfo, tokenSymbol]);
+    return `Donate Now with ${useUSDC ? "USDC" : getChainInfo(selectedChain)?.nativeCurrency?.symbol || nativeSymbol}`;
+  }, [isProcessing, isCorrectNetwork, isInsufficientBalance, useUSDC, getChainInfo, selectedChain, nativeSymbol]);
 
   return (
     <div className="donation-form w-full bg-white bg-opacity-50 rounded-xl p-4 sm:p-6 shadow-lg">
@@ -126,8 +128,8 @@ export const DonationForm: React.FC<DonationFormProps> = ({
           options={chainOptions}
           value={selectedChain}
           onChange={handleChainChange}
-          isLoading={isNetworkSwitching}
-          disabled={false}
+          isLoading={isProcessing}
+          disabled={isProcessing}
           className="w-full"
         />
 
@@ -137,7 +139,7 @@ export const DonationForm: React.FC<DonationFormProps> = ({
           value={useUSDC ? "usdc" : "native"}
           onChange={handleTokenChange}
           isLoading={isUSDCContractLoading}
-          disabled={!selectedChain}
+          disabled={!selectedChain || isProcessing}
           className="w-full"
           selectedChain={selectedChain}
         />
@@ -147,7 +149,7 @@ export const DonationForm: React.FC<DonationFormProps> = ({
           setDonationAmountUSD={setDonationAmountUSD}
           selectedToken={useUSDC ? "usdc" : "native"}
           tokenPrice={tokenPrice}
-          tokenSymbol={tokenSymbol}
+          tokenSymbol={nativeSymbol}
         />
       </div>
 
@@ -157,11 +159,25 @@ export const DonationForm: React.FC<DonationFormProps> = ({
         onChange={handleMessageChange}
         className="w-full mt-4 sm:mt-6 px-3 py-2 sm:px-4 sm:py-3 rounded-lg border border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none shadow-inner"
         rows={4}
+        disabled={isProcessing}
       />
+
+      {error && (
+        <div className="mt-4 text-red-600 bg-red-100 border border-red-400 rounded-md p-3">
+          <p className="font-bold">{error.message}</p>
+          {error.details && <p className="text-sm mt-1">{error.details}</p>}
+        </div>
+      )}
+
+      {!isCorrectNetwork && (
+        <div className="mt-4 text-yellow-600 bg-yellow-100 border border-yellow-400 rounded-md p-3">
+          Please switch to the correct network to make a donation.
+        </div>
+      )}
 
       <button
         onClick={handleDonate}
-        disabled={isLoading || currentChainId !== selectedChain || isInsufficientBalance}
+        disabled={isLoading || !isCorrectNetwork || isInsufficientBalance}
         className="w-full mt-4 sm:mt-6 py-3 sm:py-4 px-4 sm:px-6 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-bold text-lg rounded-lg shadow-md hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden"
       >
         {isLoading && <LoadingSpinner />}
