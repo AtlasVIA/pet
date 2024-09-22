@@ -37,7 +37,7 @@ export const DonationAmountSelector: React.FC<DonationAmountSelectorProps> = ({
     (amount: string) => {
       console.log("handleAmountChange called with:", amount);
       setInputAmount(amount);
-      
+
       if (amount === "") {
         setAmountError("Please enter a donation amount");
         setDonationAmountUSD("0");
@@ -142,9 +142,7 @@ export const DonationAmountSelector: React.FC<DonationAmountSelectorProps> = ({
       )}
       {selectedToken !== "usdc" && (
         <div className="mt-2 text-sm text-gray-600">
-          {conversionError ? (
-            <span className="text-red-500">{conversionError}</span>
-          ) : (
+          {!conversionError && (
             <>
               Estimated amount: {tokenAmount} {tokenSymbol}
             </>
