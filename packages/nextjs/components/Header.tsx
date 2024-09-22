@@ -6,7 +6,9 @@ import Image from "next/image";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { usePathname } from "next/navigation";
 import { FiMenu, FiX } from "react-icons/fi";
+import { FaTwitter } from "react-icons/fa";
 import ComingSoon from "./ComingSoon";
+import TweetButton from "./TweetButton";
 
 const CustomConnectButton = () => (
   <ConnectButton.Custom>
@@ -45,6 +47,18 @@ const CustomConnectButton = () => (
   </ConnectButton.Custom>
 );
 
+const TwitterButton = () => (
+  <a
+    href="https://twitter.com/DogachiPet"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="flex items-center bg-blue-400 hover:bg-blue-500 text-white px-3 py-2 rounded-md font-medium transition-colors duration-200"
+  >
+    <FaTwitter className="mr-2" />
+    Follow Us
+  </a>
+);
+
 export const Header = () => {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -64,17 +78,17 @@ export const Header = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
           <Link href="/" className="flex items-center space-x-3 group">
-            <div className="w-16 h-16 rounded-full overflow-hidden shadow-lg transition-transform duration-300 ease-in-out transform group-hover:scale-110">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full overflow-hidden shadow-lg transition-transform duration-300 ease-in-out transform group-hover:scale-110">
               <Image src="/blue.webp" alt="Logo" width={64} height={64} className="object-cover" />
             </div>
-            <span className="text-2xl font-extrabold text-white tracking-wide">
+            <span className="text-xl sm:text-2xl font-extrabold text-white tracking-wide">
               Dogachi<span className="text-yellow-300">.Pet</span>
             </span>
           </Link>
 
-          <nav className="hidden md:flex space-x-6 relative">
+          <nav className="hidden md:flex space-x-4 relative">
             {navItems.map((item) => (
-              <div key={item.path} className={`text-base font-medium ${
+              <div key={item.path} className={`text-sm lg:text-base font-medium ${
                 isActive(item.path) ? "text-yellow-300" : "text-white hover:text-yellow-200"
               } transition-colors duration-200`}>
                 {item.comingSoon ? (
@@ -86,7 +100,9 @@ export const Header = () => {
             ))}
           </nav>
 
-          <div className="hidden md:block">
+          <div className="hidden md:flex items-center space-x-2">
+            <TwitterButton />
+            <TweetButton />
             <CustomConnectButton />
           </div>
 
@@ -125,7 +141,9 @@ export const Header = () => {
                 )}
               </div>
             ))}
-            <div className="mt-4 px-3 py-2">
+            <div className="mt-4 px-3 py-2 space-y-2">
+              <TwitterButton />
+              <TweetButton />
               <CustomConnectButton />
             </div>
           </div>
