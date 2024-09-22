@@ -8,15 +8,28 @@ interface ComingSoonProps {
 
 const ComingSoon: React.FC<ComingSoonProps> = ({ name }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const [isMouseInside, setIsMouseInside] = useState(false);
   const popupRef = useRef<HTMLDivElement>(null);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
   const { scrollToDonationForm } = useScrolling();
 
-  useEffect(() => {
-    if (isVisible) {
-      const timer = setTimeout(() => setIsVisible(false), 5000);
-      return () => clearTimeout(timer);
+  const startTimer = () => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
     }
-  }, [isVisible]);
+    timerRef.current = setTimeout(() => setIsVisible(false), 5000);
+  };
+
+  useEffect(() => {
+    if (isVisible && !isMouseInside) {
+      startTimer();
+    }
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, [isVisible, isMouseInside]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -41,6 +54,18 @@ const ComingSoon: React.FC<ComingSoonProps> = ({ name }) => {
     scrollToDonationForm();
   };
 
+  const handleMouseEnter = () => {
+    setIsMouseInside(true);
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setIsMouseInside(false);
+    startTimer();
+  };
+
   return (
     <div className="relative inline-block">
       <span onClick={handleClick} className="cursor-pointer hover:text-primary transition-colors duration-300">
@@ -49,6 +74,8 @@ const ComingSoon: React.FC<ComingSoonProps> = ({ name }) => {
       {isVisible && (
         <div
           ref={popupRef}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
           className="fixed sm:absolute z-10 top-1/4 sm:top-full left-1/2 transform -translate-x-1/2 mt-4 p-4 sm:p-6 bg-base-200 text-base-content rounded-xl shadow-xl transition-all duration-300 ease-in-out animate-fadeIn w-[90vw] sm:w-[36rem] max-w-[36rem] border-2 border-primary"
         >
           <div className="flex flex-col items-center space-y-3 sm:space-y-4">
