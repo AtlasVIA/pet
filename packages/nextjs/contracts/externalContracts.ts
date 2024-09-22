@@ -118,4 +118,4 @@ const externalContracts = {
   },
 } as const;
 
-export default externalContracts satisfies GenericContractsDeclaration;
+export default externalContracts;
