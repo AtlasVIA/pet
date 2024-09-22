@@ -25,11 +25,12 @@ const GameScreen: React.FC<GameScreenProps> = ({ pets, gameState, onDonation }) 
     <div className="container mx-auto p-4">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
-          <h2 className="text-2xl font-bold mb-4 text-primary">Your Pets</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {pets.map((pet) => (
-              <PetCard key={pet.id} pet={pet} onDonation={onDonation} />
-            ))}
+          <div className="bg-base-200 rounded-lg p-6 shadow-lg">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {pets.map((pet) => (
+                <PetCard key={pet.id} pet={pet} onDonation={onDonation} />
+              ))}
+            </div>
           </div>
         </div>
         <div className="space-y-6">
