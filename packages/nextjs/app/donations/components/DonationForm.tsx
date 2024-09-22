@@ -19,8 +19,8 @@ interface DonationFormProps {
   setMessage: (message: string) => void;
   isContractLoading: boolean;
   isUSDCContractLoading: boolean;
-  donateNative: (amountUSD: string, message: string, tokenPrice: number) => Promise<void>;
-  donateUSDC: (amountUSD: string, message: string) => Promise<void>;
+  donateNative: (amountUSD: string, message: string, tokenPrice: number) => Promise<boolean>;
+  donateUSDC: (amountUSD: string, message: string) => Promise<boolean>;
   isUSDCSupported: boolean;
   tokenPrice: number;
   useUSDC: boolean;
@@ -31,7 +31,7 @@ interface DonationFormProps {
   chainSwitched: boolean;
   resetChainSwitched: () => void;
   storedDonationParams: { amountUSD: string; message: string; isNative: boolean; tokenPrice: number } | null;
-  executeDonation: (params: { amountUSD: string; message: string; isNative: boolean; tokenPrice: number }) => Promise<void>;
+  executeDonation: (params: { amountUSD: string; message: string; isNative: boolean; tokenPrice: number }) => Promise<boolean>;
   connectedChainId: number | null;
 }
 
@@ -67,6 +67,7 @@ export const DonationForm: React.FC<DonationFormProps> = ({
   const [isReexecuting, setIsReexecuting] = useState(false);
   const [showSuccessPanel, setShowSuccessPanel] = useState(false);
   const [isDonationLoading, setIsDonationLoading] = useState(false);
+  const [donationError, setDonationError] = useState<string | null>(null);
 
   const chainOptions = useMemo(
     () =>
@@ -166,19 +167,25 @@ export const DonationForm: React.FC<DonationFormProps> = ({
 
   const handleDonate = useCallback(async () => {
     setIsDonationLoading(true);
+    setDonationError(null);
     try {
+      let success = false;
       if (chainSwitched && storedDonationParams) {
-        await executeDonation(storedDonationParams);
+        success = await executeDonation(storedDonationParams);
         resetChainSwitched();
       } else if (useUSDC) {
-        await donateUSDC(donationAmountUSD, message);
+        success = await donateUSDC(donationAmountUSD, message);
       } else {
-        await donateNative(donationAmountUSD, message, tokenPrice);
+        success = await donateNative(donationAmountUSD, message, tokenPrice);
       }
-      setShowSuccessPanel(true);
+      if (success) {
+        setShowSuccessPanel(true);
+      } else {
+        setDonationError("Donation failed. Please try again.");
+      }
     } catch (error) {
       console.error("Donation failed:", error);
-      // Handle error (you might want to show an error message to the user)
+      setDonationError("An unexpected error occurred. Please try again.");
     } finally {
       setIsDonationLoading(false);
     }
@@ -270,6 +277,10 @@ export const DonationForm: React.FC<DonationFormProps> = ({
           rows={4}
           disabled={isProcessing}
         />
+
+        {donationError && (
+          <div className="mt-4 text-red-500 text-sm">{donationError}</div>
+        )}
 
         <button
           onClick={handleDonate}

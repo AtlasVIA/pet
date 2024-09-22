@@ -59,7 +59,7 @@ export const useDonationContract = (selectedChain: number | null) => {
 
   const isCorrectNetwork = currentChainId === effectiveChainId;
 
-  const executeDonation = useCallback(async (params: StoredDonationParams) => {
+  const executeDonation = useCallback(async (params: StoredDonationParams): Promise<boolean> => {
     const { amountUSD, message, isNative, tokenPrice } = params;
     setIsProcessing(true);
     setError(null);
@@ -117,7 +117,7 @@ export const useDonationContract = (selectedChain: number | null) => {
       console.log(`${isNative ? "Native" : "USDC"} donation transaction hash:`, donationHash);
       setIsProcessing(false);
       setStoredDonationParams(null);
-      return donationHash;
+      return true;
     } catch (error) {
       console.error("Donation failed:", error);
       let errorMessage = "An unexpected error occurred";
@@ -128,11 +128,12 @@ export const useDonationContract = (selectedChain: number | null) => {
         errorDetails = `Error: ${error.message}. Please check your input and try again.`;
       }
       handleError(errorMessage, errorDetails);
+      return false;
     }
   }, [address, currentChainId, effectiveChainId, writeDonationsContractAsync, writeUSDCDonationsContractAsync, approveUSDC, usdcContractData?.address, allowance, donationsContractData?.address, handleError]);
 
   const handleDonation = useCallback(
-    async (amountUSD: string, message: string, isNative: boolean, tokenPrice: number) => {
+    async (amountUSD: string, message: string, isNative: boolean, tokenPrice: number): Promise<boolean> => {
       setIsProcessing(true);
       setError(null);
 
@@ -182,7 +183,7 @@ export const useDonationContract = (selectedChain: number | null) => {
             await switchNetwork(effectiveChainId);
             setChainSwitched(true);
             setIsProcessing(false);
-            return null; // Return early to prevent further execution with stale data
+            return false; // Return false as the donation hasn't been executed yet
           } else {
             throw new Error("Effective chain ID is undefined");
           }
@@ -200,6 +201,7 @@ export const useDonationContract = (selectedChain: number | null) => {
           errorDetails = `Error: ${error.message}. Please check your input and try again.`;
         }
         handleError(errorMessage, errorDetails);
+        return false;
       }
     },
     [selectedChain, effectiveChainId, switchNetwork, isCorrectNetwork, executeDonation, handleError],

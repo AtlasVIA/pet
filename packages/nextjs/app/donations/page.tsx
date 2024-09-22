@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AppPreview } from "./components/AppPreview";
 import BlueMission from "./components/BlueMission";
 import { DonationForm } from "./components/DonationForm";
@@ -18,7 +18,9 @@ const DonationsPage = () => {
   const [donationAmountUSD, setDonationAmountUSD] = useState("10");
   const [message, setMessage] = useState("");
   const [useUSDC, setUseUSDC] = useState(false);
-  const [notification, setNotification] = useState<{ type: 'success' | 'error' | 'info', message: string } | null>(null);
+  const [notification, setNotification] = useState<{ type: "success" | "error" | "info"; message: string } | null>(
+    null,
+  );
 
   const { effectiveChainId, nativeSymbol, isUSDCSupported, tokenPrice } = useChainInfo(selectedChain);
 
@@ -49,17 +51,20 @@ const DonationsPage = () => {
     : "0";
 
   const handleDonationSuccess = useCallback(() => {
-    setNotification({ type: 'success', message: 'Donation successful! Thank you for your generosity.' });
+    setNotification({ type: "success", message: "Donation successful! Thank you for your generosity." });
     setDonationAmountUSD("10");
     setMessage("");
   }, []);
 
   const handleDonationError = useCallback((errorMessage: string) => {
-    setNotification({ type: 'error', message: `Donation failed: ${errorMessage}` });
+    setNotification({ type: "error", message: `Donation failed: ${errorMessage}` });
   }, []);
 
   const handleNetworkSwitch = useCallback(() => {
-    setNotification({ type: 'info', message: 'Network switched. Please click the donation button again to complete your donation.' });
+    setNotification({
+      type: "info",
+      message: "Network switched. Please click the donation button again to complete your donation.",
+    });
   }, []);
 
   useEffect(() => {
@@ -74,38 +79,65 @@ const DonationsPage = () => {
     }
   }, [chainSwitched, handleNetworkSwitch]);
 
-  // New effect to update selectedChain when currentChainId changes
   useEffect(() => {
     if (currentChainId) {
       setSelectedChain(currentChainId);
     }
   }, [currentChainId]);
 
-  const handleDonation = useCallback(async (isNative: boolean) => {
-    try {
-      let result;
-      if (isNative) {
-        result = await donateNative(donationAmountUSD, message, tokenPrice);
-      } else {
-        result = await donateUSDC(donationAmountUSD, message);
+  const handleDonation = useCallback(
+    async (isNative: boolean, amount: string, msg: string, price: number): Promise<boolean> => {
+      try {
+        let result;
+        if (isNative) {
+          result = await donateNative(amount, msg, price);
+        } else {
+          result = await donateUSDC(amount, msg);
+        }
+        if (result) {
+          handleDonationSuccess();
+          return true;
+        } else {
+          handleDonationError("Transaction failed. Please try again.");
+          return false;
+        }
+      } catch (err) {
+        handleDonationError((err as Error).message);
+        return false;
       }
-      if (result !== null) {
+    },
+    [donateNative, donateUSDC, handleDonationSuccess, handleDonationError],
+  );
+
+  const wrappedExecuteDonation = useCallback(
+    async (params: { amountUSD: string; message: string; isNative: boolean; tokenPrice: number }): Promise<boolean> => {
+      const result = await executeDonation(params);
+      if (result) {
         handleDonationSuccess();
+      } else {
+        handleDonationError("Execution failed. Please try again.");
       }
-    } catch (err) {
-      handleDonationError((err as Error).message);
-    }
-  }, [donateNative, donateUSDC, donationAmountUSD, message, tokenPrice, handleDonationSuccess, handleDonationError]);
+      return result;
+    },
+    [executeDonation, handleDonationSuccess, handleDonationError],
+  );
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-gradient-to-br from-indigo-200 via-purple-100 to-pink-100 bg-opacity-90 relative">
       {notification && (
-        <div className={`fixed top-4 right-4 p-4 rounded-md ${
-          notification.type === 'success' ? 'bg-green-500' : 
-          notification.type === 'error' ? 'bg-red-500' : 'bg-blue-500'
-        } text-white`}>
+        <div
+          className={`fixed top-4 right-4 p-4 rounded-md ${
+            notification.type === "success"
+              ? "bg-green-500"
+              : notification.type === "error"
+              ? "bg-red-500"
+              : "bg-blue-500"
+          } text-white`}
+        >
           {notification.message}
-          <button onClick={() => setNotification(null)} className="ml-2 font-bold">×</button>
+          <button onClick={() => setNotification(null)} className="ml-2 font-bold">
+            ×
+          </button>
         </div>
       )}
       <div
@@ -144,8 +176,8 @@ const DonationsPage = () => {
                 setMessage={setMessage}
                 isContractLoading={isContractLoading}
                 isUSDCContractLoading={isUSDCContractLoading}
-                donateNative={(amount, msg, price) => handleDonation(true)}
-                donateUSDC={(amount, msg) => handleDonation(false)}
+                donateNative={(amount, msg, price) => handleDonation(true, amount, msg, price)}
+                donateUSDC={(amount, msg) => handleDonation(false, amount, msg, 0)}
                 isUSDCSupported={isUSDCSupported}
                 tokenPrice={tokenPrice}
                 useUSDC={useUSDC}
@@ -156,7 +188,7 @@ const DonationsPage = () => {
                 chainSwitched={chainSwitched}
                 resetChainSwitched={resetChainSwitched}
                 storedDonationParams={storedDonationParams}
-                executeDonation={executeDonation}
+                executeDonation={wrappedExecuteDonation}
                 connectedChainId={currentChainId}
               />
             </div>
