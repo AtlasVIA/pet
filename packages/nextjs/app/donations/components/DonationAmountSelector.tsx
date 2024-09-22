@@ -37,16 +37,26 @@ export const DonationAmountSelector: React.FC<DonationAmountSelectorProps> = ({
   const handleAmountChange = useCallback(
     (amount: string) => {
       console.log("handleAmountChange called with:", amount);
-      setInputAmount(amount);
-      setShowOtherAmount(!donationOptionsUSD.includes(amount));
+      
+      // Allow only numbers and one decimal point
+      const regex = /^\d*\.?\d*$/;
+      if (!regex.test(amount) && amount !== "") {
+        return;
+      }
 
-      if (amount === "") {
+      // Remove leading zeros for non-decimal numbers
+      const cleanedAmount = amount.replace(/^0+(?=\d)/, '');
+
+      setInputAmount(cleanedAmount);
+      setShowOtherAmount(!donationOptionsUSD.includes(cleanedAmount));
+
+      if (cleanedAmount === "") {
         setAmountError("Please enter a donation amount");
         setDonationAmountUSD("0");
         return;
       }
 
-      const numAmount = parseFloat(amount);
+      const numAmount = parseFloat(cleanedAmount);
 
       if (isNaN(numAmount) || numAmount < 0) {
         setAmountError("Please enter a valid positive number");
@@ -60,7 +70,7 @@ export const DonationAmountSelector: React.FC<DonationAmountSelectorProps> = ({
         setAmountError(null);
       }
 
-      setDonationAmountUSD(amount);
+      setDonationAmountUSD(cleanedAmount);
     },
     [setDonationAmountUSD, setAmountError, donationOptionsUSD],
   );
@@ -129,14 +139,15 @@ export const DonationAmountSelector: React.FC<DonationAmountSelectorProps> = ({
       </div>
       {showOtherAmount && (
         <div className="relative mt-4">
-          <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-600">$</span>
+          <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-600 text-xl font-semibold">$</span>
           <input
             id="donation-amount"
             type="text"
-            placeholder="Enter custom amount in USD"
+            inputMode="decimal"
+            placeholder="Enter amount"
             value={inputAmount}
             onChange={e => handleAmountChange(e.target.value)}
-            className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+            className="w-full pl-8 pr-4 py-3 text-xl font-semibold border-2 border-indigo-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
             aria-label="Custom donation amount"
           />
         </div>
