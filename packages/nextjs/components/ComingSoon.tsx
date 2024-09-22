@@ -80,16 +80,21 @@ const ComingSoon: React.FC<ComingSoonProps> = ({ name }) => {
         >
           <div className="flex flex-col items-center space-y-3 sm:space-y-4">
             <div className="flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-primary rounded-full">
-              <SparklesIcon className="h-8 w-8 sm:h-10 sm:w-10 text-primary-content" />
+              <span className="text-3xl sm:text-4xl">🐾</span>
             </div>
-            <h3 className="text-lg sm:text-xl font-bold text-center text-primary">Coming Soon!</h3>
-            <p className="text-sm sm:text-base text-center">Consider donating to accelerate development!</p>
+            <h3 className="text-lg sm:text-xl font-bold text-center text-primary">Pawsome Features Coming Soon! 🐶</h3>
+            <p className="text-sm sm:text-base text-center">Your support helps us fetch new features faster! 🦴</p>
+            <div className="flex justify-center space-x-2 text-4xl">
+              <span>🐕</span>
+              <span>🐩</span>
+              <span>🦮</span>
+            </div>
             <button
               onClick={handleDonateClick}
               className="flex items-center justify-center space-x-2 text-primary-content bg-primary hover:bg-primary-focus p-2 sm:p-3 rounded-lg w-full transition-colors duration-200"
             >
               <InformationCircleIcon className="h-4 w-4 sm:h-5 sm:w-5" />
-              <span className="text-xs sm:text-sm font-semibold">Your support matters!</span>
+              <span className="text-xs sm:text-sm font-semibold">Wag your tail and donate! 🐾</span>
             </button>
           </div>
         </div>
