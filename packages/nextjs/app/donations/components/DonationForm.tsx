@@ -195,9 +195,8 @@ export const DonationForm: React.FC<DonationFormProps> = ({
 
   const handleCloseSuccessPanel = useCallback(() => {
     setShowSuccessPanel(false);
-    setDonationAmountUSD("");
     setMessage("");
-  }, [setDonationAmountUSD, setMessage]);
+  }, [setMessage]);
 
   const chainName = useMemo(() => {
     const chainInfo = getChainInfo(selectedChain);

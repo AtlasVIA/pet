@@ -27,7 +27,8 @@ export const DonationAmountSelector: React.FC<DonationAmountSelectorProps> = ({
 
   useEffect(() => {
     setInputAmount(donationAmountUSD);
-  }, [donationAmountUSD]);
+    setShowOtherAmount(!donationOptionsUSD.includes(donationAmountUSD));
+  }, [donationAmountUSD, donationOptionsUSD]);
 
   useEffect(() => {
     console.log("DonationAmountSelector props:", { selectedToken, tokenPrice, tokenSymbol });
@@ -37,6 +38,7 @@ export const DonationAmountSelector: React.FC<DonationAmountSelectorProps> = ({
     (amount: string) => {
       console.log("handleAmountChange called with:", amount);
       setInputAmount(amount);
+      setShowOtherAmount(!donationOptionsUSD.includes(amount));
 
       if (amount === "") {
         setAmountError("Please enter a donation amount");
@@ -60,13 +62,12 @@ export const DonationAmountSelector: React.FC<DonationAmountSelectorProps> = ({
 
       setDonationAmountUSD(amount);
     },
-    [setDonationAmountUSD, setAmountError],
+    [setDonationAmountUSD, setAmountError, donationOptionsUSD],
   );
 
   const handleOptionClick = useCallback(
     (amount: string) => {
       handleAmountChange(amount);
-      setShowOtherAmount(false);
     },
     [handleAmountChange],
   );
@@ -105,11 +106,11 @@ export const DonationAmountSelector: React.FC<DonationAmountSelectorProps> = ({
             key={amount}
             onClick={() => handleOptionClick(amount)}
             className={`px-4 py-2 rounded-lg font-bold transition-all duration-200 ${
-              donationAmountUSD === amount && !showOtherAmount
+              donationAmountUSD === amount
                 ? "bg-indigo-600 text-white shadow-md transform scale-105"
                 : "bg-gray-100 text-gray-800 hover:bg-gray-200 hover:shadow-sm"
             }`}
-            aria-pressed={donationAmountUSD === amount && !showOtherAmount}
+            aria-pressed={donationAmountUSD === amount}
           >
             ${amount}
           </button>

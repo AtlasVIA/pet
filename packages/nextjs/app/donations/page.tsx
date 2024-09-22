@@ -54,7 +54,7 @@ const DonationsPage = () => {
 
   const handleDonationSuccess = useCallback(() => {
     setNotification({ type: "success", message: "Donation successful! Thank you for your generosity." });
-    setDonationAmountUSD("10");
+    setDonationAmountUSD("50");
     setMessage("");
   }, []);
 
@@ -86,6 +86,13 @@ const DonationsPage = () => {
       setSelectedChain(currentChainId);
     }
   }, [currentChainId]);
+
+  // New useEffect to set donation amount to 50 when wallet is connected
+  useEffect(() => {
+    if (isConnected) {
+      setDonationAmountUSD("50");
+    }
+  }, [isConnected]);
 
   const handleDonation = useCallback(
     async (isNative: boolean, amount: string, msg: string, price: number): Promise<boolean> => {

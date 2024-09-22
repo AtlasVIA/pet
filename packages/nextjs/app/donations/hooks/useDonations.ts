@@ -11,7 +11,7 @@ export const useDonations = (selectedChain: number | null) => {
   const { effectiveChainId, isUSDCSupported, currentChainId, usdcAddress } = useChainInfo(selectedChain);
   const { nativeBalance, usdcBalance } = useTokenBalances(selectedChain);
 
-  const [donationAmountUSD, setDonationAmountUSD] = useState("10");
+  const [donationAmountUSD, setDonationAmountUSD] = useState("50");
   const [message, setMessage] = useState("");
   const [useUSDC, setUseUSDC] = useState(false);
   const [error, setError] = useState<string | null>(null);
