@@ -57,7 +57,7 @@ const ChainSelect: React.FC<ChainSelectProps> = ({
     onChange(optionId);
   };
 
-  const selectedOption = value !== null ? options.find(option => option.id === value) : undefined;
+  const selectedOption = value !== null ? options.find(option => option.id === value) : null;
 
   return (
     <div className={className}>
@@ -69,22 +69,24 @@ const ChainSelect: React.FC<ChainSelectProps> = ({
       <div className="relative" ref={dropdownRef}>
         <div
           className={`block w-full px-3 py-2 border border-base-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm bg-base-100 text-base-content ${
-            disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"
+            disabled || isLoading ? "cursor-not-allowed opacity-50" : "cursor-pointer"
           }`}
-          onClick={() => !disabled && setIsOpen(!isOpen)}
+          onClick={() => !disabled && !isLoading && setIsOpen(!isOpen)}
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center">
-              {value !== null && (
+              {isLoading ? (
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-primary mr-2"></div>
+              ) : selectedOption ? (
                 <Image
                   width={24}
                   height={24}
-                  alt={`${value} logo`}
+                  alt={`${selectedOption.name} logo`}
                   className="rounded-full mr-2"
-                  src={`https://scan.vialabs.io/images/logos/chains/${value}.png`}
+                  src={`https://scan.vialabs.io/images/logos/chains/${selectedOption.id}.png`}
                 />
-              )}
-              <span>{selectedOption ? selectedOption.name : "Select Chain"}</span>
+              ) : null}
+              <span>{isLoading ? "Loading..." : selectedOption ? selectedOption.name : "Select Chain"}</span>
             </div>
           </div>
         </div>
@@ -93,7 +95,7 @@ const ChainSelect: React.FC<ChainSelectProps> = ({
             <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
           </svg>
         </div>
-        {isOpen && !disabled && (
+        {isOpen && !disabled && !isLoading && (
           <div className="absolute top-full left-0 w-full bg-base-100 border border-base-300 rounded-md mt-1 shadow-lg z-50">
             {options.map(option => (
               <div

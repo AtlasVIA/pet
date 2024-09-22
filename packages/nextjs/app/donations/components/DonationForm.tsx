@@ -31,6 +31,7 @@ interface DonationFormProps {
   resetChainSwitched: () => void;
   storedDonationParams: { amountUSD: string; message: string; isNative: boolean; tokenPrice: number } | null;
   executeDonation: (params: { amountUSD: string; message: string; isNative: boolean; tokenPrice: number }) => Promise<void>;
+  connectedChainId: number | null;
 }
 
 export const DonationForm: React.FC<DonationFormProps> = ({
@@ -59,6 +60,7 @@ export const DonationForm: React.FC<DonationFormProps> = ({
   resetChainSwitched,
   storedDonationParams,
   executeDonation,
+  connectedChainId,
 }) => {
   const [amountError, setAmountError] = useState<string | null>(null);
   const [isReexecuting, setIsReexecuting] = useState(false);
@@ -82,6 +84,22 @@ export const DonationForm: React.FC<DonationFormProps> = ({
     },
     [setSelectedChain],
   );
+
+  // Updated useEffect hook to set the selected chain based on the user's connected chain
+  useEffect(() => {
+    if (connectedChainId) {
+      const connectedChainInfo = getChainInfo(connectedChainId);
+      if (connectedChainInfo) {
+        console.log(`Updating selected chain to connected chain: ${connectedChainId}`);
+        setSelectedChain(connectedChainId);
+      } else {
+        console.log(`Connected chain ${connectedChainId} not supported, setting to first chain in list: ${chainOptions[0].id}`);
+        setSelectedChain(chainOptions[0].id);
+      }
+    } else {
+      console.log('No connected chain detected');
+    }
+  }, [connectedChainId, setSelectedChain, getChainInfo, chainOptions]);
 
   const handleTokenChange = useCallback(
     (tokenId: string) => {
@@ -169,6 +187,7 @@ export const DonationForm: React.FC<DonationFormProps> = ({
       chainSwitched,
       isReexecuting,
       storedDonationParams,
+      connectedChainId,
     });
   }, [
     isLoading,
@@ -183,6 +202,7 @@ export const DonationForm: React.FC<DonationFormProps> = ({
     chainSwitched,
     isReexecuting,
     storedDonationParams,
+    connectedChainId,
   ]);
 
   return (
@@ -193,7 +213,7 @@ export const DonationForm: React.FC<DonationFormProps> = ({
           options={chainOptions}
           value={selectedChain}
           onChange={handleChainChange}
-          isLoading={isProcessing}
+          isLoading={isContractLoading}
           disabled={isProcessing}
           className="w-full"
         />
@@ -228,19 +248,6 @@ export const DonationForm: React.FC<DonationFormProps> = ({
         disabled={isProcessing}
       />
 
-      {amountError && (
-        <div className="mt-4 text-red-600 bg-red-100 border border-red-400 rounded-md p-3">
-          <p className="font-bold">{amountError}</p>
-        </div>
-      )}
-
-      {error && (
-        <div className="mt-4 text-red-600 bg-red-100 border border-red-400 rounded-md p-3">
-          <p className="font-bold">{error.message}</p>
-          {error.details && <p>{error.details}</p>}
-        </div>
-      )}
-
       <button
         onClick={handleDonate}
         disabled={
@@ -255,18 +262,6 @@ export const DonationForm: React.FC<DonationFormProps> = ({
         {isLoading && <LoadingSpinner />}
         <span className={isLoading ? "invisible" : ""}>{buttonText}</span>
       </button>
-
-      {chainSwitched && (
-        <p className="mt-2 text-sm text-green-600">
-          Network switched successfully. Please click the button above to complete your donation.
-        </p>
-      )}
-
-      {!isCorrectNetwork && !chainSwitched && (
-        <p className="mt-2 text-sm text-yellow-600">
-          Please switch to the correct network to make a donation.
-        </p>
-      )}
     </div>
   );
 };

@@ -74,6 +74,13 @@ const DonationsPage = () => {
     }
   }, [chainSwitched, handleNetworkSwitch]);
 
+  // New effect to update selectedChain when currentChainId changes
+  useEffect(() => {
+    if (currentChainId) {
+      setSelectedChain(currentChainId);
+    }
+  }, [currentChainId]);
+
   const handleDonation = useCallback(async (isNative: boolean) => {
     try {
       let result;
@@ -150,6 +157,7 @@ const DonationsPage = () => {
                 resetChainSwitched={resetChainSwitched}
                 storedDonationParams={storedDonationParams}
                 executeDonation={executeDonation}
+                connectedChainId={currentChainId}
               />
             </div>
             <div className="flex flex-col justify-between lg:border-l lg:border-indigo-200 lg:pl-12">
