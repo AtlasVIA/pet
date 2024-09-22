@@ -9,6 +9,8 @@ const staticTokenPrices: { [key: string]: number } = {
   polygon: 0.8,
   avalanche: 15,
   fantom: 0.3,
+  mantle: 0.5,
+  celo: 0.6
 };
 
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes in milliseconds
