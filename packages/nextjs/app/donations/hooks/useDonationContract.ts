@@ -1,20 +1,24 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useChainInfo } from "./useChainInfo";
 import { formatEther, formatUnits, parseEther, parseUnits } from "viem";
-import { useAccount, useBalance } from "wagmi";
+import { useAccount, useBalance, useChainId } from "wagmi";
 import { useDeployedContractInfo, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 
 export const useDonationContract = (selectedChain: number | null) => {
   const { address } = useAccount();
   const { effectiveChainId, usdcAddress, nativeSymbol } = useChainInfo(selectedChain);
-  const { targetNetwork, switchNetwork } = useTargetNetwork();
+  const { switchNetwork } = useTargetNetwork();
+  const currentChainId = useChainId();
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<{ message: string; details?: string } | null>(null);
 
   const { data: usdcContractData, isLoading: isUSDCContractLoading } = useDeployedContractInfo("USDC");
 
   const { writeContractAsync: writeDonationsContractAsync } = useScaffoldWriteContract("Donations");
+  const { writeContractAsync: writeUSDCDonationsContractAsync } = useScaffoldWriteContract("Donations");
+
+  const { writeContractAsync: approveUSDC } = useScaffoldWriteContract("USDC");
 
   const { data: nativeBalance } = useBalance({
     address,
@@ -41,14 +45,12 @@ export const useDonationContract = (selectedChain: number | null) => {
 
   const formattedUsdcBalance = useMemo(() => (usdcBalance ? formatUnits(usdcBalance.value, 6) : "0"), [usdcBalance]);
 
-  const isCorrectNetwork = targetNetwork.id === effectiveChainId;
+  const isCorrectNetwork = currentChainId === effectiveChainId;
 
   const handleDonation = useCallback(
     async (amountUSD: string, message: string, isNative: boolean, tokenPrice: number) => {
       setIsProcessing(true);
       setError(null);
-
-      console.log(`Donation attempt - Type: ${isNative ? "Native" : "USDC"}, Amount USD: ${amountUSD}, Message: ${message}, Token Price: ${tokenPrice}`);
 
       try {
         // Input validation
@@ -68,7 +70,6 @@ export const useDonationContract = (selectedChain: number | null) => {
         }
 
         const numericAmountUSD = Number(amountUSD);
-        console.log(`Numeric Amount USD: ${numericAmountUSD}`);
         if (isNaN(numericAmountUSD)) {
           throw new Error(`Amount is not a valid number: ${amountUSD}`);
         }
@@ -78,14 +79,25 @@ export const useDonationContract = (selectedChain: number | null) => {
         }
 
         // Check for valid token price
-        console.log(`Token Price: ${tokenPrice}`);
         if (isNative && (isNaN(tokenPrice) || tokenPrice <= 0)) {
           throw new Error(`Invalid token price: ${tokenPrice}`);
         }
 
+        // Switch network if needed
         if (!isCorrectNetwork) {
           if (effectiveChainId) {
             await switchNetwork(effectiveChainId);
+            // Wait for the chain to be updated
+            await new Promise<void>((resolve) => {
+              const checkChain = () => {
+                if (currentChainId === effectiveChainId) {
+                  resolve();
+                } else {
+                  setTimeout(checkChain, 100);
+                }
+              };
+              checkChain();
+            });
           } else {
             throw new Error("Effective chain ID is undefined");
           }
@@ -93,30 +105,13 @@ export const useDonationContract = (selectedChain: number | null) => {
 
         let donationHash;
         if (isNative) {
-          console.log("Calling native token donation function: donate");
-          
           // Convert USD to native token amount
           const nativeAmount = numericAmountUSD / tokenPrice;
-          console.log(`Calculated native amount: ${nativeAmount}`);
-          if (isNaN(nativeAmount) || !isFinite(nativeAmount)) {
-            throw new Error(`Error converting USD to native token amount: ${nativeAmount}`);
-          }
-          
-          // Handle very small amounts
           let parsedAmount;
           if (nativeAmount < 1e-18) {
             parsedAmount = BigInt(1); // Minimum amount (1 wei)
-            console.log("Amount too small, setting to 1 wei");
           } else {
             parsedAmount = parseEther(nativeAmount.toFixed(18));
-          }
-          console.log("Parsed native amount:", parsedAmount.toString());
-          
-          // Verify parsed amount
-          const formattedParsedAmount = formatEther(parsedAmount);
-          console.log(`Formatted parsed amount: ${formattedParsedAmount}`);
-          if (Math.abs(Number(formattedParsedAmount) - nativeAmount) > 0.000001) {
-            console.warn(`Parsed amount (${formattedParsedAmount}) does not closely match calculated amount (${nativeAmount})`);
           }
 
           donationHash = await writeDonationsContractAsync({
@@ -125,17 +120,16 @@ export const useDonationContract = (selectedChain: number | null) => {
             value: parsedAmount,
           });
         } else {
-          console.log("Calling USDC donation function: donateUSDC");
           const usdcAmount = parseUnits(amountUSD, 6);
-          console.log("Parsed USDC amount:", usdcAmount.toString());
 
-          // Verify parsed amount
-          const formattedParsedAmount = formatUnits(usdcAmount, 6);
-          if (formattedParsedAmount !== amountUSD) {
-            console.warn(`Parsed amount (${formattedParsedAmount}) does not match input amount (${amountUSD})`);
-          }
+          // Approve USDC spending
+          await approveUSDC({
+            functionName: "approve",
+            args: [usdcContractData?.address, usdcAmount],
+          });
 
-          donationHash = await writeDonationsContractAsync({
+          // Donate USDC
+          donationHash = await writeUSDCDonationsContractAsync({
             functionName: "donateUSDC",
             args: [usdcAmount, message],
           });
@@ -156,8 +150,14 @@ export const useDonationContract = (selectedChain: number | null) => {
         handleError(errorMessage, errorDetails);
       }
     },
-    [isCorrectNetwork, effectiveChainId, switchNetwork, writeDonationsContractAsync, handleError],
+    [effectiveChainId, switchNetwork, writeDonationsContractAsync, writeUSDCDonationsContractAsync, approveUSDC, handleError, isCorrectNetwork, currentChainId, usdcContractData?.address],
   );
+
+  useEffect(() => {
+    console.log("Current chain ID:", currentChainId);
+    console.log("Effective chain ID:", effectiveChainId);
+    console.log("Is correct network:", isCorrectNetwork);
+  }, [currentChainId, effectiveChainId, isCorrectNetwork]);
 
   return {
     donateNative: useCallback(

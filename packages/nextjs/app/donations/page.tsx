@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { AppPreview } from "./components/AppPreview";
 import BlueMission from "./components/BlueMission";
 import { DonationForm } from "./components/DonationForm";
@@ -16,8 +16,9 @@ const DonationsPage = () => {
   const [donationAmountUSD, setDonationAmountUSD] = useState("10");
   const [message, setMessage] = useState("");
   const [useUSDC, setUseUSDC] = useState(false);
+  const [notification, setNotification] = useState<{ type: 'success' | 'error', message: string } | null>(null);
 
-  const { nativeSymbol, isUSDCSupported, tokenPrice } = useChainInfo(selectedChain);
+  const { effectiveChainId, nativeSymbol, isUSDCSupported, tokenPrice } = useChainInfo(selectedChain);
 
   const {
     donateNative,
@@ -35,33 +36,36 @@ const DonationsPage = () => {
 
   const toggleTokenType = () => setUseUSDC(!useUSDC);
 
-  const handleDonate = async () => {
-    try {
-      if (useUSDC) {
-        await donateUSDC(donationAmountUSD, message);
-      } else {
-        if (tokenPrice === 0) {
-          throw new Error("Token price is not available. Please try again later.");
-        }
-        await donateNative(donationAmountUSD, message, tokenPrice);
-      }
-      // Handle successful donation (e.g., show success message, reset form)
-      setMessage("");
-      setDonationAmountUSD("10");
-    } catch (err) {
-      // Error handling is now managed by useDonationContract
-      console.error("Donation failed:", err);
-    }
-  };
-
   const donationAmountToken = useUSDC
     ? donationAmountUSD
     : tokenPrice > 0
     ? (parseFloat(donationAmountUSD) / tokenPrice).toFixed(6)
     : "0";
 
+  const handleDonationSuccess = useCallback(() => {
+    setNotification({ type: 'success', message: 'Donation successful! Thank you for your generosity.' });
+    setDonationAmountUSD("10");
+    setMessage("");
+  }, []);
+
+  const handleDonationError = useCallback((errorMessage: string) => {
+    setNotification({ type: 'error', message: `Donation failed: ${errorMessage}` });
+  }, []);
+
+  useEffect(() => {
+    if (error) {
+      handleDonationError(error.message);
+    }
+  }, [error, handleDonationError]);
+
   return (
     <div className="flex flex-col items-center min-h-screen bg-gradient-to-br from-indigo-200 via-purple-100 to-pink-100 bg-opacity-90 relative">
+      {notification && (
+        <div className={`fixed top-4 right-4 p-4 rounded-md ${notification.type === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white`}>
+          {notification.message}
+          <button onClick={() => setNotification(null)} className="ml-2 font-bold">×</button>
+        </div>
+      )}
       <div
         className="absolute inset-0 bg-opacity-10 bg-white pointer-events-none"
         style={{
@@ -98,7 +102,22 @@ const DonationsPage = () => {
                 setMessage={setMessage}
                 isContractLoading={isContractLoading}
                 isUSDCContractLoading={isUSDCContractLoading}
-                handleDonate={handleDonate}
+                donateNative={async (amount, msg, price) => {
+                  try {
+                    await donateNative(amount, msg, price);
+                    handleDonationSuccess();
+                  } catch (err) {
+                    handleDonationError((err as Error).message);
+                  }
+                }}
+                donateUSDC={async (amount, msg) => {
+                  try {
+                    await donateUSDC(amount, msg);
+                    handleDonationSuccess();
+                  } catch (err) {
+                    handleDonationError((err as Error).message);
+                  }
+                }}
                 isUSDCSupported={isUSDCSupported}
                 tokenPrice={tokenPrice}
                 useUSDC={useUSDC}
