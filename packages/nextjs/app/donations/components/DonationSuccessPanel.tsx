@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence, useAnimation } from 'framer-motion';
+import TweetButton from '../../../components/TweetButton';
+import { FaFacebook, FaLinkedin } from 'react-icons/fa';
 
 interface DonationSuccessPanelProps {
   isVisible: boolean;
@@ -66,6 +68,19 @@ const DonationSuccessPanel: React.FC<DonationSuccessPanelProps> = ({
     }, 20);
   };
 
+  const shareOnFacebook = () => {
+    const url = encodeURIComponent('https://dogachi.pet');
+    const text = encodeURIComponent(`I just donated ${donationAmount} ${tokenType} on ${chainName} to help save dogs with Dogachi.Pet! Join me in making a difference!`);
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`, '_blank');
+  };
+
+  const shareOnLinkedIn = () => {
+    const url = encodeURIComponent('https://dogachi.pet');
+    const title = encodeURIComponent('I just donated to help save dogs with Dogachi.Pet!');
+    const summary = encodeURIComponent(`I donated ${donationAmount} ${tokenType} on ${chainName}. Join me in making a difference!`);
+    window.open(`https://www.linkedin.com/shareArticle?mini=true&url=${url}&title=${title}&summary=${summary}`, '_blank');
+  };
+
   return (
     <AnimatePresence>
       {isVisible && (
@@ -82,7 +97,6 @@ const DonationSuccessPanel: React.FC<DonationSuccessPanelProps> = ({
             exit={{ scale: 0.8, y: 50 }}
             transition={{ type: 'spring', damping: 15 }}
             className="bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-lg p-6 w-full max-w-md shadow-xl relative overflow-hidden"
-            style={{ aspectRatio: '1 / 1' }}
           >
             {/* Animated background */}
             <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
@@ -95,20 +109,6 @@ const DonationSuccessPanel: React.FC<DonationSuccessPanelProps> = ({
                 <animate attributeName="x" from="0" to="-40" dur="20s" repeatCount="indefinite" />
                 <animate attributeName="y" from="0" to="-40" dur="20s" repeatCount="indefinite" />
               </rect>
-            </svg>
-
-            {/* 3D-like scene with perspective */}
-            <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-              <defs>
-                <linearGradient id="grass" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#4CAF50" />
-                  <stop offset="100%" stopColor="#8BC34A" />
-                </linearGradient>
-              </defs>
-              <polygon points="0,100 100,100 100,70 0,85" fill="url(#grass)" />
-              <path d="M0,85 C30,82 70,75 100,70" fill="none" stroke="#795548" strokeWidth="0.5" />
-              <path d="M0,90 C30,88 70,82 100,80" fill="none" stroke="#795548" strokeWidth="0.5" />
-              <path d="M0,95 C30,94 70,90 100,90" fill="none" stroke="#795548" strokeWidth="0.5" />
             </svg>
 
             {isLoading ? (
@@ -158,7 +158,6 @@ const DonationSuccessPanel: React.FC<DonationSuccessPanelProps> = ({
                 </div>
                 <p className="text-white text-center mt-2 text-sm md:text-base">Impact: {impactPercentage}%</p>
 
-                {/* Morphing text effect */}
                 <motion.div
                   animate={textAnimation}
                   className="text-center my-4"
@@ -175,12 +174,23 @@ const DonationSuccessPanel: React.FC<DonationSuccessPanelProps> = ({
                   </p>
                 </motion.div>
 
-                {/* Interactive close button */}
+                <div className="flex flex-col space-y-2">
+                  <p className="text-white text-center">Share your donation:</p>
+                  <div className="flex flex-wrap justify-center gap-2">
+                    <TweetButton
+                      text="I just made a donation to help save dogs with Dogachi.Pet!"
+                      donationAmount={donationAmount}
+                      tokenType={tokenType}
+                      chainName={chainName}
+                    />
+                  </div>
+                </div>
+
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={onClose}
-                  className="w-full bg-white bg-opacity-20 text-white font-bold py-3 px-6 rounded-full transition duration-300 hover:bg-opacity-30 relative overflow-hidden"
+                  className="w-full bg-white bg-opacity-20 text-white font-bold py-3 px-6 rounded-full transition duration-300 hover:bg-opacity-30 relative overflow-hidden mt-4"
                 >
                   <span className="relative z-10">Close</span>
                   <motion.div
@@ -193,7 +203,7 @@ const DonationSuccessPanel: React.FC<DonationSuccessPanelProps> = ({
               </motion.div>
             )}
 
-            {/* Elaborate confetti animation */}
+            {/* Confetti animation */}
             <svg ref={confettiRef} className="absolute inset-0 w-full h-full pointer-events-none" xmlns="http://www.w3.org/2000/svg">
               {[...Array(30)].map((_, i) => (
                 <path
@@ -201,32 +211,6 @@ const DonationSuccessPanel: React.FC<DonationSuccessPanelProps> = ({
                   d={`M${Math.random() * 100},${Math.random() * 100} L${Math.random() * 100},${Math.random() * 100} L${Math.random() * 100},${Math.random() * 100} Z`}
                   fill={`hsl(${Math.random() * 360}, 100%, 70%)`}
                 />
-              ))}
-            </svg>
-
-            {/* Paw print trail animation */}
-            <svg className="absolute inset-0 w-full h-full pointer-events-none" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <path id="paw" d="M0,0 C-1,-1 -2,0 -2,1 C-2,2 -1,3 0,3 C1,3 2,2 2,1 C2,0 1,-1 0,0 M-1.5,1.5 C-2.5,1.5 -3.5,2.5 -3.5,3.5 C-3.5,4.5 -2.5,5.5 -1.5,5.5 C-0.5,5.5 0.5,4.5 0.5,3.5 C0.5,2.5 -0.5,1.5 -1.5,1.5 M1.5,1.5 C0.5,1.5 -0.5,2.5 -0.5,3.5 C-0.5,4.5 0.5,5.5 1.5,5.5 C2.5,5.5 3.5,4.5 3.5,3.5 C3.5,2.5 2.5,1.5 1.5,1.5 M-1.5,-1.5 C-2.5,-1.5 -3.5,-0.5 -3.5,0.5 C-3.5,1.5 -2.5,2.5 -1.5,2.5 C-0.5,2.5 0.5,1.5 0.5,0.5 C0.5,-0.5 -0.5,-1.5 -1.5,-1.5 M1.5,-1.5 C0.5,-1.5 -0.5,-0.5 -0.5,0.5 C-0.5,1.5 0.5,2.5 1.5,2.5 C2.5,2.5 3.5,1.5 3.5,0.5 C3.5,-0.5 2.5,-1.5 1.5,-1.5" />
-              </defs>
-              {[...Array(8)].map((_, i) => (
-                <use
-                  key={i}
-                  href="#paw"
-                  x={10 + i * 10}
-                  y={80 - i * 5}
-                  fill="rgba(255,255,255,0.3)"
-                >
-                  <animateTransform
-                    attributeName="transform"
-                    type="translate"
-                    from="0 0"
-                    to="100 -50"
-                    dur="3s"
-                    begin={`${i * 0.2}s`}
-                    repeatCount="indefinite"
-                  />
-                </use>
               ))}
             </svg>
           </motion.div>
@@ -238,10 +222,3 @@ const DonationSuccessPanel: React.FC<DonationSuccessPanelProps> = ({
 
 export default DonationSuccessPanel;
 
-// Add this CSS to your global styles or component-specific styles
-`
-@keyframes fall {
-  0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
-  100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
-}
-`

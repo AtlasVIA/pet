@@ -1,8 +1,22 @@
-import React from 'react';
-import { FaTwitter } from 'react-icons/fa';
+import React from "react";
+import { FaTwitter } from "react-icons/fa";
 
-const TweetButton = () => {
-  const tweetText = encodeURIComponent("Check out Dogachi.Pet - The cutest blockchain pet adoption platform! 🐶🐱 #DogachiPet #BlockchainPets");
+interface TweetButtonProps {
+  text: string;
+  donationAmount?: string;
+  tokenType?: string;
+  chainName?: string;
+}
+
+const TweetButton: React.FC<TweetButtonProps> = ({ text, donationAmount, tokenType, chainName }) => {
+  let tweetText = encodeURIComponent(text);
+
+  if (donationAmount && tokenType && chainName) {
+    tweetText += encodeURIComponent(` I just donated ${donationAmount} ${tokenType} on ${chainName}!`);
+  }
+
+  tweetText += encodeURIComponent(" #DogachiPet #BlockchainForGood");
+
   const tweetUrl = `https://twitter.com/intent/tweet?text=${tweetText}`;
 
   return (
@@ -13,7 +27,7 @@ const TweetButton = () => {
       className="flex items-center bg-blue-400 hover:bg-blue-500 text-white px-3 py-2 rounded-md font-medium transition-colors duration-200"
     >
       <FaTwitter className="mr-2" />
-      Tweet About Us
+      Tweet
     </a>
   );
 };
