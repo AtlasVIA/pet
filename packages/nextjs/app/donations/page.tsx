@@ -19,7 +19,6 @@ const DonationsPage = () => {
     donationAmountUSD,
     setDonationAmountUSD,
     donationAmountToken,
-    setDonationAmountToken,
     message,
     setMessage,
     isNetworkSwitching,
@@ -150,7 +149,6 @@ const DonationsPage = () => {
                 donationAmountUSD={donationAmountUSD}
                 setDonationAmountUSD={setDonationAmountUSD}
                 donationAmountToken={donationAmountToken}
-                setDonationAmountToken={setDonationAmountToken}
                 message={message}
                 setMessage={setMessage}
                 isNetworkSwitching={isNetworkSwitching}
