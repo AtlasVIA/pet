@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useMemo } from "react";
 import { chains } from "../../../utils/scaffold-eth/chains";
 import ChainSelect from "./ChainSelect";
 import { DonationAmountSelector } from "./DonationAmountSelector";
 import TokenSelect from "./TokenSelect";
-import { formatTokenBalance } from "../../../utils/formatTokenBalance";
+import { LoadingSpinner } from "./LoadingSpinner";
 
 interface DonationFormProps {
   selectedChain: number | null;
@@ -15,7 +15,6 @@ interface DonationFormProps {
   donationAmountUSD: string;
   setDonationAmountUSD: (amount: string) => void;
   donationAmountToken: string;
-  setDonationAmountToken: (amount: string) => void;
   message: string;
   setMessage: (message: string) => void;
   isNetworkSwitching: boolean;
@@ -24,12 +23,9 @@ interface DonationFormProps {
   handleDonate: () => void;
   isUSDCSupported: boolean;
   tokenPrice: number;
+  useUSDC: boolean;
+  toggleTokenType: () => void;
 }
-
-const formatUSD = (amount: string): string => {
-  const numAmount = parseFloat(amount);
-  return isNaN(numAmount) ? "0.00" : numAmount.toFixed(2);
-};
 
 export const DonationForm: React.FC<DonationFormProps> = ({
   selectedChain,
@@ -41,7 +37,6 @@ export const DonationForm: React.FC<DonationFormProps> = ({
   donationAmountUSD,
   setDonationAmountUSD,
   donationAmountToken,
-  setDonationAmountToken,
   message,
   setMessage,
   isNetworkSwitching,
@@ -50,18 +45,13 @@ export const DonationForm: React.FC<DonationFormProps> = ({
   handleDonate,
   isUSDCSupported,
   tokenPrice,
+  useUSDC,
+  toggleTokenType,
 }) => {
-  const [selectedToken, setSelectedToken] = useState("native");
-  const [tokenSelectKey, setTokenSelectKey] = useState(0);
-
-  const currentBalance = selectedToken === "usdc" ? usdcBalance : nativeBalance;
-  const isInsufficientBalance = parseFloat(donationAmountToken) > parseFloat(currentBalance);
-  const isLoading = isNetworkSwitching || isContractLoading || (selectedToken === "usdc" && isUSDCContractLoading);
-
-  const chainOptions = chains.map(chain => ({
+  const chainOptions = useMemo(() => chains.map(chain => ({
     id: chain.id,
     name: chain.name,
-  }));
+  })), []);
 
   const getChainInfo = useCallback((chainId: number | null) => {
     return chains.find(chain => chain.id === chainId);
@@ -70,17 +60,24 @@ export const DonationForm: React.FC<DonationFormProps> = ({
   const handleChainChange = useCallback(
     (chainId: number | null) => {
       setSelectedChain(chainId);
-      setSelectedToken("native");
-      setTokenSelectKey(prevKey => prevKey + 1);
     },
     [setSelectedChain],
   );
 
   const handleTokenChange = useCallback(
     (tokenId: string) => {
-      setSelectedToken(tokenId);
+      if ((tokenId === "usdc" && !useUSDC) || (tokenId === "native" && useUSDC)) {
+        toggleTokenType();
+      }
     },
-    [],
+    [useUSDC, toggleTokenType],
+  );
+
+  const handleMessageChange = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setMessage(e.target.value);
+    },
+    [setMessage],
   );
 
   const tokenOptions = useMemo(() => {
@@ -106,97 +103,65 @@ export const DonationForm: React.FC<DonationFormProps> = ({
     ];
   }, [selectedChain, tokenSymbol, isUSDCSupported, nativeBalance, usdcBalance, getChainInfo]);
 
-  useEffect(() => {
-    if (selectedToken === "usdc") {
-      setDonationAmountToken(donationAmountUSD);
-    } else if (tokenPrice > 0) {
-      const tokenAmount = (parseFloat(donationAmountUSD) / tokenPrice).toFixed(18);
-      setDonationAmountToken(tokenAmount);
-    }
-  }, [selectedToken, donationAmountUSD, setDonationAmountToken, tokenPrice, selectedChain]);
+  const currentBalance = useUSDC ? usdcBalance : nativeBalance;
+  const isInsufficientBalance = parseFloat(donationAmountToken) > parseFloat(currentBalance);
+  const isLoading = isNetworkSwitching || isContractLoading || (useUSDC && isUSDCContractLoading);
+
+  const buttonText = useMemo(() => {
+    if (isNetworkSwitching) return "Switching Network...";
+    if (currentChainId !== selectedChain) return "Switch Network";
+    if (isInsufficientBalance) return "Insufficient Balance";
+    return `Donate Now with ${useUSDC ? "USDC" : (getChainInfo(selectedChain)?.nativeCurrency?.symbol || tokenSymbol)}`;
+  }, [isNetworkSwitching, currentChainId, selectedChain, isInsufficientBalance, useUSDC, getChainInfo, tokenSymbol]);
 
   return (
     <div className="donation-form w-full bg-white bg-opacity-50 rounded-xl p-4 sm:p-6 shadow-lg">
       <div className="space-y-4 sm:space-y-6">
-        <div className="relative z-30">
-          <ChainSelect
-            label="Select Chain"
-            options={chainOptions}
-            value={selectedChain}
-            onChange={handleChainChange}
-            isLoading={isNetworkSwitching}
-            disabled={false}
-            className="w-full"
-          />
-        </div>
+        <ChainSelect
+          label="Select Chain"
+          options={chainOptions}
+          value={selectedChain}
+          onChange={handleChainChange}
+          isLoading={isNetworkSwitching}
+          disabled={false}
+          className="w-full"
+        />
 
-        <div className="relative z-20">
-          <TokenSelect
-            key={tokenSelectKey}
-            label="Select Token"
-            options={tokenOptions}
-            value={selectedToken}
-            onChange={handleTokenChange}
-            isLoading={isUSDCContractLoading}
-            disabled={!selectedChain}
-            className="w-full"
-            selectedChain={selectedChain}
-          />
-        </div>
+        <TokenSelect
+          label="Select Token"
+          options={tokenOptions}
+          value={useUSDC ? "usdc" : "native"}
+          onChange={handleTokenChange}
+          isLoading={isUSDCContractLoading}
+          disabled={!selectedChain}
+          className="w-full"
+          selectedChain={selectedChain}
+        />
 
-        <div className="relative z-10">
-          <DonationAmountSelector 
-            donationAmountUSD={donationAmountUSD} 
-            setDonationAmountUSD={setDonationAmountUSD}
-            setDonationAmountToken={setDonationAmountToken}
-            selectedToken={selectedToken}
-            tokenPrice={tokenPrice}
-            tokenSymbol={tokenSymbol}
-          />
-        </div>
-      </div>
-
-      <div className="mt-4 sm:mt-6">
-        <textarea
-          placeholder="Your Message (optional)"
-          value={message}
-          onChange={e => setMessage(e.target.value)}
-          className="w-full px-3 py-2 sm:px-4 sm:py-3 rounded-lg border border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none shadow-inner"
-          rows={4}
+        <DonationAmountSelector 
+          donationAmountUSD={donationAmountUSD} 
+          setDonationAmountUSD={setDonationAmountUSD}
+          selectedToken={useUSDC ? "usdc" : "native"}
+          tokenPrice={tokenPrice}
+          tokenSymbol={tokenSymbol}
         />
       </div>
+
+      <textarea
+        placeholder="Your Message (optional)"
+        value={message}
+        onChange={handleMessageChange}
+        className="w-full mt-4 sm:mt-6 px-3 py-2 sm:px-4 sm:py-3 rounded-lg border border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none shadow-inner"
+        rows={4}
+      />
 
       <button
         onClick={handleDonate}
         disabled={isLoading || currentChainId !== selectedChain || isInsufficientBalance}
         className="w-full mt-4 sm:mt-6 py-3 sm:py-4 px-4 sm:px-6 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-bold text-lg rounded-lg shadow-md hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden"
       >
-        {isLoading && (
-          <span className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30">
-            <svg
-              className="animate-spin h-6 w-6 sm:h-8 sm:w-8 text-white"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              ></path>
-            </svg>
-          </span>
-        )}
-        <span className={isLoading ? "invisible" : ""}>
-          {isNetworkSwitching
-            ? "Switching Network..."
-            : currentChainId !== selectedChain
-            ? "Switch Network"
-            : isInsufficientBalance
-            ? "Insufficient Balance"
-            : `Donate Now with ${selectedToken === "usdc" ? "USDC" : (getChainInfo(selectedChain)?.nativeCurrency?.symbol || tokenSymbol)}`}
-        </span>
+        {isLoading && <LoadingSpinner />}
+        <span className={isLoading ? "invisible" : ""}>{buttonText}</span>
       </button>
     </div>
   );

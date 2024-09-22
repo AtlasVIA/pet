@@ -1,8 +1,7 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useMemo } from "react";
 import { formatEther, formatUnits, parseUnits } from "viem";
 import { useAccount, useBalance, useChainId } from "wagmi";
-import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
-import { useScaffoldContract } from "~~/hooks/scaffold-eth/useScaffoldContract";
+import { useDeployedContractInfo, useScaffoldContract } from "~~/hooks/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { chains } from "~~/utils/scaffold-eth/chains";
 import { getUsdcAddress } from "~~/utils/scaffold-eth/contractAddresses";
@@ -18,137 +17,82 @@ export const useDonationContract = (walletClient: any, selectedChain: number | n
 
   const { targetNetwork } = useTargetNetwork();
 
+  const effectiveChainId = useMemo(() => selectedChain || chainId, [selectedChain, chainId]);
+
   const { data: nativeBalance } = useBalance({
     address,
     watch: true,
-    chainId: selectedChain || chainId,
+    chainId: effectiveChainId,
   });
 
-  const usdcAddress = selectedChain ? getUsdcAddress(selectedChain) : undefined;
+  const usdcAddress = useMemo(() => getUsdcAddress(effectiveChainId), [effectiveChainId]);
 
   const { data: usdcBalance } = useBalance({
     address,
     token: usdcAddress,
     watch: true,
-    chainId: selectedChain || chainId,
+    chainId: effectiveChainId,
   });
 
-  useEffect(() => {
-    console.log("useDonationContract: Chain changed", {
-      selectedChain,
-      chainId,
-      nativeBalance: nativeBalance?.formatted,
-      usdcBalance: usdcBalance?.formatted,
-      usdcAddress,
-    });
-  }, [selectedChain, chainId, nativeBalance, usdcBalance, usdcAddress]);
+  const handleContractError = useCallback((error: unknown, errorMessage: string) => {
+    console.error(errorMessage, error);
+    throw new Error(`${errorMessage} Please try again.`);
+  }, []);
 
-  const fetchTotalDonations = useCallback(async () => {
-    if (isContractLoading) {
-      throw new Error("Contract is still loading. Please wait.");
-    }
-    if (!donationsContract) {
-      throw new Error("Donations contract not available for the current chain.");
+  const donateNative = useCallback(async (amount: string, message: string) => {
+    if (!donationsContract || !address) {
+      throw new Error("Donation contract or user address not available. Please check your connection.");
     }
 
     try {
-      const total = await donationsContract.read.totalDonations();
-      return formatEther(total);
+      return await donationsContract.write.donate([message], {
+        value: parseUnits(amount, 18),
+      });
     } catch (error) {
-      console.error("Error fetching total donations:", error);
-      throw new Error("Failed to fetch total donations. The contract might not be properly deployed on this chain.");
+      handleContractError(error, "Failed to process native token donation.");
     }
-  }, [donationsContract, isContractLoading]);
+  }, [donationsContract, address, handleContractError]);
 
-  const fetchRecentMessages = useCallback(async () => {
-    if (isContractLoading) {
-      throw new Error("Contract is still loading. Please wait.");
-    }
-    if (!donationsContract) {
-      throw new Error("Donations contract not available for the current chain.");
+  const donateUSDC = useCallback(async (amount: string, message: string) => {
+    if (!donationsContract || !address || !usdcAddress || !usdcContractData?.abi) {
+      throw new Error("Required contracts or addresses not available. Please check your connection.");
     }
 
     try {
-      const recent = await donationsContract.read.getMessages([5]);
-      return recent;
+      const approveTx = await walletClient.writeContract({
+        address: usdcAddress,
+        abi: usdcContractData.abi,
+        functionName: "approve",
+        args: [donationsContract.address, parseUnits(amount, 6)],
+      });
+      await approveTx.wait();
+
+      return await donationsContract.write.donateUSDC([parseUnits(amount, 6), message]);
     } catch (error) {
-      console.error("Error fetching recent messages:", error);
-      throw new Error("Failed to fetch recent messages. The contract might not be properly deployed on this chain.");
+      handleContractError(error, "Failed to process USDC donation.");
     }
-  }, [donationsContract, isContractLoading]);
+  }, [donationsContract, address, usdcAddress, usdcContractData, walletClient, handleContractError]);
 
-  const donateNative = useCallback(
-    async (amount: string, message: string) => {
-      if (isContractLoading) {
-        throw new Error("Contract is still loading. Please wait.");
-      }
-      if (!donationsContract || !address) {
-        throw new Error(
-          "Donations contract or user address not available. Please check your connection and try again.",
-        );
-      }
-
-      try {
-        const tx = await donationsContract.write.donate([message], {
-          value: parseUnits(amount, 18),
-        });
-        return tx;
-      } catch (error) {
-        console.error("Error donating native token:", error);
-        throw new Error("Failed to process native token donation. Please try again or contact support.");
-      }
-    },
-    [donationsContract, address, isContractLoading],
-  );
-
-  const donateUSDC = useCallback(
-    async (amount: string, message: string) => {
-      if (isContractLoading || isUSDCContractLoading) {
-        throw new Error("Contracts are still loading. Please wait.");
-      }
-      if (!donationsContract || !address || !usdcAddress) {
-        throw new Error(
-          "Donations contract, user address, or USDC contract not available. Please check your connection and try again.",
-        );
-      }
-
-      try {
-        // First, approve the USDC transfer
-        const approveTx = await walletClient.writeContract({
-          address: usdcAddress,
-          abi: usdcContractData?.abi,
-          functionName: "approve",
-          args: [donationsContract.address, parseUnits(amount, 6)],
-        });
-        await approveTx.wait();
-
-        // Then, call the donateUSDC function
-        const tx = await donationsContract.write.donateUSDC([parseUnits(amount, 6), message]);
-        return tx;
-      } catch (error) {
-        console.error("Error donating USDC:", error);
-        throw new Error(
-          "Failed to process USDC donation. Please ensure you have sufficient USDC balance and try again.",
-        );
-      }
-    },
-    [donationsContract, address, usdcAddress, usdcContractData, walletClient, isContractLoading, isUSDCContractLoading],
-  );
-
-  const getNativeSymbol = useCallback(() => {
-    const chainInfo = chains.find(chain => chain.id === (selectedChain || chainId));
+  const nativeSymbol = useMemo(() => {
+    const chainInfo = chains.find(chain => chain.id === effectiveChainId);
     return chainInfo?.nativeCurrency?.symbol || targetNetwork.nativeCurrency.symbol;
-  }, [selectedChain, chainId, targetNetwork.nativeCurrency.symbol]);
+  }, [effectiveChainId, targetNetwork.nativeCurrency.symbol]);
+
+  const formattedNativeBalance = useMemo(() => 
+    nativeBalance ? formatEther(nativeBalance.value) : "0"
+  , [nativeBalance]);
+
+  const formattedUsdcBalance = useMemo(() => 
+    usdcBalance ? formatUnits(usdcBalance.value, 6) : "0"
+  , [usdcBalance]);
 
   return {
     donationsContract,
-    fetchTotalDonations,
-    fetchRecentMessages,
     donateNative,
     donateUSDC,
-    nativeBalance: nativeBalance ? formatEther(nativeBalance.value) : "0",
-    usdcBalance: usdcBalance ? formatUnits(usdcBalance.value, 6) : "0",
-    nativeSymbol: getNativeSymbol(),
+    nativeBalance: formattedNativeBalance,
+    usdcBalance: formattedUsdcBalance,
+    nativeSymbol,
     isContractLoading,
     isUSDCContractLoading,
   };

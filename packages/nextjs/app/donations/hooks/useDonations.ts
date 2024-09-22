@@ -1,26 +1,22 @@
-import { useEffect, useState } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { useDonationContract } from "./useDonationContract";
 import { useNetworkSwitching } from "./useNetworkSwitching";
 import { useTokenPrice } from "./useTokenPrice";
-import { useAccount, useChainId, useWalletClient } from "wagmi";
+import { useChainId, useWalletClient } from "wagmi";
 import { notification } from "~~/utils/scaffold-eth";
 import { Chain, getUsdcAddress } from "~~/utils/scaffold-eth/contractAddresses";
 
 export const useDonations = (selectedChain: number | null) => {
-  const { address: connectedAddress } = useAccount();
   const { data: walletClient } = useWalletClient();
   const currentChainId = useChainId();
 
   const [donationAmountUSD, setDonationAmountUSD] = useState("10");
-  const [donationAmountToken, setDonationAmountToken] = useState("");
   const [message, setMessage] = useState("");
   const [useUSDC, setUseUSDC] = useState(false);
-  const [isUSDCSupported, setIsUSDCSupported] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const { tokenSymbol, tokenPrice } = useTokenPrice(selectedChain);
   const {
-    donationsContract,
     donateNative,
     donateUSDC,
     nativeBalance,
@@ -31,39 +27,39 @@ export const useDonations = (selectedChain: number | null) => {
   } = useDonationContract(walletClient, selectedChain);
   const { isNetworkSwitching, handleNetworkSwitch } = useNetworkSwitching();
 
-  useEffect(() => {
-    console.log("useDonations: selectedChain changed", { selectedChain, currentChainId });
-    if (selectedChain) {
-      const usdcAddress = getUsdcAddress(selectedChain as Chain);
-      setIsUSDCSupported(!!usdcAddress);
-      setUseUSDC(false); // Reset to native token when changing chains
-    }
-  }, [selectedChain, currentChainId]);
+  const isUSDCSupported = useMemo(() => 
+    selectedChain ? !!getUsdcAddress(selectedChain as Chain) : false
+  , [selectedChain]);
 
-  useEffect(() => {
-    console.log("useDonations: Balances updated", {
-      selectedChain,
-      currentChainId,
-      nativeBalance,
-      usdcBalance,
-      useUSDC,
-      tokenSymbol,
-      nativeSymbol,
-    });
-  }, [selectedChain, currentChainId, nativeBalance, usdcBalance, useUSDC, tokenSymbol, nativeSymbol]);
+  const donationAmountToken = useMemo(() => {
+    if (useUSDC) return donationAmountUSD;
+    return tokenPrice > 0 ? (parseFloat(donationAmountUSD) / tokenPrice).toFixed(18) : "0";
+  }, [donationAmountUSD, tokenPrice, useUSDC]);
 
-  useEffect(() => {
-    if (tokenPrice !== undefined && tokenPrice > 0 && donationAmountUSD) {
-      const tokenAmount = useUSDC
-        ? donationAmountUSD // For USDC, use the USD amount directly
-        : (parseFloat(donationAmountUSD) / tokenPrice).toFixed(18); // For native tokens, convert USD to token amount
-      setDonationAmountToken(tokenAmount);
+  const setDonationAmount = useCallback((amount: string) => {
+    setDonationAmountUSD(amount);
+  }, []);
+
+  const setDonationMessage = useCallback((msg: string) => {
+    setMessage(msg);
+  }, []);
+
+  const toggleTokenType = useCallback(() => {
+    if (isUSDCSupported) {
+      setUseUSDC(prev => !prev);
     } else {
-      setDonationAmountToken("");
+      notification.warning("USDC is not supported on this chain.");
     }
-  }, [donationAmountUSD, tokenPrice, useUSDC, selectedChain]);
+  }, [isUSDCSupported]);
 
-  const handleDonate = async () => {
+  const handleError = useCallback((error: unknown) => {
+    console.error("Donation failed", error);
+    const errorMessage = error instanceof Error ? error.message : "Donation failed. Please try again.";
+    setError(errorMessage);
+    notification.error(errorMessage);
+  }, []);
+
+  const handleDonate = useCallback(async () => {
     if (!donationAmountToken || isNaN(Number(donationAmountToken))) {
       notification.error("Please enter a valid donation amount.");
       return;
@@ -74,10 +70,10 @@ export const useDonations = (selectedChain: number | null) => {
       return;
     }
 
-    const switched = await handleNetworkSwitch(selectedChain);
-    if (!switched) return;
-
     try {
+      const switched = await handleNetworkSwitch(selectedChain);
+      if (!switched) return;
+
       setError(null);
       if (useUSDC) {
         if (isUSDCContractLoading) {
@@ -88,29 +84,17 @@ export const useDonations = (selectedChain: number | null) => {
         await donateNative(donationAmountToken, message);
       }
       notification.success("Donation successful!");
-      // We're not resetting donationAmountUSD and message here anymore
     } catch (error) {
-      console.error("Donation failed", error);
-      setError(error instanceof Error ? error.message : "Donation failed. Please try again.");
-      notification.error(error instanceof Error ? error.message : "Donation failed. Please try again.");
+      handleError(error);
     }
-  };
-
-  const toggleTokenType = () => {
-    if (isUSDCSupported) {
-      setUseUSDC(!useUSDC);
-    } else {
-      notification.warning("USDC is not supported on this chain.");
-    }
-  };
+  }, [donationAmountToken, selectedChain, handleNetworkSwitch, useUSDC, isUSDCContractLoading, donateUSDC, donateNative, message, handleError]);
 
   return {
     donationAmountUSD,
-    setDonationAmountUSD,
+    setDonationAmountUSD: setDonationAmount,
     donationAmountToken,
-    setDonationAmountToken,
     message,
-    setMessage,
+    setMessage: setDonationMessage,
     tokenSymbol: useUSDC ? "USDC" : nativeSymbol,
     tokenPrice,
     isNetworkSwitching,

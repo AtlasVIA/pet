@@ -28,6 +28,8 @@ const DonationsPage = () => {
     isContractLoading,
     isUSDCContractLoading,
     tokenPrice,
+    useUSDC,
+    toggleTokenType,
   } = useDonations(selectedChain);
 
   const scrollToDonationForm = () => {
@@ -157,6 +159,8 @@ const DonationsPage = () => {
                 handleDonate={handleDonate}
                 isUSDCSupported={isUSDCSupported}
                 tokenPrice={tokenPrice}
+                useUSDC={useUSDC}
+                toggleTokenType={toggleTokenType}
               />
             </div>
             <div className="flex flex-col justify-between lg:border-l lg:border-indigo-200 lg:pl-12">
