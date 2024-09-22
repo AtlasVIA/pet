@@ -44,11 +44,43 @@ export const useDonationContract = (selectedChain: number | null) => {
   const isCorrectNetwork = targetNetwork.id === effectiveChainId;
 
   const handleDonation = useCallback(
-    async (amount: string, message: string, isNative: boolean) => {
+    async (amountUSD: string, message: string, isNative: boolean, tokenPrice: number) => {
       setIsProcessing(true);
       setError(null);
 
+      console.log(`Donation attempt - Type: ${isNative ? "Native" : "USDC"}, Amount USD: ${amountUSD}, Message: ${message}, Token Price: ${tokenPrice}`);
+
       try {
+        // Input validation
+        if (typeof amountUSD !== 'string') {
+          throw new Error(`Invalid amount type: ${typeof amountUSD}`);
+        }
+
+        amountUSD = amountUSD.trim();
+        if (amountUSD === '') {
+          throw new Error("Amount is empty");
+        }
+
+        // Ensure the amount is in the correct format (remove any thousand separators and use . as decimal separator)
+        amountUSD = amountUSD.replace(/,/g, '');
+        if (!/^\d*\.?\d*$/.test(amountUSD)) {
+          throw new Error(`Invalid amount format: ${amountUSD}`);
+        }
+
+        const numericAmountUSD = Number(amountUSD);
+        if (isNaN(numericAmountUSD)) {
+          throw new Error(`Amount is not a valid number: ${amountUSD}`);
+        }
+
+        if (numericAmountUSD <= 0) {
+          throw new Error(`Amount must be greater than 0: ${amountUSD}`);
+        }
+
+        // Check for valid token price
+        if (isNative && (isNaN(tokenPrice) || tokenPrice <= 0)) {
+          throw new Error(`Invalid token price: ${tokenPrice}`);
+        }
+
         if (!isCorrectNetwork) {
           if (effectiveChainId) {
             await switchNetwork(effectiveChainId);
@@ -59,21 +91,46 @@ export const useDonationContract = (selectedChain: number | null) => {
 
         let donationHash;
         if (isNative) {
+          console.log("Calling native token donation function: donate");
+          
+          // Convert USD to native token amount
+          const nativeAmount = numericAmountUSD / tokenPrice;
+          if (isNaN(nativeAmount) || !isFinite(nativeAmount)) {
+            throw new Error(`Error converting USD to native token amount: ${nativeAmount}`);
+          }
+          
+          const parsedAmount = parseEther(nativeAmount.toFixed(18));
+          console.log("Parsed native amount:", parsedAmount.toString());
+          
+          // Verify parsed amount
+          const formattedParsedAmount = formatEther(parsedAmount);
+          if (Math.abs(Number(formattedParsedAmount) - nativeAmount) > 0.000001) {
+            console.warn(`Parsed amount (${formattedParsedAmount}) does not closely match calculated amount (${nativeAmount})`);
+          }
+
           donationHash = await writeDonationsContractAsync({
             functionName: "donate",
             args: [message],
-            value: parseEther("0.1"),
+            value: parsedAmount,
           });
         } else {
+          console.log("Calling USDC donation function: donateUSDC");
+          const usdcAmount = parseUnits(amountUSD, 6);
+          console.log("Parsed USDC amount:", usdcAmount.toString());
+
+          // Verify parsed amount
+          const formattedParsedAmount = formatUnits(usdcAmount, 6);
+          if (formattedParsedAmount !== amountUSD) {
+            console.warn(`Parsed amount (${formattedParsedAmount}) does not match input amount (${amountUSD})`);
+          }
+
           donationHash = await writeDonationsContractAsync({
             functionName: "donateUSDC",
-            args: [parseUnits(amount, 6), message],
+            args: [usdcAmount, message],
           });
         }
 
         console.log(`${isNative ? "Native" : "USDC"} donation transaction hash:`, donationHash);
-        // You might want to add a function to wait for the transaction confirmation here
-
         setIsProcessing(false);
         return donationHash;
       } catch (error) {
@@ -82,32 +139,22 @@ export const useDonationContract = (selectedChain: number | null) => {
         let errorDetails = "Please try again. If the problem persists, contact support.";
 
         if (error instanceof Error) {
-          if (error.message.includes("user rejected")) {
-            errorMessage = "Transaction rejected";
-            errorDetails = "You have canceled the transaction. Please try again if this was unintended.";
-          } else if (error.message.includes("insufficient funds")) {
-            errorMessage = "Insufficient funds";
-            errorDetails = `You don't have enough ${
-              isNative ? nativeSymbol : "USDC"
-            } to complete this donation. Please check your balance and try again with a smaller amount.`;
-          } else {
-            errorMessage = "Transaction failed";
-            errorDetails = `Error: ${error.message}. Please check your wallet settings. If this issue persists, please contact support.`;
-          }
+          errorMessage = "Donation failed";
+          errorDetails = `Error: ${error.message}. Please check your input and try again.`;
         }
         handleError(errorMessage, errorDetails);
       }
     },
-    [isCorrectNetwork, effectiveChainId, switchNetwork, writeDonationsContractAsync, handleError, nativeSymbol],
+    [isCorrectNetwork, effectiveChainId, switchNetwork, writeDonationsContractAsync, handleError],
   );
 
   return {
     donateNative: useCallback(
-      (amount: string, message: string) => handleDonation(amount, message, true),
+      (amountUSD: string, message: string, tokenPrice: number) => handleDonation(amountUSD, message, true, tokenPrice),
       [handleDonation],
     ),
     donateUSDC: useCallback(
-      (amount: string, message: string) => handleDonation(amount, message, false),
+      (amountUSD: string, message: string) => handleDonation(amountUSD, message, false, 1),
       [handleDonation],
     ),
     nativeBalance: formattedNativeBalance,

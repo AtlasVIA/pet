@@ -36,12 +36,11 @@ const DonationsPage = () => {
   const toggleTokenType = () => setUseUSDC(!useUSDC);
 
   const handleDonate = async () => {
-    const amount = useUSDC ? donationAmountUSD : (parseFloat(donationAmountUSD) / tokenPrice).toFixed(6);
     try {
       if (useUSDC) {
-        await donateUSDC(amount, message);
+        await donateUSDC(donationAmountUSD, message);
       } else {
-        await donateNative(amount, message);
+        await donateNative(donationAmountUSD, message, tokenPrice);
       }
       // Handle successful donation (e.g., show success message, reset form)
       setMessage("");
@@ -52,7 +51,11 @@ const DonationsPage = () => {
     }
   };
 
-  const donationAmountToken = useUSDC ? donationAmountUSD : (parseFloat(donationAmountUSD) / tokenPrice).toFixed(6);
+  const donationAmountToken = useUSDC 
+    ? donationAmountUSD 
+    : tokenPrice > 0 
+      ? (parseFloat(donationAmountUSD) / tokenPrice).toFixed(6) 
+      : "0";
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-gradient-to-br from-indigo-200 via-purple-100 to-pink-100 bg-opacity-90 relative">

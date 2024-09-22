@@ -17,6 +17,7 @@ export const DonationAmountSelector: React.FC<DonationAmountSelectorProps> = ({
 }) => {
   const [showOtherAmount, setShowOtherAmount] = useState(false);
   const [inputAmount, setInputAmount] = useState(donationAmountUSD);
+  const [conversionError, setConversionError] = useState<string | null>(null);
 
   const donationOptionsUSD = useMemo(() => ["10", "50", "100", "500", "1000"], []);
 
@@ -53,8 +54,18 @@ export const DonationAmountSelector: React.FC<DonationAmountSelectorProps> = ({
   }, [handleAmountChange]);
 
   const tokenAmount = useMemo(() => {
-    if (selectedToken === "usdc" || tokenPrice <= 0) return donationAmountUSD;
-    return (parseFloat(donationAmountUSD) / tokenPrice).toFixed(6);
+    setConversionError(null);
+    if (selectedToken === "usdc") return donationAmountUSD;
+    if (tokenPrice <= 0) {
+      setConversionError("Invalid token price. Please try again later.");
+      return "0";
+    }
+    const convertedAmount = parseFloat(donationAmountUSD) / tokenPrice;
+    if (isNaN(convertedAmount) || !isFinite(convertedAmount)) {
+      setConversionError("Error converting amount. Please try a different value.");
+      return "0";
+    }
+    return convertedAmount.toFixed(6);
   }, [donationAmountUSD, selectedToken, tokenPrice]);
 
   return (
@@ -105,7 +116,13 @@ export const DonationAmountSelector: React.FC<DonationAmountSelectorProps> = ({
       )}
       {selectedToken !== "usdc" && (
         <div className="mt-2 text-sm text-gray-600">
-          Estimated amount: {tokenAmount} {tokenSymbol}
+          {conversionError ? (
+            <span className="text-red-500">{conversionError}</span>
+          ) : (
+            <>
+              Estimated amount: {tokenAmount} {tokenSymbol}
+            </>
+          )}
         </div>
       )}
     </div>
