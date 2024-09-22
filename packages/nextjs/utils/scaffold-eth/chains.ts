@@ -20,6 +20,24 @@ export const chains = [
     nativeCurrency: { symbol: "ETH" },
   },
   {
+    name: "Celo Testnet",
+    id: 44787,
+    gasFee: parseUnits("0", 6),
+    nativeCurrency: { symbol: "CELO" },
+  },
+  {
+    name: "Mantle Testnet",
+    id: 5003,
+    gasFee: parseUnits("0", 6),
+    nativeCurrency: { symbol: "MNT" },
+  },
+  {
+    name: "Meter Testnet",
+    id: 83,
+    gasFee: parseUnits("0", 6),
+    nativeCurrency: { symbol: "MTR" },
+  },
+  {
     name: "Ethereum Testnet",
     id: 11155111,
     gasFee: parseUnits("10", 6),
@@ -36,12 +54,6 @@ export const chains = [
     id: 80002,
     gasFee: parseUnits("0", 6),
     nativeCurrency: { symbol: "MATIC" },
-  },
-  {
-    name: "Meter Testnet",
-    id: 83,
-    gasFee: parseUnits("0", 6),
-    nativeCurrency: { symbol: "MTR" },
   },
   {
     name: "XLayer Testnet",
