@@ -33,6 +33,7 @@ interface DonationFormProps {
   storedDonationParams: { amountUSD: string; message: string; isNative: boolean; tokenPrice: number } | null;
   executeDonation: (params: { amountUSD: string; message: string; isNative: boolean; tokenPrice: number }) => Promise<boolean>;
   connectedChainId: number | null;
+  isWalletConnected: boolean;
 }
 
 export const DonationForm: React.FC<DonationFormProps> = ({
@@ -62,6 +63,7 @@ export const DonationForm: React.FC<DonationFormProps> = ({
   storedDonationParams,
   executeDonation,
   connectedChainId,
+  isWalletConnected,
 }) => {
   const [amountError, setAmountError] = useState<string | null>(null);
   const [isReexecuting, setIsReexecuting] = useState(false);
@@ -235,68 +237,69 @@ export const DonationForm: React.FC<DonationFormProps> = ({
   ]);
 
   return (
-    <>
-      <div className="donation-form w-full bg-white bg-opacity-50 rounded-xl p-4 sm:p-6 shadow-lg">
-        <div className="space-y-4 sm:space-y-6">
-          <ChainSelect
-            label="Select Chain"
-            options={chainOptions}
-            value={selectedChain}
-            onChange={handleChainChange}
-            isLoading={isContractLoading}
-            disabled={isProcessing}
-            className="w-full"
-          />
-
-          <TokenSelect
-            label="Select Token"
-            options={tokenOptions}
-            value={useUSDC ? "usdc" : "native"}
-            onChange={handleTokenChange}
-            isLoading={isUSDCContractLoading}
-            disabled={!selectedChain || isProcessing}
-            className="w-full"
-            selectedChain={selectedChain}
-          />
-
-          <DonationAmountSelector
-            donationAmountUSD={donationAmountUSD}
-            setDonationAmountUSD={setDonationAmountUSD}
-            selectedToken={useUSDC ? "usdc" : "native"}
-            tokenPrice={tokenPrice}
-            tokenSymbol={nativeSymbol}
-            setAmountError={setAmountError}
-          />
-        </div>
-
-        <textarea
-          placeholder="Your Message (optional)"
-          value={message}
-          onChange={handleMessageChange}
-          className="w-full mt-4 sm:mt-6 px-3 py-2 sm:px-4 sm:py-3 rounded-lg border border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none shadow-inner"
-          rows={4}
-          disabled={isProcessing}
+    <div className={`donation-form w-full bg-white bg-opacity-50 rounded-xl p-4 sm:p-6 shadow-lg ${!isWalletConnected ? 'opacity-50 pointer-events-none' : ''}`}>
+      <div className="space-y-4 sm:space-y-6">
+        <ChainSelect
+          label="Select Chain"
+          options={chainOptions}
+          value={selectedChain}
+          onChange={handleChainChange}
+          isLoading={!isWalletConnected || isContractLoading}
+          disabled={isProcessing || !isWalletConnected}
+          className="w-full"
         />
 
-        {donationError && (
-          <div className="mt-4 text-red-500 text-sm">{donationError}</div>
-        )}
+        <TokenSelect
+          label="Select Token"
+          options={tokenOptions}
+          value={useUSDC ? "usdc" : "native"}
+          onChange={handleTokenChange}
+          isLoading={!isWalletConnected || isUSDCContractLoading}
+          disabled={!selectedChain || isProcessing || !isWalletConnected}
+          className="w-full"
+          selectedChain={selectedChain}
+        />
 
-        <button
-          onClick={handleDonate}
-          disabled={
-            isLoading ||
-            isInsufficientBalance ||
-            !!amountError ||
-            (!chainSwitched && !isValidAmount) ||
-            isReexecuting
-          }
-          className="w-full mt-4 sm:mt-6 py-3 sm:py-4 px-4 sm:px-6 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-bold text-lg rounded-lg shadow-md hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden"
-        >
-          {isLoading && <LoadingSpinner />}
-          <span className={isLoading ? "invisible" : ""}>{buttonText}</span>
-        </button>
+        <DonationAmountSelector
+          donationAmountUSD={donationAmountUSD}
+          setDonationAmountUSD={setDonationAmountUSD}
+          selectedToken={useUSDC ? "usdc" : "native"}
+          tokenPrice={tokenPrice}
+          tokenSymbol={nativeSymbol}
+          setAmountError={setAmountError}
+          disabled={!isWalletConnected}
+        />
       </div>
+
+      <textarea
+        placeholder="Your Message (optional)"
+        value={message}
+        onChange={handleMessageChange}
+        className="w-full mt-4 sm:mt-6 px-3 py-2 sm:px-4 sm:py-3 rounded-lg border border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none shadow-inner"
+        rows={4}
+        disabled={isProcessing || !isWalletConnected}
+      />
+
+      {donationError && (
+        <div className="mt-4 text-red-500 text-sm">{donationError}</div>
+      )}
+
+      <button
+        onClick={handleDonate}
+        disabled={
+          isLoading ||
+          isInsufficientBalance ||
+          !!amountError ||
+          (!chainSwitched && !isValidAmount) ||
+          isReexecuting ||
+          !isWalletConnected
+        }
+        className="w-full mt-4 sm:mt-6 py-3 sm:py-4 px-4 sm:px-6 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-bold text-lg rounded-lg shadow-md hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden"
+      >
+        {isLoading && <LoadingSpinner />}
+        <span className={isLoading ? "invisible" : ""}>{buttonText}</span>
+      </button>
+
       <DonationSuccessPanel
         isVisible={showSuccessPanel}
         onClose={handleCloseSuccessPanel}
@@ -305,6 +308,6 @@ export const DonationForm: React.FC<DonationFormProps> = ({
         chainName={chainName}
         isLoading={isDonationLoading}
       />
-    </>
+    </div>
   );
 };

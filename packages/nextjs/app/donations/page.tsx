@@ -10,10 +10,12 @@ import ScrollToTopButton from "./components/ScrollToTopButton";
 import { useChainInfo } from "./hooks/useChainInfo";
 import { useDonationContract } from "./hooks/useDonationContract";
 import useScrolling from "./hooks/useScrolling";
-import { useChainId } from "wagmi";
+import { useAccount, useChainId } from "wagmi";
+import { RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 
 const DonationsPage = () => {
   const currentChainId = useChainId();
+  const { address, isConnected } = useAccount();
   const [selectedChain, setSelectedChain] = useState<number | null>(currentChainId);
   const [donationAmountUSD, setDonationAmountUSD] = useState("10");
   const [message, setMessage] = useState("");
@@ -161,7 +163,7 @@ const DonationsPage = () => {
           className="bg-white bg-opacity-90 rounded-3xl shadow-lg p-6 sm:p-12 transition-all duration-500 ease-in-out hover:shadow-2xl hover:scale-[1.02] hover:-translate-y-2"
         >
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 sm:gap-12">
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-2 relative">
               <h2 className="text-3xl sm:text-4xl font-bold text-indigo-800 mb-8">Lend a Paw! 🐾</h2>
               <DonationForm
                 selectedChain={selectedChain}
@@ -190,7 +192,16 @@ const DonationsPage = () => {
                 storedDonationParams={storedDonationParams}
                 executeDonation={wrappedExecuteDonation}
                 connectedChainId={currentChainId}
+                isWalletConnected={isConnected}
               />
+              {!isConnected && (
+                <div className="absolute inset-0 bg-white bg-opacity-90 flex items-center justify-center rounded-3xl">
+                  <div className="text-center">
+                    <p className="text-lg text-gray-600 mb-4">Connect your wallet to make a donation</p>
+                    <RainbowKitCustomConnectButton />
+                  </div>
+                </div>
+              )}
             </div>
             <div className="flex flex-col justify-between lg:border-l lg:border-indigo-200 lg:pl-12">
               <div>
