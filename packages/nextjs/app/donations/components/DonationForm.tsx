@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { chains } from "../../../utils/scaffold-eth/chains";
 import ChainSelect from "./ChainSelect";
 import { DonationAmountSelector } from "./DonationAmountSelector";
@@ -50,6 +50,10 @@ export const DonationForm: React.FC<DonationFormProps> = ({
   error,
   isCorrectNetwork,
 }) => {
+  // State to handle amount-specific errors
+  const [amountError, setAmountError] = useState<string | null>(null);
+
+  // Memoized chain options for the ChainSelect component
   const chainOptions = useMemo(
     () =>
       chains.map(chain => ({
@@ -59,10 +63,12 @@ export const DonationForm: React.FC<DonationFormProps> = ({
     [],
   );
 
+  // Helper function to get chain info
   const getChainInfo = useCallback((chainId: number | null) => {
     return chains.find(chain => chain.id === chainId);
   }, []);
 
+  // Handlers for form interactions
   const handleChainChange = useCallback(
     (chainId: number | null) => {
       setSelectedChain(chainId);
@@ -86,6 +92,7 @@ export const DonationForm: React.FC<DonationFormProps> = ({
     [setMessage],
   );
 
+  // Memoized token options for the TokenSelect component
   const tokenOptions = useMemo(() => {
     if (!selectedChain) return [];
     const chainInfo = getChainInfo(selectedChain);
@@ -109,16 +116,40 @@ export const DonationForm: React.FC<DonationFormProps> = ({
     ];
   }, [selectedChain, nativeSymbol, isUSDCSupported, nativeBalance, usdcBalance, getChainInfo]);
 
+  // Determine the current balance based on the selected token
   const currentBalance = useUSDC ? usdcBalance : nativeBalance;
+  
+  // Check if the donation amount exceeds the current balance
   const isInsufficientBalance = parseFloat(donationAmountToken) > parseFloat(currentBalance);
+  
+  // Check if any loading state is active
   const isLoading = isProcessing || isContractLoading || (useUSDC && isUSDCContractLoading);
+  
+  // Validate the donation amount
+  const isValidAmount = parseFloat(donationAmountUSD) > 0;
 
+  // Determine the text to display on the donation button
   const buttonText = useMemo(() => {
     if (isProcessing) return "Processing...";
     if (!isCorrectNetwork) return "Switch Network";
     if (isInsufficientBalance) return "Insufficient Balance";
+    if (!isValidAmount) return "Enter Valid Amount";
     return `Donate Now with ${useUSDC ? "USDC" : getChainInfo(selectedChain)?.nativeCurrency?.symbol || nativeSymbol}`;
-  }, [isProcessing, isCorrectNetwork, isInsufficientBalance, useUSDC, getChainInfo, selectedChain, nativeSymbol]);
+  }, [isProcessing, isCorrectNetwork, isInsufficientBalance, isValidAmount, useUSDC, getChainInfo, selectedChain, nativeSymbol]);
+
+  // Add logging to check button state
+  useEffect(() => {
+    console.log("Button state:", {
+      isLoading,
+      isCorrectNetwork,
+      isInsufficientBalance,
+      amountError,
+      isValidAmount,
+      donationAmountUSD,
+      currentBalance,
+      tokenPrice,
+    });
+  }, [isLoading, isCorrectNetwork, isInsufficientBalance, amountError, isValidAmount, donationAmountUSD, currentBalance, tokenPrice]);
 
   return (
     <div className="donation-form w-full bg-white bg-opacity-50 rounded-xl p-4 sm:p-6 shadow-lg">
@@ -150,6 +181,7 @@ export const DonationForm: React.FC<DonationFormProps> = ({
           selectedToken={useUSDC ? "usdc" : "native"}
           tokenPrice={tokenPrice}
           tokenSymbol={nativeSymbol}
+          setAmountError={setAmountError}
         />
       </div>
 
@@ -162,6 +194,7 @@ export const DonationForm: React.FC<DonationFormProps> = ({
         disabled={isProcessing}
       />
 
+      {/* Display any errors from the donation process */}
       {error && (
         <div className="mt-4 text-red-600 bg-red-100 border border-red-400 rounded-md p-3">
           <p className="font-bold">{error.message}</p>
@@ -169,15 +202,24 @@ export const DonationForm: React.FC<DonationFormProps> = ({
         </div>
       )}
 
+      {/* Display any errors related to the donation amount */}
+      {amountError && (
+        <div className="mt-4 text-red-600 bg-red-100 border border-red-400 rounded-md p-3">
+          <p className="font-bold">{amountError}</p>
+        </div>
+      )}
+
+      {/* Display a warning if the user is not on the correct network */}
       {!isCorrectNetwork && (
         <div className="mt-4 text-yellow-600 bg-yellow-100 border border-yellow-400 rounded-md p-3">
           Please switch to the correct network to make a donation.
         </div>
       )}
 
+      {/* Donation button */}
       <button
         onClick={handleDonate}
-        disabled={isLoading || !isCorrectNetwork || isInsufficientBalance}
+        disabled={isLoading || !isCorrectNetwork || isInsufficientBalance || !!amountError || !isValidAmount}
         className="w-full mt-4 sm:mt-6 py-3 sm:py-4 px-4 sm:px-6 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-bold text-lg rounded-lg shadow-md hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden"
       >
         {isLoading && <LoadingSpinner />}

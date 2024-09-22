@@ -40,6 +40,9 @@ const DonationsPage = () => {
       if (useUSDC) {
         await donateUSDC(donationAmountUSD, message);
       } else {
+        if (tokenPrice === 0) {
+          throw new Error("Token price is not available. Please try again later.");
+        }
         await donateNative(donationAmountUSD, message, tokenPrice);
       }
       // Handle successful donation (e.g., show success message, reset form)
@@ -51,11 +54,11 @@ const DonationsPage = () => {
     }
   };
 
-  const donationAmountToken = useUSDC 
-    ? donationAmountUSD 
-    : tokenPrice > 0 
-      ? (parseFloat(donationAmountUSD) / tokenPrice).toFixed(6) 
-      : "0";
+  const donationAmountToken = useUSDC
+    ? donationAmountUSD
+    : tokenPrice > 0
+    ? (parseFloat(donationAmountUSD) / tokenPrice).toFixed(6)
+    : "0";
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-gradient-to-br from-indigo-200 via-purple-100 to-pink-100 bg-opacity-90 relative">

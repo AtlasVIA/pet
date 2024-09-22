@@ -6,7 +6,10 @@ interface DonationAmountSelectorProps {
   selectedToken: string;
   tokenPrice: number;
   tokenSymbol: string;
+  setAmountError: (error: string | null) => void;
 }
+
+const MIN_DONATION_USD = 0.01;
 
 export const DonationAmountSelector: React.FC<DonationAmountSelectorProps> = ({
   donationAmountUSD,
@@ -14,6 +17,7 @@ export const DonationAmountSelector: React.FC<DonationAmountSelectorProps> = ({
   selectedToken,
   tokenPrice,
   tokenSymbol,
+  setAmountError,
 }) => {
   const [showOtherAmount, setShowOtherAmount] = useState(false);
   const [inputAmount, setInputAmount] = useState(donationAmountUSD);
@@ -25,19 +29,38 @@ export const DonationAmountSelector: React.FC<DonationAmountSelectorProps> = ({
     setInputAmount(donationAmountUSD);
   }, [donationAmountUSD]);
 
+  useEffect(() => {
+    console.log("DonationAmountSelector props:", { selectedToken, tokenPrice, tokenSymbol });
+  }, [selectedToken, tokenPrice, tokenSymbol]);
+
   const handleAmountChange = useCallback(
     (amount: string) => {
-      const numAmount = parseFloat(amount);
-      if (isNaN(numAmount) || numAmount < 0) {
-        setInputAmount("");
+      console.log("handleAmountChange called with:", amount);
+      setInputAmount(amount);
+      
+      if (amount === "") {
+        setAmountError("Please enter a donation amount");
         setDonationAmountUSD("0");
         return;
       }
 
-      setInputAmount(amount);
+      const numAmount = parseFloat(amount);
+
+      if (isNaN(numAmount) || numAmount < 0) {
+        setAmountError("Please enter a valid positive number");
+        setDonationAmountUSD("0");
+        return;
+      }
+
+      if (numAmount < MIN_DONATION_USD) {
+        setAmountError(`Minimum donation amount is $${MIN_DONATION_USD.toFixed(2)}`);
+      } else {
+        setAmountError(null);
+      }
+
       setDonationAmountUSD(amount);
     },
-    [setDonationAmountUSD],
+    [setDonationAmountUSD, setAmountError],
   );
 
   const handleOptionClick = useCallback(
@@ -54,6 +77,7 @@ export const DonationAmountSelector: React.FC<DonationAmountSelectorProps> = ({
   }, [handleAmountChange]);
 
   const tokenAmount = useMemo(() => {
+    console.log("Calculating tokenAmount:", { donationAmountUSD, selectedToken, tokenPrice });
     setConversionError(null);
     if (selectedToken === "usdc") return donationAmountUSD;
     if (tokenPrice <= 0) {
@@ -65,7 +89,9 @@ export const DonationAmountSelector: React.FC<DonationAmountSelectorProps> = ({
       setConversionError("Error converting amount. Please try a different value.");
       return "0";
     }
-    return convertedAmount.toFixed(6);
+    const result = convertedAmount.toFixed(6);
+    console.log("Calculated tokenAmount:", result);
+    return result;
   }, [donationAmountUSD, selectedToken, tokenPrice]);
 
   return (

@@ -68,6 +68,7 @@ export const useDonationContract = (selectedChain: number | null) => {
         }
 
         const numericAmountUSD = Number(amountUSD);
+        console.log(`Numeric Amount USD: ${numericAmountUSD}`);
         if (isNaN(numericAmountUSD)) {
           throw new Error(`Amount is not a valid number: ${amountUSD}`);
         }
@@ -77,6 +78,7 @@ export const useDonationContract = (selectedChain: number | null) => {
         }
 
         // Check for valid token price
+        console.log(`Token Price: ${tokenPrice}`);
         if (isNative && (isNaN(tokenPrice) || tokenPrice <= 0)) {
           throw new Error(`Invalid token price: ${tokenPrice}`);
         }
@@ -95,15 +97,24 @@ export const useDonationContract = (selectedChain: number | null) => {
           
           // Convert USD to native token amount
           const nativeAmount = numericAmountUSD / tokenPrice;
+          console.log(`Calculated native amount: ${nativeAmount}`);
           if (isNaN(nativeAmount) || !isFinite(nativeAmount)) {
             throw new Error(`Error converting USD to native token amount: ${nativeAmount}`);
           }
           
-          const parsedAmount = parseEther(nativeAmount.toFixed(18));
+          // Handle very small amounts
+          let parsedAmount;
+          if (nativeAmount < 1e-18) {
+            parsedAmount = BigInt(1); // Minimum amount (1 wei)
+            console.log("Amount too small, setting to 1 wei");
+          } else {
+            parsedAmount = parseEther(nativeAmount.toFixed(18));
+          }
           console.log("Parsed native amount:", parsedAmount.toString());
           
           // Verify parsed amount
           const formattedParsedAmount = formatEther(parsedAmount);
+          console.log(`Formatted parsed amount: ${formattedParsedAmount}`);
           if (Math.abs(Number(formattedParsedAmount) - nativeAmount) > 0.000001) {
             console.warn(`Parsed amount (${formattedParsedAmount}) does not closely match calculated amount (${nativeAmount})`);
           }
