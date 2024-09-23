@@ -4,6 +4,11 @@ pragma solidity =0.8.17;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
+interface IProtoCCTPGateway {
+    function usdc() external view returns (IERC20);
+    function send(uint _destChainId, address _recipient, uint256 _amount) external;
+}
+
 contract Donations {
     struct Message {
         address sender;
@@ -16,8 +21,10 @@ contract Donations {
     Message[] public messages;
     uint256 public totalDonations;
     address public treasuryAddress;
+    uint public rootChainId;
     address public owner;
     IERC20 public usdcToken;
+    IProtoCCTPGateway public protoCCTPGateway;
 
     event DonationReceived(address indexed sender, uint256 amount, string message, bool isUSDC);
     event TreasuryAddressUpdated(address indexed oldAddress, address indexed newAddress);
@@ -28,9 +35,11 @@ contract Donations {
         _;
     }
 
-    constructor(address _treasuryAddress, address _usdcAddress) {
+    constructor(address _treasuryAddress, uint _rootChainId, address _usdcAddress, address _protoCCTPGateway) {
         treasuryAddress = _treasuryAddress;
         owner = msg.sender;
+        rootChainId = _rootChainId;
+        protoCCTPGateway = IProtoCCTPGateway(_protoCCTPGateway);
         usdcToken = IERC20(_usdcAddress);
     }
 
@@ -71,7 +80,13 @@ contract Donations {
         require(treasuryAddress != address(0), "Treasury address not set");
         require(address(usdcToken) != address(0), "USDC token address not set");
 
-        require(usdcToken.transferFrom(msg.sender, treasuryAddress, _amount), "USDC transfer failed");
+        if(rootChainId == block.chainid) {
+            require(usdcToken.transferFrom(msg.sender, treasuryAddress, _amount), "USDC transfer failed");
+        } else {
+            require(usdcToken.transferFrom(msg.sender, address(this), _amount), "USDC transfer failed");
+            usdcToken.approve(address(protoCCTPGateway), _amount);
+            protoCCTPGateway.send(rootChainId, treasuryAddress, _amount);
+        }
 
         totalDonations += _amount;
 
