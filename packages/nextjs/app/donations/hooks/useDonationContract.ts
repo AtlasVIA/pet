@@ -59,78 +59,92 @@ export const useDonationContract = (selectedChain: number | null) => {
 
   const isCorrectNetwork = currentChainId === effectiveChainId;
 
-  const executeDonation = useCallback(async (params: StoredDonationParams): Promise<boolean> => {
-    const { amountUSD, message, isNative, tokenPrice } = params;
-    setIsProcessing(true);
-    setError(null);
+  const executeDonation = useCallback(
+    async (params: StoredDonationParams): Promise<boolean> => {
+      const { amountUSD, message, isNative, tokenPrice } = params;
+      setIsProcessing(true);
+      setError(null);
 
-    try {
-      if (!address) {
-        throw new Error("Cannot access account. Please ensure your wallet is connected.");
-      }
-
-      if (currentChainId !== effectiveChainId) {
-        throw new Error(`Chain mismatch. Expected ${effectiveChainId}, got ${currentChainId}`);
-      }
-
-      let donationHash;
-      if (isNative) {
-        const nativeAmount = Number(amountUSD) / tokenPrice;
-        let parsedAmount;
-        if (nativeAmount < 1e-18) {
-          parsedAmount = BigInt(1); // Minimum amount (1 wei)
-        } else {
-          parsedAmount = parseEther(nativeAmount.toFixed(18));
+      try {
+        if (!address) {
+          throw new Error("Cannot access account. Please ensure your wallet is connected.");
         }
 
-        console.log(`Donating native token: ${parsedAmount.toString()} wei`);
-        donationHash = await writeDonationsContractAsync({
-          functionName: "donate",
-          args: [message],
-          value: parsedAmount,
-        });
-      } else {
-        if (!usdcContractData?.address) {
-          throw new Error("USDC contract address is not set");
+        if (currentChainId !== effectiveChainId) {
+          throw new Error(`Chain mismatch. Expected ${effectiveChainId}, got ${currentChainId}`);
         }
 
-        const usdcAmount = parseUnits(amountUSD, 6);
-        console.log(`USDC amount to donate: ${usdcAmount.toString()}`);
+        let donationHash;
+        if (isNative) {
+          const nativeAmount = Number(amountUSD) / tokenPrice;
+          let parsedAmount;
+          if (nativeAmount < 1e-18) {
+            parsedAmount = BigInt(1); // Minimum amount (1 wei)
+          } else {
+            parsedAmount = parseEther(nativeAmount.toFixed(18));
+          }
 
-        if (!allowance || allowance < usdcAmount) {
-          console.log("Insufficient allowance, approving USDC spending");
-          const approvalTx = await approveUSDC({
-            functionName: "approve",
-            args: [donationsContractData?.address, usdcAmount],
+          console.log(`Donating native token: ${parsedAmount.toString()} wei`);
+          donationHash = await writeDonationsContractAsync({
+            functionName: "donate",
+            args: [message],
+            value: parsedAmount,
           });
-          console.log("USDC allowance approved, transaction hash:", approvalTx);
+        } else {
+          if (!usdcContractData?.address) {
+            throw new Error("USDC contract address is not set");
+          }
+
+          const usdcAmount = parseUnits(amountUSD, 6);
+          console.log(`USDC amount to donate: ${usdcAmount.toString()}`);
+
+          if (!allowance || allowance < usdcAmount) {
+            console.log("Insufficient allowance, approving USDC spending");
+            const approvalTx = await approveUSDC({
+              functionName: "approve",
+              args: [donationsContractData?.address, usdcAmount],
+            });
+            console.log("USDC allowance approved, transaction hash:", approvalTx);
+          }
+
+          console.log("Initiating USDC donation");
+          donationHash = await writeUSDCDonationsContractAsync({
+            functionName: "donateUSDC",
+            args: [usdcAmount, message],
+          });
+          console.log("USDC donation transaction hash:", donationHash);
         }
 
-        console.log("Initiating USDC donation");
-        donationHash = await writeUSDCDonationsContractAsync({
-          functionName: "donateUSDC",
-          args: [usdcAmount, message],
-        });
-        console.log("USDC donation transaction hash:", donationHash);
-      }
+        console.log(`${isNative ? "Native" : "USDC"} donation transaction hash:`, donationHash);
+        setIsProcessing(false);
+        setStoredDonationParams(null);
+        return true;
+      } catch (error) {
+        console.error("Donation failed:", error);
+        let errorMessage = "An unexpected error occurred";
+        let errorDetails = "Please try again. If the problem persists, contact support.";
 
-      console.log(`${isNative ? "Native" : "USDC"} donation transaction hash:`, donationHash);
-      setIsProcessing(false);
-      setStoredDonationParams(null);
-      return true;
-    } catch (error) {
-      console.error("Donation failed:", error);
-      let errorMessage = "An unexpected error occurred";
-      let errorDetails = "Please try again. If the problem persists, contact support.";
-
-      if (error instanceof Error) {
-        errorMessage = "Donation failed";
-        errorDetails = `Error: ${error.message}. Please check your input and try again.`;
+        if (error instanceof Error) {
+          errorMessage = "Donation failed";
+          errorDetails = `Error: ${error.message}. Please check your input and try again.`;
+        }
+        handleError(errorMessage, errorDetails);
+        return false;
       }
-      handleError(errorMessage, errorDetails);
-      return false;
-    }
-  }, [address, currentChainId, effectiveChainId, writeDonationsContractAsync, writeUSDCDonationsContractAsync, approveUSDC, usdcContractData?.address, allowance, donationsContractData?.address, handleError]);
+    },
+    [
+      address,
+      currentChainId,
+      effectiveChainId,
+      writeDonationsContractAsync,
+      writeUSDCDonationsContractAsync,
+      approveUSDC,
+      usdcContractData?.address,
+      allowance,
+      donationsContractData?.address,
+      handleError,
+    ],
+  );
 
   const handleDonation = useCallback(
     async (amountUSD: string, message: string, isNative: boolean, tokenPrice: number): Promise<boolean> => {
