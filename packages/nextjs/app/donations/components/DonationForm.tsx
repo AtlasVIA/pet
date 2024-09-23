@@ -70,6 +70,7 @@ export const DonationForm: React.FC<DonationFormProps> = ({
   const [showSuccessPanel, setShowSuccessPanel] = useState(false);
   const [isDonationLoading, setIsDonationLoading] = useState(false);
   const [donationError, setDonationError] = useState<string | null>(null);
+  const [successfulDonationAmount, setSuccessfulDonationAmount] = useState<string | null>(null);
 
   const chainOptions = useMemo(
     () =>
@@ -181,6 +182,7 @@ export const DonationForm: React.FC<DonationFormProps> = ({
         success = await donateNative(donationAmountUSD, message, tokenPrice);
       }
       if (success) {
+        setSuccessfulDonationAmount(donationAmountUSD);
         setShowSuccessPanel(true);
       } else {
         setDonationError("Donation failed. Please try again.");
@@ -196,6 +198,7 @@ export const DonationForm: React.FC<DonationFormProps> = ({
   const handleCloseSuccessPanel = useCallback(() => {
     setShowSuccessPanel(false);
     setMessage("");
+    setSuccessfulDonationAmount(null);
   }, [setMessage]);
 
   const chainName = useMemo(() => {
@@ -302,7 +305,7 @@ export const DonationForm: React.FC<DonationFormProps> = ({
       <DonationSuccessPanel
         isVisible={showSuccessPanel}
         onClose={handleCloseSuccessPanel}
-        donationAmount={donationAmountUSD}
+        donationAmount={successfulDonationAmount || ""}
         tokenType={useUSDC ? "USDC" : (getChainInfo(selectedChain)?.nativeCurrency?.symbol || nativeSymbol)}
         chainName={chainName}
         isLoading={isDonationLoading}

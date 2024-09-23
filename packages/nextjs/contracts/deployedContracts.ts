@@ -1765,21 +1765,35 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {
-        approve: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        balanceOf: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        getApproved: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        isApprovedForAll: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        approve:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        balanceOf:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        getApproved:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        isApprovedForAll:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
         name: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        ownerOf: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        safeTransferFrom: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        setApprovalForAll: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        supportsInterface: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        symbol: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenURI: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        transferFrom: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenByIndex: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenOfOwnerByIndex: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        totalSupply: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        ownerOf:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        safeTransferFrom:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        setApprovalForAll:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        supportsInterface:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        symbol:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenURI:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        transferFrom:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenByIndex:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenOfOwnerByIndex:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        totalSupply:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
         owner: "@openzeppelin/contracts/access/Ownable.sol",
         renounceOwnership: "@openzeppelin/contracts/access/Ownable.sol",
         transferOwnership: "@openzeppelin/contracts/access/Ownable.sol",
@@ -1790,8 +1804,10 @@ const deployedContracts = {
         MESSAGE_OWNER: "@vialabs-io/contracts/message/MessageClient.sol",
         MESSAGEv3: "@vialabs-io/contracts/message/MessageClient.sol",
         configureClient: "@vialabs-io/contracts/message/MessageClient.sol",
-        configureClientExtended: "@vialabs-io/contracts/message/MessageClient.sol",
-        configureFeatureGateway: "@vialabs-io/contracts/message/MessageClient.sol",
+        configureClientExtended:
+          "@vialabs-io/contracts/message/MessageClient.sol",
+        configureFeatureGateway:
+          "@vialabs-io/contracts/message/MessageClient.sol",
         isAuthorized: "@vialabs-io/contracts/message/MessageClient.sol",
         isSelf: "@vialabs-io/contracts/message/MessageClient.sol",
         messageProcess: "@vialabs-io/contracts/message/MessageClient.sol",
@@ -1799,11 +1815,12 @@ const deployedContracts = {
         setExsig: "@vialabs-io/contracts/message/MessageClient.sol",
         setMaxfee: "@vialabs-io/contracts/message/MessageClient.sol",
         setMaxgas: "@vialabs-io/contracts/message/MessageClient.sol",
-        transferMessageOwnership: "@vialabs-io/contracts/message/MessageClient.sol",
+        transferMessageOwnership:
+          "@vialabs-io/contracts/message/MessageClient.sol",
       },
     },
     Donations: {
-      address: "0xcb123c48dbFffF92810D9fA74de9582bF72F6f26",
+      address: "0xB6Dfce673Ab8F3FB5E39eBe105759ccCaA8B733D",
       abi: [
         {
           inputs: [
@@ -3884,21 +3901,35 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {
-        approve: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        balanceOf: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        getApproved: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        isApprovedForAll: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        approve:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        balanceOf:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        getApproved:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        isApprovedForAll:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
         name: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        ownerOf: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        safeTransferFrom: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        setApprovalForAll: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        supportsInterface: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        symbol: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenURI: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        transferFrom: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenByIndex: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenOfOwnerByIndex: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        totalSupply: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        ownerOf:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        safeTransferFrom:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        setApprovalForAll:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        supportsInterface:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        symbol:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenURI:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        transferFrom:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenByIndex:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenOfOwnerByIndex:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        totalSupply:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
         owner: "@openzeppelin/contracts/access/Ownable.sol",
         renounceOwnership: "@openzeppelin/contracts/access/Ownable.sol",
         transferOwnership: "@openzeppelin/contracts/access/Ownable.sol",
@@ -3909,8 +3940,10 @@ const deployedContracts = {
         MESSAGE_OWNER: "@vialabs-io/contracts/message/MessageClient.sol",
         MESSAGEv3: "@vialabs-io/contracts/message/MessageClient.sol",
         configureClient: "@vialabs-io/contracts/message/MessageClient.sol",
-        configureClientExtended: "@vialabs-io/contracts/message/MessageClient.sol",
-        configureFeatureGateway: "@vialabs-io/contracts/message/MessageClient.sol",
+        configureClientExtended:
+          "@vialabs-io/contracts/message/MessageClient.sol",
+        configureFeatureGateway:
+          "@vialabs-io/contracts/message/MessageClient.sol",
         isAuthorized: "@vialabs-io/contracts/message/MessageClient.sol",
         isSelf: "@vialabs-io/contracts/message/MessageClient.sol",
         messageProcess: "@vialabs-io/contracts/message/MessageClient.sol",
@@ -3918,11 +3951,12 @@ const deployedContracts = {
         setExsig: "@vialabs-io/contracts/message/MessageClient.sol",
         setMaxfee: "@vialabs-io/contracts/message/MessageClient.sol",
         setMaxgas: "@vialabs-io/contracts/message/MessageClient.sol",
-        transferMessageOwnership: "@vialabs-io/contracts/message/MessageClient.sol",
+        transferMessageOwnership:
+          "@vialabs-io/contracts/message/MessageClient.sol",
       },
     },
     Donations: {
-      address: "0x0754bB89825fFE8a6beEAB844E9172151125a1b0",
+      address: "0xc05044c9801A69F643D95D130682dDe546270A5D",
       abi: [
         {
           inputs: [
@@ -6003,21 +6037,35 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {
-        approve: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        balanceOf: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        getApproved: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        isApprovedForAll: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        approve:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        balanceOf:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        getApproved:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        isApprovedForAll:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
         name: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        ownerOf: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        safeTransferFrom: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        setApprovalForAll: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        supportsInterface: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        symbol: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenURI: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        transferFrom: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenByIndex: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenOfOwnerByIndex: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        totalSupply: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        ownerOf:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        safeTransferFrom:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        setApprovalForAll:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        supportsInterface:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        symbol:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenURI:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        transferFrom:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenByIndex:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenOfOwnerByIndex:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        totalSupply:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
         owner: "@openzeppelin/contracts/access/Ownable.sol",
         renounceOwnership: "@openzeppelin/contracts/access/Ownable.sol",
         transferOwnership: "@openzeppelin/contracts/access/Ownable.sol",
@@ -6028,8 +6076,10 @@ const deployedContracts = {
         MESSAGE_OWNER: "@vialabs-io/contracts/message/MessageClient.sol",
         MESSAGEv3: "@vialabs-io/contracts/message/MessageClient.sol",
         configureClient: "@vialabs-io/contracts/message/MessageClient.sol",
-        configureClientExtended: "@vialabs-io/contracts/message/MessageClient.sol",
-        configureFeatureGateway: "@vialabs-io/contracts/message/MessageClient.sol",
+        configureClientExtended:
+          "@vialabs-io/contracts/message/MessageClient.sol",
+        configureFeatureGateway:
+          "@vialabs-io/contracts/message/MessageClient.sol",
         isAuthorized: "@vialabs-io/contracts/message/MessageClient.sol",
         isSelf: "@vialabs-io/contracts/message/MessageClient.sol",
         messageProcess: "@vialabs-io/contracts/message/MessageClient.sol",
@@ -6037,7 +6087,8 @@ const deployedContracts = {
         setExsig: "@vialabs-io/contracts/message/MessageClient.sol",
         setMaxfee: "@vialabs-io/contracts/message/MessageClient.sol",
         setMaxgas: "@vialabs-io/contracts/message/MessageClient.sol",
-        transferMessageOwnership: "@vialabs-io/contracts/message/MessageClient.sol",
+        transferMessageOwnership:
+          "@vialabs-io/contracts/message/MessageClient.sol",
       },
     },
     Donations: {
@@ -8122,21 +8173,35 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {
-        approve: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        balanceOf: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        getApproved: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        isApprovedForAll: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        approve:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        balanceOf:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        getApproved:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        isApprovedForAll:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
         name: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        ownerOf: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        safeTransferFrom: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        setApprovalForAll: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        supportsInterface: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        symbol: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenURI: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        transferFrom: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenByIndex: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenOfOwnerByIndex: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        totalSupply: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        ownerOf:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        safeTransferFrom:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        setApprovalForAll:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        supportsInterface:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        symbol:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenURI:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        transferFrom:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenByIndex:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenOfOwnerByIndex:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        totalSupply:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
         owner: "@openzeppelin/contracts/access/Ownable.sol",
         renounceOwnership: "@openzeppelin/contracts/access/Ownable.sol",
         transferOwnership: "@openzeppelin/contracts/access/Ownable.sol",
@@ -8147,8 +8212,10 @@ const deployedContracts = {
         MESSAGE_OWNER: "@vialabs-io/contracts/message/MessageClient.sol",
         MESSAGEv3: "@vialabs-io/contracts/message/MessageClient.sol",
         configureClient: "@vialabs-io/contracts/message/MessageClient.sol",
-        configureClientExtended: "@vialabs-io/contracts/message/MessageClient.sol",
-        configureFeatureGateway: "@vialabs-io/contracts/message/MessageClient.sol",
+        configureClientExtended:
+          "@vialabs-io/contracts/message/MessageClient.sol",
+        configureFeatureGateway:
+          "@vialabs-io/contracts/message/MessageClient.sol",
         isAuthorized: "@vialabs-io/contracts/message/MessageClient.sol",
         isSelf: "@vialabs-io/contracts/message/MessageClient.sol",
         messageProcess: "@vialabs-io/contracts/message/MessageClient.sol",
@@ -8156,11 +8223,12 @@ const deployedContracts = {
         setExsig: "@vialabs-io/contracts/message/MessageClient.sol",
         setMaxfee: "@vialabs-io/contracts/message/MessageClient.sol",
         setMaxgas: "@vialabs-io/contracts/message/MessageClient.sol",
-        transferMessageOwnership: "@vialabs-io/contracts/message/MessageClient.sol",
+        transferMessageOwnership:
+          "@vialabs-io/contracts/message/MessageClient.sol",
       },
     },
     Donations: {
-      address: "0xbf4bDf167Df8839fE5592e11C08dA3e2A24DC37C",
+      address: "0xD1B3974CAc3B16C6C2EcB781F0ffc4B9f2Ed6AFD",
       abi: [
         {
           inputs: [
@@ -10241,21 +10309,35 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {
-        approve: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        balanceOf: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        getApproved: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        isApprovedForAll: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        approve:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        balanceOf:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        getApproved:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        isApprovedForAll:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
         name: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        ownerOf: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        safeTransferFrom: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        setApprovalForAll: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        supportsInterface: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        symbol: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenURI: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        transferFrom: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenByIndex: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenOfOwnerByIndex: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        totalSupply: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        ownerOf:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        safeTransferFrom:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        setApprovalForAll:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        supportsInterface:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        symbol:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenURI:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        transferFrom:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenByIndex:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenOfOwnerByIndex:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        totalSupply:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
         owner: "@openzeppelin/contracts/access/Ownable.sol",
         renounceOwnership: "@openzeppelin/contracts/access/Ownable.sol",
         transferOwnership: "@openzeppelin/contracts/access/Ownable.sol",
@@ -10266,8 +10348,10 @@ const deployedContracts = {
         MESSAGE_OWNER: "@vialabs-io/contracts/message/MessageClient.sol",
         MESSAGEv3: "@vialabs-io/contracts/message/MessageClient.sol",
         configureClient: "@vialabs-io/contracts/message/MessageClient.sol",
-        configureClientExtended: "@vialabs-io/contracts/message/MessageClient.sol",
-        configureFeatureGateway: "@vialabs-io/contracts/message/MessageClient.sol",
+        configureClientExtended:
+          "@vialabs-io/contracts/message/MessageClient.sol",
+        configureFeatureGateway:
+          "@vialabs-io/contracts/message/MessageClient.sol",
         isAuthorized: "@vialabs-io/contracts/message/MessageClient.sol",
         isSelf: "@vialabs-io/contracts/message/MessageClient.sol",
         messageProcess: "@vialabs-io/contracts/message/MessageClient.sol",
@@ -10275,7 +10359,8 @@ const deployedContracts = {
         setExsig: "@vialabs-io/contracts/message/MessageClient.sol",
         setMaxfee: "@vialabs-io/contracts/message/MessageClient.sol",
         setMaxgas: "@vialabs-io/contracts/message/MessageClient.sol",
-        transferMessageOwnership: "@vialabs-io/contracts/message/MessageClient.sol",
+        transferMessageOwnership:
+          "@vialabs-io/contracts/message/MessageClient.sol",
       },
     },
     Donations: {
@@ -12360,21 +12445,35 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {
-        approve: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        balanceOf: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        getApproved: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        isApprovedForAll: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        approve:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        balanceOf:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        getApproved:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        isApprovedForAll:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
         name: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        ownerOf: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        safeTransferFrom: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        setApprovalForAll: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        supportsInterface: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        symbol: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenURI: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        transferFrom: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenByIndex: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenOfOwnerByIndex: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        totalSupply: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        ownerOf:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        safeTransferFrom:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        setApprovalForAll:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        supportsInterface:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        symbol:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenURI:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        transferFrom:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenByIndex:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenOfOwnerByIndex:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        totalSupply:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
         owner: "@openzeppelin/contracts/access/Ownable.sol",
         renounceOwnership: "@openzeppelin/contracts/access/Ownable.sol",
         transferOwnership: "@openzeppelin/contracts/access/Ownable.sol",
@@ -12385,8 +12484,10 @@ const deployedContracts = {
         MESSAGE_OWNER: "@vialabs-io/contracts/message/MessageClient.sol",
         MESSAGEv3: "@vialabs-io/contracts/message/MessageClient.sol",
         configureClient: "@vialabs-io/contracts/message/MessageClient.sol",
-        configureClientExtended: "@vialabs-io/contracts/message/MessageClient.sol",
-        configureFeatureGateway: "@vialabs-io/contracts/message/MessageClient.sol",
+        configureClientExtended:
+          "@vialabs-io/contracts/message/MessageClient.sol",
+        configureFeatureGateway:
+          "@vialabs-io/contracts/message/MessageClient.sol",
         isAuthorized: "@vialabs-io/contracts/message/MessageClient.sol",
         isSelf: "@vialabs-io/contracts/message/MessageClient.sol",
         messageProcess: "@vialabs-io/contracts/message/MessageClient.sol",
@@ -12394,11 +12495,12 @@ const deployedContracts = {
         setExsig: "@vialabs-io/contracts/message/MessageClient.sol",
         setMaxfee: "@vialabs-io/contracts/message/MessageClient.sol",
         setMaxgas: "@vialabs-io/contracts/message/MessageClient.sol",
-        transferMessageOwnership: "@vialabs-io/contracts/message/MessageClient.sol",
+        transferMessageOwnership:
+          "@vialabs-io/contracts/message/MessageClient.sol",
       },
     },
     Donations: {
-      address: "0x3F3e786D38256B06f9fb480f5B49cB8Ec867b47d",
+      address: "0x8501CECaFD51Ea92077eC67DBed415b9377d6b54",
       abi: [
         {
           inputs: [
@@ -14479,21 +14581,35 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {
-        approve: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        balanceOf: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        getApproved: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        isApprovedForAll: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        approve:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        balanceOf:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        getApproved:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        isApprovedForAll:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
         name: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        ownerOf: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        safeTransferFrom: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        setApprovalForAll: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        supportsInterface: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        symbol: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenURI: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        transferFrom: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenByIndex: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenOfOwnerByIndex: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        totalSupply: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        ownerOf:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        safeTransferFrom:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        setApprovalForAll:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        supportsInterface:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        symbol:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenURI:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        transferFrom:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenByIndex:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenOfOwnerByIndex:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        totalSupply:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
         owner: "@openzeppelin/contracts/access/Ownable.sol",
         renounceOwnership: "@openzeppelin/contracts/access/Ownable.sol",
         transferOwnership: "@openzeppelin/contracts/access/Ownable.sol",
@@ -14504,8 +14620,10 @@ const deployedContracts = {
         MESSAGE_OWNER: "@vialabs-io/contracts/message/MessageClient.sol",
         MESSAGEv3: "@vialabs-io/contracts/message/MessageClient.sol",
         configureClient: "@vialabs-io/contracts/message/MessageClient.sol",
-        configureClientExtended: "@vialabs-io/contracts/message/MessageClient.sol",
-        configureFeatureGateway: "@vialabs-io/contracts/message/MessageClient.sol",
+        configureClientExtended:
+          "@vialabs-io/contracts/message/MessageClient.sol",
+        configureFeatureGateway:
+          "@vialabs-io/contracts/message/MessageClient.sol",
         isAuthorized: "@vialabs-io/contracts/message/MessageClient.sol",
         isSelf: "@vialabs-io/contracts/message/MessageClient.sol",
         messageProcess: "@vialabs-io/contracts/message/MessageClient.sol",
@@ -14513,11 +14631,12 @@ const deployedContracts = {
         setExsig: "@vialabs-io/contracts/message/MessageClient.sol",
         setMaxfee: "@vialabs-io/contracts/message/MessageClient.sol",
         setMaxgas: "@vialabs-io/contracts/message/MessageClient.sol",
-        transferMessageOwnership: "@vialabs-io/contracts/message/MessageClient.sol",
+        transferMessageOwnership:
+          "@vialabs-io/contracts/message/MessageClient.sol",
       },
     },
     Donations: {
-      address: "0x950F4E9a06b2Cd3049B4A57B9DD9B83D16a26EFc",
+      address: "0x7bB78097d7e672D65cD6596Ee9b4097CE16AC391",
       abi: [
         {
           inputs: [
@@ -16598,21 +16717,35 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {
-        approve: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        balanceOf: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        getApproved: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        isApprovedForAll: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        approve:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        balanceOf:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        getApproved:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        isApprovedForAll:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
         name: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        ownerOf: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        safeTransferFrom: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        setApprovalForAll: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        supportsInterface: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        symbol: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenURI: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        transferFrom: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenByIndex: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenOfOwnerByIndex: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        totalSupply: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        ownerOf:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        safeTransferFrom:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        setApprovalForAll:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        supportsInterface:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        symbol:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenURI:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        transferFrom:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenByIndex:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenOfOwnerByIndex:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        totalSupply:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
         owner: "@openzeppelin/contracts/access/Ownable.sol",
         renounceOwnership: "@openzeppelin/contracts/access/Ownable.sol",
         transferOwnership: "@openzeppelin/contracts/access/Ownable.sol",
@@ -16623,8 +16756,10 @@ const deployedContracts = {
         MESSAGE_OWNER: "@vialabs-io/contracts/message/MessageClient.sol",
         MESSAGEv3: "@vialabs-io/contracts/message/MessageClient.sol",
         configureClient: "@vialabs-io/contracts/message/MessageClient.sol",
-        configureClientExtended: "@vialabs-io/contracts/message/MessageClient.sol",
-        configureFeatureGateway: "@vialabs-io/contracts/message/MessageClient.sol",
+        configureClientExtended:
+          "@vialabs-io/contracts/message/MessageClient.sol",
+        configureFeatureGateway:
+          "@vialabs-io/contracts/message/MessageClient.sol",
         isAuthorized: "@vialabs-io/contracts/message/MessageClient.sol",
         isSelf: "@vialabs-io/contracts/message/MessageClient.sol",
         messageProcess: "@vialabs-io/contracts/message/MessageClient.sol",
@@ -16632,11 +16767,12 @@ const deployedContracts = {
         setExsig: "@vialabs-io/contracts/message/MessageClient.sol",
         setMaxfee: "@vialabs-io/contracts/message/MessageClient.sol",
         setMaxgas: "@vialabs-io/contracts/message/MessageClient.sol",
-        transferMessageOwnership: "@vialabs-io/contracts/message/MessageClient.sol",
+        transferMessageOwnership:
+          "@vialabs-io/contracts/message/MessageClient.sol",
       },
     },
     Donations: {
-      address: "0xf705f3eA38B4DeAE5814DF980DEDc4E921C82E81",
+      address: "0x5a80F5B4EB313116cD6c29196d28346abBA5F5C0",
       abi: [
         {
           inputs: [
@@ -18717,21 +18853,35 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {
-        approve: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        balanceOf: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        getApproved: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        isApprovedForAll: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        approve:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        balanceOf:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        getApproved:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        isApprovedForAll:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
         name: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        ownerOf: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        safeTransferFrom: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        setApprovalForAll: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        supportsInterface: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        symbol: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenURI: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        transferFrom: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenByIndex: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenOfOwnerByIndex: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        totalSupply: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        ownerOf:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        safeTransferFrom:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        setApprovalForAll:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        supportsInterface:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        symbol:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenURI:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        transferFrom:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenByIndex:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenOfOwnerByIndex:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        totalSupply:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
         owner: "@openzeppelin/contracts/access/Ownable.sol",
         renounceOwnership: "@openzeppelin/contracts/access/Ownable.sol",
         transferOwnership: "@openzeppelin/contracts/access/Ownable.sol",
@@ -18742,8 +18892,10 @@ const deployedContracts = {
         MESSAGE_OWNER: "@vialabs-io/contracts/message/MessageClient.sol",
         MESSAGEv3: "@vialabs-io/contracts/message/MessageClient.sol",
         configureClient: "@vialabs-io/contracts/message/MessageClient.sol",
-        configureClientExtended: "@vialabs-io/contracts/message/MessageClient.sol",
-        configureFeatureGateway: "@vialabs-io/contracts/message/MessageClient.sol",
+        configureClientExtended:
+          "@vialabs-io/contracts/message/MessageClient.sol",
+        configureFeatureGateway:
+          "@vialabs-io/contracts/message/MessageClient.sol",
         isAuthorized: "@vialabs-io/contracts/message/MessageClient.sol",
         isSelf: "@vialabs-io/contracts/message/MessageClient.sol",
         messageProcess: "@vialabs-io/contracts/message/MessageClient.sol",
@@ -18751,11 +18903,12 @@ const deployedContracts = {
         setExsig: "@vialabs-io/contracts/message/MessageClient.sol",
         setMaxfee: "@vialabs-io/contracts/message/MessageClient.sol",
         setMaxgas: "@vialabs-io/contracts/message/MessageClient.sol",
-        transferMessageOwnership: "@vialabs-io/contracts/message/MessageClient.sol",
+        transferMessageOwnership:
+          "@vialabs-io/contracts/message/MessageClient.sol",
       },
     },
     Donations: {
-      address: "0x241fC12Ed4a40F977b112A8293A712a0FA490c18",
+      address: "0xbB67414cb9507189B5A57DACa45fDc8b1d3AEaD3",
       abi: [
         {
           inputs: [
@@ -20836,21 +20989,35 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {
-        approve: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        balanceOf: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        getApproved: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        isApprovedForAll: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        approve:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        balanceOf:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        getApproved:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        isApprovedForAll:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
         name: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        ownerOf: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        safeTransferFrom: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        setApprovalForAll: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        supportsInterface: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        symbol: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenURI: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        transferFrom: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenByIndex: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenOfOwnerByIndex: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        totalSupply: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        ownerOf:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        safeTransferFrom:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        setApprovalForAll:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        supportsInterface:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        symbol:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenURI:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        transferFrom:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenByIndex:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenOfOwnerByIndex:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        totalSupply:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
         owner: "@openzeppelin/contracts/access/Ownable.sol",
         renounceOwnership: "@openzeppelin/contracts/access/Ownable.sol",
         transferOwnership: "@openzeppelin/contracts/access/Ownable.sol",
@@ -20861,8 +21028,10 @@ const deployedContracts = {
         MESSAGE_OWNER: "@vialabs-io/contracts/message/MessageClient.sol",
         MESSAGEv3: "@vialabs-io/contracts/message/MessageClient.sol",
         configureClient: "@vialabs-io/contracts/message/MessageClient.sol",
-        configureClientExtended: "@vialabs-io/contracts/message/MessageClient.sol",
-        configureFeatureGateway: "@vialabs-io/contracts/message/MessageClient.sol",
+        configureClientExtended:
+          "@vialabs-io/contracts/message/MessageClient.sol",
+        configureFeatureGateway:
+          "@vialabs-io/contracts/message/MessageClient.sol",
         isAuthorized: "@vialabs-io/contracts/message/MessageClient.sol",
         isSelf: "@vialabs-io/contracts/message/MessageClient.sol",
         messageProcess: "@vialabs-io/contracts/message/MessageClient.sol",
@@ -20870,11 +21039,12 @@ const deployedContracts = {
         setExsig: "@vialabs-io/contracts/message/MessageClient.sol",
         setMaxfee: "@vialabs-io/contracts/message/MessageClient.sol",
         setMaxgas: "@vialabs-io/contracts/message/MessageClient.sol",
-        transferMessageOwnership: "@vialabs-io/contracts/message/MessageClient.sol",
+        transferMessageOwnership:
+          "@vialabs-io/contracts/message/MessageClient.sol",
       },
     },
     Donations: {
-      address: "0xadDf104A6f24cdE874f83400226D7f3026C43956",
+      address: "0x575B2a27501fd0f24BDb72D82C7c330dcAc137dc",
       abi: [
         {
           inputs: [
@@ -22955,21 +23125,35 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {
-        approve: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        balanceOf: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        getApproved: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        isApprovedForAll: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        approve:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        balanceOf:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        getApproved:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        isApprovedForAll:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
         name: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        ownerOf: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        safeTransferFrom: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        setApprovalForAll: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        supportsInterface: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        symbol: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenURI: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        transferFrom: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenByIndex: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenOfOwnerByIndex: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        totalSupply: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        ownerOf:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        safeTransferFrom:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        setApprovalForAll:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        supportsInterface:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        symbol:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenURI:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        transferFrom:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenByIndex:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenOfOwnerByIndex:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        totalSupply:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
         owner: "@openzeppelin/contracts/access/Ownable.sol",
         renounceOwnership: "@openzeppelin/contracts/access/Ownable.sol",
         transferOwnership: "@openzeppelin/contracts/access/Ownable.sol",
@@ -22980,8 +23164,10 @@ const deployedContracts = {
         MESSAGE_OWNER: "@vialabs-io/contracts/message/MessageClient.sol",
         MESSAGEv3: "@vialabs-io/contracts/message/MessageClient.sol",
         configureClient: "@vialabs-io/contracts/message/MessageClient.sol",
-        configureClientExtended: "@vialabs-io/contracts/message/MessageClient.sol",
-        configureFeatureGateway: "@vialabs-io/contracts/message/MessageClient.sol",
+        configureClientExtended:
+          "@vialabs-io/contracts/message/MessageClient.sol",
+        configureFeatureGateway:
+          "@vialabs-io/contracts/message/MessageClient.sol",
         isAuthorized: "@vialabs-io/contracts/message/MessageClient.sol",
         isSelf: "@vialabs-io/contracts/message/MessageClient.sol",
         messageProcess: "@vialabs-io/contracts/message/MessageClient.sol",
@@ -22989,7 +23175,8 @@ const deployedContracts = {
         setExsig: "@vialabs-io/contracts/message/MessageClient.sol",
         setMaxfee: "@vialabs-io/contracts/message/MessageClient.sol",
         setMaxgas: "@vialabs-io/contracts/message/MessageClient.sol",
-        transferMessageOwnership: "@vialabs-io/contracts/message/MessageClient.sol",
+        transferMessageOwnership:
+          "@vialabs-io/contracts/message/MessageClient.sol",
       },
     },
     Donations: {
@@ -25074,21 +25261,35 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {
-        approve: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        balanceOf: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        getApproved: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        isApprovedForAll: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        approve:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        balanceOf:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        getApproved:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        isApprovedForAll:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
         name: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        ownerOf: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        safeTransferFrom: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        setApprovalForAll: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        supportsInterface: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        symbol: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenURI: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        transferFrom: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenByIndex: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenOfOwnerByIndex: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        totalSupply: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        ownerOf:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        safeTransferFrom:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        setApprovalForAll:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        supportsInterface:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        symbol:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenURI:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        transferFrom:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenByIndex:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenOfOwnerByIndex:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        totalSupply:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
         owner: "@openzeppelin/contracts/access/Ownable.sol",
         renounceOwnership: "@openzeppelin/contracts/access/Ownable.sol",
         transferOwnership: "@openzeppelin/contracts/access/Ownable.sol",
@@ -25099,8 +25300,10 @@ const deployedContracts = {
         MESSAGE_OWNER: "@vialabs-io/contracts/message/MessageClient.sol",
         MESSAGEv3: "@vialabs-io/contracts/message/MessageClient.sol",
         configureClient: "@vialabs-io/contracts/message/MessageClient.sol",
-        configureClientExtended: "@vialabs-io/contracts/message/MessageClient.sol",
-        configureFeatureGateway: "@vialabs-io/contracts/message/MessageClient.sol",
+        configureClientExtended:
+          "@vialabs-io/contracts/message/MessageClient.sol",
+        configureFeatureGateway:
+          "@vialabs-io/contracts/message/MessageClient.sol",
         isAuthorized: "@vialabs-io/contracts/message/MessageClient.sol",
         isSelf: "@vialabs-io/contracts/message/MessageClient.sol",
         messageProcess: "@vialabs-io/contracts/message/MessageClient.sol",
@@ -25108,11 +25311,12 @@ const deployedContracts = {
         setExsig: "@vialabs-io/contracts/message/MessageClient.sol",
         setMaxfee: "@vialabs-io/contracts/message/MessageClient.sol",
         setMaxgas: "@vialabs-io/contracts/message/MessageClient.sol",
-        transferMessageOwnership: "@vialabs-io/contracts/message/MessageClient.sol",
+        transferMessageOwnership:
+          "@vialabs-io/contracts/message/MessageClient.sol",
       },
     },
     Donations: {
-      address: "0x3A63eCC1f150Bae238937510930235dc600ca7C6",
+      address: "0x620dee877258173D2270700f7fE90601Ea930260",
       abi: [
         {
           inputs: [
@@ -27193,21 +27397,35 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {
-        approve: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        balanceOf: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        getApproved: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        isApprovedForAll: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        approve:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        balanceOf:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        getApproved:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        isApprovedForAll:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
         name: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        ownerOf: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        safeTransferFrom: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        setApprovalForAll: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        supportsInterface: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        symbol: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenURI: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        transferFrom: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenByIndex: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        tokenOfOwnerByIndex: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        totalSupply: "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        ownerOf:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        safeTransferFrom:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        setApprovalForAll:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        supportsInterface:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        symbol:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenURI:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        transferFrom:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenByIndex:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        tokenOfOwnerByIndex:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
+        totalSupply:
+          "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
         owner: "@openzeppelin/contracts/access/Ownable.sol",
         renounceOwnership: "@openzeppelin/contracts/access/Ownable.sol",
         transferOwnership: "@openzeppelin/contracts/access/Ownable.sol",
@@ -27218,8 +27436,10 @@ const deployedContracts = {
         MESSAGE_OWNER: "@vialabs-io/contracts/message/MessageClient.sol",
         MESSAGEv3: "@vialabs-io/contracts/message/MessageClient.sol",
         configureClient: "@vialabs-io/contracts/message/MessageClient.sol",
-        configureClientExtended: "@vialabs-io/contracts/message/MessageClient.sol",
-        configureFeatureGateway: "@vialabs-io/contracts/message/MessageClient.sol",
+        configureClientExtended:
+          "@vialabs-io/contracts/message/MessageClient.sol",
+        configureFeatureGateway:
+          "@vialabs-io/contracts/message/MessageClient.sol",
         isAuthorized: "@vialabs-io/contracts/message/MessageClient.sol",
         isSelf: "@vialabs-io/contracts/message/MessageClient.sol",
         messageProcess: "@vialabs-io/contracts/message/MessageClient.sol",
@@ -27227,11 +27447,12 @@ const deployedContracts = {
         setExsig: "@vialabs-io/contracts/message/MessageClient.sol",
         setMaxfee: "@vialabs-io/contracts/message/MessageClient.sol",
         setMaxgas: "@vialabs-io/contracts/message/MessageClient.sol",
-        transferMessageOwnership: "@vialabs-io/contracts/message/MessageClient.sol",
+        transferMessageOwnership:
+          "@vialabs-io/contracts/message/MessageClient.sol",
       },
     },
     Donations: {
-      address: "0x604b5b91c4dDb1Fe6812c0814A08b2351253f1B6",
+      address: "0x930C419F595a2Ab8F38dBF3Ed47aA8DEeCd193Cb",
       abi: [
         {
           inputs: [
