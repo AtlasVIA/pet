@@ -5,6 +5,7 @@ import { AppPreview } from "./components/AppPreview";
 import BlueMission from "./components/BlueMission";
 import { DonationForm } from "./components/DonationForm";
 import DonationPageHero from "./components/DonationPageHero";
+import DonationSuccessPanel from "./components/DonationSuccessPanel";
 import Roadmap from "./components/Roadmap";
 import ScrollToTopButton from "./components/ScrollToTopButton";
 import { useChainInfo } from "./hooks/useChainInfo";
@@ -15,7 +16,7 @@ import { RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 
 const DonationsPage = () => {
   const currentChainId = useChainId();
-  const { address, isConnected } = useAccount();
+  const { isConnected } = useAccount();
   const [selectedChain, setSelectedChain] = useState<number | null>(currentChainId);
   const [donationAmountUSD, setDonationAmountUSD] = useState("10");
   const [message, setMessage] = useState("");
@@ -23,6 +24,7 @@ const DonationsPage = () => {
   const [notification, setNotification] = useState<{ type: "success" | "error" | "info"; message: string } | null>(
     null,
   );
+  const [showSuccessPanel, setShowSuccessPanel] = useState(false);
 
   const { effectiveChainId, nativeSymbol, isUSDCSupported, tokenPrice } = useChainInfo(selectedChain);
 
@@ -31,8 +33,6 @@ const DonationsPage = () => {
     donateUSDC,
     nativeBalance,
     usdcBalance,
-    isContractLoading,
-    isUSDCContractLoading,
     isProcessing,
     error,
     isCorrectNetwork,
@@ -54,7 +54,7 @@ const DonationsPage = () => {
 
   const handleDonationSuccess = useCallback(() => {
     setNotification({ type: "success", message: "Donation successful! Thank you for your generosity." });
-    setDonationAmountUSD("50");
+    setShowSuccessPanel(true);
     setMessage("");
   }, []);
 
@@ -87,7 +87,6 @@ const DonationsPage = () => {
     }
   }, [currentChainId]);
 
-  // New useEffect to set donation amount to 50 when wallet is connected
   useEffect(() => {
     if (isConnected) {
       setDonationAmountUSD("50");
@@ -165,13 +164,20 @@ const DonationsPage = () => {
           <div className="w-24 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full animate-gradient-x"></div>
         </div>
 
-        <div
-          id="donation-form"
-          className="bg-white bg-opacity-90 rounded-3xl shadow-lg p-6 sm:p-12 transition-all duration-500 ease-in-out hover:shadow-2xl hover:scale-[1.02] hover:-translate-y-2"
-        >
+        <AppPreview />
+
+        <div className="flex justify-center mb-24">
+          <div className="w-24 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full animate-gradient-x"></div>
+        </div>
+
+        <div className="bg-white bg-opacity-80 rounded-3xl shadow-lg p-6 sm:p-12 mb-24 animate-fade-in-up transition-all duration-500 ease-in-out hover:shadow-2xl relative overflow-hidden hover:scale-[1.02] hover:-translate-y-2">
+          <div className="absolute top-0 left-0 w-full h-3 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 animate-gradient-x"></div>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 sm:gap-12">
             <div className="lg:col-span-2 relative">
-              <h2 className="text-3xl sm:text-4xl font-bold text-indigo-800 mb-8">Lend a Paw! 🐾</h2>
+              <h2 className="text-3xl sm:text-4xl font-bold text-indigo-800 mb-8 sm:mb-12 relative inline-block">
+                Lend a Paw! 🐾
+                <span className="absolute -bottom-2 left-0 w-full h-1 bg-indigo-500"></span>
+              </h2>
               <DonationForm
                 selectedChain={selectedChain}
                 setSelectedChain={setSelectedChain}
@@ -183,8 +189,8 @@ const DonationsPage = () => {
                 donationAmountToken={donationAmountToken}
                 message={message}
                 setMessage={setMessage}
-                isContractLoading={isContractLoading}
-                isUSDCContractLoading={isUSDCContractLoading}
+                isContractLoading={false}
+                isUSDCContractLoading={false}
                 donateNative={(amount, msg, price) => handleDonation(true, amount, msg, price)}
                 donateUSDC={(amount, msg) => handleDonation(false, amount, msg, 0)}
                 isUSDCSupported={isUSDCSupported}
@@ -211,9 +217,7 @@ const DonationsPage = () => {
               )}
             </div>
             <div className="flex flex-col justify-between lg:border-l lg:border-indigo-200 lg:pl-12">
-              <div>
-                <AppPreview />
-              </div>
+              <div>{/* Removed AppPreview from here */}</div>
             </div>
           </div>
         </div>
@@ -228,6 +232,15 @@ const DonationsPage = () => {
       </div>
 
       <ScrollToTopButton showScrollTop={showScrollTop} scrollToTop={scrollToTop} />
+
+      <DonationSuccessPanel
+        isVisible={showSuccessPanel}
+        onClose={() => setShowSuccessPanel(false)}
+        donationAmount={donationAmountUSD}
+        tokenType={useUSDC ? "USDC" : nativeSymbol}
+        chainName={effectiveChainId ? `${effectiveChainId} network` : ""}
+        isLoading={isProcessing}
+      />
     </div>
   );
 };

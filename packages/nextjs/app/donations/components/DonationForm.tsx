@@ -2,9 +2,9 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { chains } from "../../../utils/scaffold-eth/chains";
 import ChainSelect from "./ChainSelect";
 import { DonationAmountSelector } from "./DonationAmountSelector";
+import DonationSuccessPanel from "./DonationSuccessPanel";
 import { LoadingSpinner } from "./LoadingSpinner";
 import TokenSelect from "./TokenSelect";
-import DonationSuccessPanel from "./DonationSuccessPanel";
 
 interface DonationFormProps {
   selectedChain: number | null;
@@ -31,7 +31,12 @@ interface DonationFormProps {
   chainSwitched: boolean;
   resetChainSwitched: () => void;
   storedDonationParams: { amountUSD: string; message: string; isNative: boolean; tokenPrice: number } | null;
-  executeDonation: (params: { amountUSD: string; message: string; isNative: boolean; tokenPrice: number }) => Promise<boolean>;
+  executeDonation: (params: {
+    amountUSD: string;
+    message: string;
+    isNative: boolean;
+    tokenPrice: number;
+  }) => Promise<boolean>;
   connectedChainId: number | null;
   isWalletConnected: boolean;
 }
@@ -99,11 +104,13 @@ export const DonationForm: React.FC<DonationFormProps> = ({
         console.log(`Updating selected chain to connected chain: ${connectedChainId}`);
         setSelectedChain(connectedChainId);
       } else {
-        console.log(`Connected chain ${connectedChainId} not supported, setting to first chain in list: ${chainOptions[0].id}`);
+        console.log(
+          `Connected chain ${connectedChainId} not supported, setting to first chain in list: ${chainOptions[0].id}`,
+        );
         setSelectedChain(chainOptions[0].id);
       }
     } else {
-      console.log('No connected chain detected');
+      console.log("No connected chain detected");
     }
   }, [connectedChainId, setSelectedChain, getChainInfo, chainOptions]);
 
@@ -193,7 +200,18 @@ export const DonationForm: React.FC<DonationFormProps> = ({
     } finally {
       setIsDonationLoading(false);
     }
-  }, [chainSwitched, storedDonationParams, executeDonation, resetChainSwitched, useUSDC, donateUSDC, donateNative, donationAmountUSD, message, tokenPrice]);
+  }, [
+    chainSwitched,
+    storedDonationParams,
+    executeDonation,
+    resetChainSwitched,
+    useUSDC,
+    donateUSDC,
+    donateNative,
+    donationAmountUSD,
+    message,
+    tokenPrice,
+  ]);
 
   const handleCloseSuccessPanel = useCallback(() => {
     setShowSuccessPanel(false);
@@ -239,7 +257,11 @@ export const DonationForm: React.FC<DonationFormProps> = ({
   ]);
 
   return (
-    <div className={`donation-form w-full bg-white bg-opacity-50 rounded-xl p-4 sm:p-6 shadow-lg ${!isWalletConnected ? 'opacity-50 pointer-events-none' : ''}`}>
+    <div
+      className={`donation-form w-full bg-white bg-opacity-50 rounded-xl p-4 sm:p-6 shadow-lg ${
+        !isWalletConnected ? "opacity-50 pointer-events-none" : ""
+      }`}
+    >
       <div className="space-y-4 sm:space-y-6">
         <ChainSelect
           label="Select Chain"
@@ -282,9 +304,7 @@ export const DonationForm: React.FC<DonationFormProps> = ({
         disabled={isProcessing || !isWalletConnected}
       />
 
-      {donationError && (
-        <div className="mt-4 text-red-500 text-sm">{donationError}</div>
-      )}
+      {donationError && <div className="mt-4 text-red-500 text-sm">{donationError}</div>}
 
       <button
         onClick={handleDonate}
@@ -306,7 +326,7 @@ export const DonationForm: React.FC<DonationFormProps> = ({
         isVisible={showSuccessPanel}
         onClose={handleCloseSuccessPanel}
         donationAmount={successfulDonationAmount || ""}
-        tokenType={useUSDC ? "USDC" : (getChainInfo(selectedChain)?.nativeCurrency?.symbol || nativeSymbol)}
+        tokenType={useUSDC ? "USDC" : getChainInfo(selectedChain)?.nativeCurrency?.symbol || nativeSymbol}
         chainName={chainName}
         isLoading={isDonationLoading}
       />

@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import TweetButton from "../../../components/TweetButton";
 import { AnimatePresence, motion, useAnimation } from "framer-motion";
-import { FaFacebook, FaLinkedin } from "react-icons/fa";
+import Confetti from "react-confetti";
 
 interface DonationSuccessPanelProps {
   isVisible: boolean;
@@ -20,47 +20,27 @@ const DonationSuccessPanel: React.FC<DonationSuccessPanelProps> = ({
   chainName,
   isLoading,
 }) => {
-  const confettiRef = useRef<SVGSVGElement>(null);
   const [impactPercentage, setImpactPercentage] = useState(0);
+  const [showConfetti, setShowConfetti] = useState(false);
   const dogAnimation = useAnimation();
   const textAnimation = useAnimation();
 
   useEffect(() => {
     if (isVisible && !isLoading) {
-      animateConfetti();
+      setShowConfetti(true);
       animateImpactMeter();
       dogAnimation.start({
         y: [0, -10, 0],
-        transition: { duration: 1, repeat: Infinity, repeatType: "reverse" },
+        transition: { duration: 1.5, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" },
       });
       textAnimation.start({
         scale: [1, 1.05, 1],
-        transition: { duration: 2, repeat: Infinity, repeatType: "reverse" },
+        transition: { duration: 2.5, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" },
       });
+    } else {
+      setShowConfetti(false);
     }
-  }, [isVisible, isLoading]);
-
-  const animateConfetti = () => {
-    const confetti = confettiRef.current;
-    if (confetti) {
-      const particles = confetti.querySelectorAll("path");
-      particles.forEach(particle => {
-        const x = Math.random() * 100;
-        const y = Math.random() * 100;
-        const delay = Math.random() * 2;
-        const duration = 2 + Math.random() * 2;
-        const rotation = Math.random() * 360;
-        particle.setAttribute(
-          "style",
-          `
-          animation: fall ${duration}s ease-in infinite;
-          animation-delay: -${delay}s;
-          transform: translate(${x}vw, -20px) rotate(${rotation}deg);
-        `,
-        );
-      });
-    }
-  };
+  }, [isVisible, isLoading, dogAnimation, textAnimation]);
 
   const animateImpactMeter = () => {
     let progress = 0;
@@ -68,27 +48,7 @@ const DonationSuccessPanel: React.FC<DonationSuccessPanelProps> = ({
       progress += 1;
       setImpactPercentage(progress);
       if (progress >= 100) clearInterval(interval);
-    }, 20);
-  };
-
-  const shareOnFacebook = () => {
-    const url = encodeURIComponent("https://dogachi.pet");
-    const text = encodeURIComponent(
-      `I just donated ${donationAmount} ${tokenType} on ${chainName} to help save dogs with Dogachi.Pet! Join me in making a difference!`,
-    );
-    window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`, "_blank");
-  };
-
-  const shareOnLinkedIn = () => {
-    const url = encodeURIComponent("https://dogachi.pet");
-    const title = encodeURIComponent("I just donated to help save dogs with Dogachi.Pet!");
-    const summary = encodeURIComponent(
-      `I donated ${donationAmount} ${tokenType} on ${chainName}. Join me in making a difference!`,
-    );
-    window.open(
-      `https://www.linkedin.com/shareArticle?mini=true&url=${url}&title=${title}&summary=${summary}`,
-      "_blank",
-    );
+    }, 30);
   };
 
   return (
@@ -98,16 +58,20 @@ const DonationSuccessPanel: React.FC<DonationSuccessPanelProps> = ({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
-          className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 p-4"
+          transition={{ duration: 0.4 }}
+          className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-60 p-4"
         >
           <motion.div
-            initial={{ scale: 0.8, y: 50 }}
+            initial={{ scale: 0.9, y: 50 }}
             animate={{ scale: 1, y: 0 }}
-            exit={{ scale: 0.8, y: 50 }}
-            transition={{ type: "spring", damping: 15 }}
-            className="bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-lg p-6 w-full max-w-md shadow-xl relative overflow-hidden"
+            exit={{ scale: 0.9, y: 50 }}
+            transition={{ type: "spring", damping: 20, stiffness: 300 }}
+            className="bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 rounded-2xl p-8 w-full max-w-md shadow-2xl relative overflow-hidden"
           >
+            {showConfetti && (
+              <Confetti width={window.innerWidth} height={window.innerHeight} recycle={false} numberOfPieces={200} />
+            )}
+
             {/* Animated background */}
             <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
               <defs>
@@ -134,7 +98,7 @@ const DonationSuccessPanel: React.FC<DonationSuccessPanelProps> = ({
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2, duration: 0.5 }}
+                transition={{ delay: 0.2, duration: 0.6 }}
                 className="relative z-10 h-full flex flex-col justify-between"
               >
                 {/* Animated dog character */}
@@ -153,27 +117,29 @@ const DonationSuccessPanel: React.FC<DonationSuccessPanelProps> = ({
                   </g>
                 </motion.svg>
 
-                {/* Dynamic impact meter */}
-                <div className="w-full bg-white bg-opacity-30 rounded-full h-4 mt-4 overflow-hidden">
+                {/* Enhanced impact meter */}
+                <div className="w-full bg-white bg-opacity-30 rounded-full h-6 mt-6 overflow-hidden">
                   <motion.div
-                    className="bg-yellow-300 h-full rounded-full"
+                    className="bg-yellow-300 h-full rounded-full flex items-center justify-end pr-2"
                     initial={{ width: 0 }}
                     animate={{ width: `${impactPercentage}%` }}
-                    transition={{ duration: 1 }}
-                  />
+                    transition={{ duration: 1.5, ease: "easeOut" }}
+                  >
+                    <span className="text-xs font-bold text-blue-900">{impactPercentage}%</span>
+                  </motion.div>
                 </div>
-                <p className="text-white text-center mt-2 text-sm md:text-base">Impact: {impactPercentage}%</p>
+                <p className="text-white text-center mt-2 text-sm md:text-base font-semibold">Impact Meter</p>
 
-                <motion.div animate={textAnimation} className="text-center my-4">
-                  <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">Thank You!</h2>
-                  <p className="text-lg md:text-xl text-white">Your generous donation of</p>
-                  <p className="text-2xl md:text-3xl font-bold text-yellow-300 my-2">${donationAmount}</p>
-                  <p className="text-lg md:text-xl text-white">on {chainName} will help save dogs!</p>
+                <motion.div animate={textAnimation} className="text-center my-6">
+                  <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">Thank You!</h2>
+                  <p className="text-xl md:text-2xl text-white">Your generous donation of</p>
+                  <p className="text-3xl md:text-4xl font-bold text-yellow-300 my-3">${donationAmount}</p>
+                  <p className="text-xl md:text-2xl text-white">on {chainName} will help save dogs!</p>
                 </motion.div>
 
-                <div className="flex flex-col space-y-2">
-                  <p className="text-white text-center">Share your donation:</p>
-                  <div className="flex flex-wrap justify-center gap-2">
+                <div className="flex flex-col space-y-4">
+                  <p className="text-white text-center text-lg">Share your donation:</p>
+                  <div className="flex flex-wrap justify-center gap-3">
                     <TweetButton
                       text="I just made a donation to help save dogs with Dogachi.Pet!"
                       donationAmount={donationAmount}
@@ -187,7 +153,7 @@ const DonationSuccessPanel: React.FC<DonationSuccessPanelProps> = ({
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={onClose}
-                  className="w-full bg-white bg-opacity-20 text-white font-bold py-3 px-6 rounded-full transition duration-300 hover:bg-opacity-30 relative overflow-hidden mt-4"
+                  className="w-full bg-white bg-opacity-20 text-white font-bold py-3 px-6 rounded-full transition duration-300 hover:bg-opacity-30 relative overflow-hidden mt-6"
                 >
                   <span className="relative z-10">Close</span>
                   <motion.div
@@ -199,23 +165,6 @@ const DonationSuccessPanel: React.FC<DonationSuccessPanelProps> = ({
                 </motion.button>
               </motion.div>
             )}
-
-            {/* Confetti animation */}
-            <svg
-              ref={confettiRef}
-              className="absolute inset-0 w-full h-full pointer-events-none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              {[...Array(30)].map((_, i) => (
-                <path
-                  key={i}
-                  d={`M${Math.random() * 100},${Math.random() * 100} L${Math.random() * 100},${Math.random() * 100} L${
-                    Math.random() * 100
-                  },${Math.random() * 100} Z`}
-                  fill={`hsl(${Math.random() * 360}, 100%, 70%)`}
-                />
-              ))}
-            </svg>
           </motion.div>
         </motion.div>
       )}
